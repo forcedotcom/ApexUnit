@@ -1,0 +1,2 @@
+# ApexUnit
+ApexUnit 2.x is a powerful continuous delivery tool for Force.com platform and it comprises of two major components: 1. A xUnit based testing framework for Force.com platform;  2. Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline. More details @ https://sites.google.com/a/salesforce.com/continuousdelivery/home/apexunit and https://git.soma.salesforce.com/APT/ApexUnit
