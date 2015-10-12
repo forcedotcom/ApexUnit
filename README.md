@@ -49,7 +49,7 @@ The above command should provide you the access_token in the response.
   
 ## How to build?
 1. Clone the project onto your local system using the command:
-```git 
+```shell
  git clone https://github.com/forcedotcom/ApexUnit.git 
 ``` This would create a local copy of the project for you.
 2. (Optional) Open the project in an IDE(eclipse, intelliJ etc.) 
