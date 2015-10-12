@@ -48,13 +48,14 @@ curl -v <Salesforce_Org_URL>/services/oauth2/token -d "grant_type=password" -d "
 The above command should provide you the access_token in the response.
   
 ## How to build?
-1. Clone the project onto your local system using the command:
+- Clone the project onto your local system using the command:
 ```shell
  git clone https://github.com/forcedotcom/ApexUnit.git 
-``` This would create a local copy of the project for you.
-2. (Optional) Open the project in an IDE(eclipse, intelliJ etc.) 
-3. Modify/Add manifest files for test classes (for execution) and for Apex(source) classes (for code coverage computation) in the following location in your project setup: src/main/resources
-4. Go to your project directory(to the directory having pom.xml) in command prompt and execute the following command:
+``` 
+This would create a local copy of the project for you.
+- (Optional) Open the project in an IDE(eclipse, intelliJ etc.) 
+- Modify/Add manifest files for test classes (for execution) and for Apex(source) classes (for code coverage computation) in the following location in your project setup: src/main/resources
+- Go to your project directory(to the directory having pom.xml) in command prompt and execute the following command:
 ```java
 mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner"
 -Dexec.args="-org.login.url $Salesforce_org_url 
