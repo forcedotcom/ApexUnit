@@ -1,15 +1,14 @@
 ApexUnit
 ========
-This repo is the core of ApexUnit 2.x. ApexUnit 2.x is a powerful continuous integration tool for Force.com platform. 
 
-## Overview
-ApexUnit 2.x is a Java application and it leverages the features exposed by the Force.com platform to queue and submit Apex tests for execution. Force.com tooling API's is used for fetching code coverage. 
-The tool comprises of two major components:
+## What is ApexUnit?
+ApexUnit 2.x is a powerful continuous integration tool for Force.com platform. ApexUnit 2.x is a Java application and it leverages the features exposed by the Force.com platform to queue and submit Apex tests for execution. Force.com tooling API's are used for fetching code coverage results. ApexUnit is intended to exercise integrated Force.com objects functionality through APIs beneath the Force.com UI layer.
+ApexUnit comprises of two major components:
 1. A xUnit based testing framework for Force.com platform; 
 2. Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline.
-ApexUnit 2.x is intended to exercise integrated Force.com objects functionality through APIs beneath the Force.com UI layer.
 
-## Key Features of ApexUnit 2.x
+
+## Key Features of ApexUnit
 
 - Queue and schedule Apex test runs asynchronously
 - Filter and group tests(xUnit based)
@@ -24,8 +23,6 @@ ApexUnit 2.x is intended to exercise integrated Force.com objects functionality 
   - Halts the tool when code coverage thresholds are not met and/or when there are test failures
   - Self-abort long running tests using customizable timeout threshold
 - Seamless integration with Jenkins and CD pipeline
-
-# Additional features
 - Live test status logging
   - Completed test execution count and remaining tests count
   - Periodic test status logging
@@ -51,7 +48,7 @@ curl -v <Salesforce_Org_URL>/services/oauth2/token -d "grant_type=password" -d "
 ```
 *The above command should provide you the access_token in the response.*
   
-## How to build?
+## How to build and execute?
 - Clone the project onto your local system using the command:
 ```shell
  git clone https://github.com/forcedotcom/ApexUnit.git 
