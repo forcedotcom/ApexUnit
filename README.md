@@ -1,15 +1,14 @@
 ApexUnit
 ========
-This repo is the core of ApexUnit 2.x. It is a powerful continuous delivery tool for Force.com platform. 
 
-## Overview
-ApexUnit 2.x is a Java application and it leverages the features exposed by the Force.com platform to queue and submit Apex tests for execution. Force.com tooling API's is used for fetching code coverage. 
-The tool comprises of two major components:
+## What is ApexUnit?
+ApexUnit 2.x is a powerful continuous integration tool for Force.com platform. ApexUnit 2.x is a Java application and it leverages the features exposed by the Force.com platform to queue and submit Apex tests for execution. Force.com tooling API's are used for fetching code coverage results. ApexUnit is intended to exercise integrated Force.com objects functionality through APIs beneath the Force.com UI layer.
+ApexUnit comprises of two major components:
 1. A xUnit based testing framework for Force.com platform; 
 2. Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline.
-ApexUnit 2.x is intended to exercise integrated Force.com objects functionality through APIs beneath the Force.com UI layer.
 
-## Key Features of ApexUnit 2.x
+
+## Key Features of ApexUnit
 
 - Queue and schedule Apex test runs asynchronously
 - Filter and group tests(xUnit based)
@@ -24,8 +23,6 @@ ApexUnit 2.x is intended to exercise integrated Force.com objects functionality 
   - Halts the tool when code coverage thresholds are not met and/or when there are test failures
   - Self-abort long running tests using customizable timeout threshold
 - Seamless integration with Jenkins and CD pipeline
-
-# Additional features
 - Live test status logging
   - Completed test execution count and remaining tests count
   - Periodic test status logging
@@ -34,20 +31,24 @@ ApexUnit 2.x is intended to exercise integrated Force.com objects functionality 
 - Man page with details on available command line parameter options (-help)
 
 ## Pre-Requisites
-- Java 1.6 or later
-- Maven 3.0.3 or later 
+- Java 1.6 or later 
+  - http://www.oracle.com/technetwork/java/javase/downloads/index.html 
+- Maven 3.0.3 or later (latest version is recommended)
+  - Download link : https://maven.apache.org/download.cgi 
+  - Installation instructions : https://maven.apache.org/install.html
+  - Configuring maven : https://maven.apache.org/configure.html
 - Eclipse 3.6 or later
 - OAuth setup for the org to get Client ID and Client Secret
-http://salesforce.stackexchange.com/questions/40346/where-do-i-find-the-client-id-and-client-secret-of-an-existing-connected-app
-http://stackoverflow.com/questions/18464598/where-to-get-client-id-and-client-secret-of-salesforce-api-for-rails-3-2-11 
-http://www.calvinfroedge.com/salesforce-how-to-generate-api-credentials/
-Please verify the oauth setup for the org by executing the following command : 
+  - http://salesforce.stackexchange.com/questions/40346/where-do-i-find-the-client-id-and-client-secret-of-an-existing-connected-app
+  - http://stackoverflow.com/questions/18464598/where-to-get-client-id-and-client-secret-of-salesforce-api-for-rails-3-2-11 
+  - http://www.calvinfroedge.com/salesforce-how-to-generate-api-credentials/
+  - Please verify the oauth setup for the org by executing the following command : 
 ```shell
 curl -v <Salesforce_Org_URL>/services/oauth2/token -d "grant_type=password" -d "client_id=****************" -d "client_secret= **************" -d "username=***********" -d "password= *******"
 ```
-The above command should provide you the access_token in the response.
+*The above command should provide you the access_token in the response.*
   
-## How to build?
+## How to build and execute?
 - Clone the project onto your local system using the command:
 ```shell
  git clone https://github.com/forcedotcom/ApexUnit.git 
@@ -120,7 +121,33 @@ Use cases
 - If you do not wish to rename your existing apex classes, you could use manifest files to filter the classes. However, you could start leveraging the regex-support feature by making sure that the new classes follow a naming convention.
 - Multiple-regex support is provided; user can specify multiple comma separated regexes. 
 
+## Integrating with CI pipeline
+CI engines like Jenkins(https://jenkins-ci.org/) can be used to seamlessly integrate ApexUnit with CI pipelines.
+
+Prerequisites : 
+ - Checkin your ApexUnit(maven) project to a Source Control Management(SCM) system
+ - If you are using Jenkins, you would need the following plugins
+   - Plugin specific for your SCM
+     - Mask passwords plugin : https://wiki.jenkins-ci.org/display/JENKINS/Mask+Passwords+Plugin. This helps in masking passwords and client id/secret if you parameterize your build for the cli options
+     - Performance plugin - https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin. This plugin allows you to capture reports from JUnit. ApexUnit generates test report in standard JUnit format
+     - HTML Publisher plugin : https://wiki.jenkins-ci.org/display/JENKINS/HTML+Publisher+Plugin. This plugin helps in publishing the consolidated HTML report generated by the tool
+ - Generic instructions on building a project using Jenkins : https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project 
+
+Steps for creating a jenkins job for ApexUnit: 
+  - Create a "Free style project" using jenkins
+  - (Optional)Select the "This build is parameterized" checkbox and parameterize the build by adding relevant (String/password) parameters for all of the cli options
+  - Select the SCM where you checked in your code and update the location of source code to your code on SCM
+  - Add the build step "Invoke Top level maven targets" with the command mentioned above in the "How to build" section. Use the parameters if you parameterized the build, otherwise provide the entire command with hard-coded values
+  - In the post-build Actions step:
+    - Add "Publish HTML reports" step and populate 'HTML directory to archive' field with 'Report' and 'Index page[s]' field with 'ApexUnitReport.html' and choose your 'Report title'
+    - Add "Publish JUnit test result report" step and populate 'ApexUnitReport.xml' for the 'Test Report XMLs' field
+    - If you would like to get email notifications on the build status for the job, add 'E-mail Notification' step and populate the 'Recipients' field with your and possible your teams email id(s)
+
+## How to contribute or track Bug/Issue for ApexUnit?
+- We encourage users to contribute to the code base. 
+- Got new ideas/suggestions to improve ApexUnit? Feel free to send out pull requests with detailed description.
+- Found issues with the ApexUnit? Please log and track bug/issue using https://github.com/forcedotcom/ApexUnit/issues
+We resolve P0 issues ASAP. Lower priority bugs will be addressed based on prioritization and availability of the contributors. Please feel free to suggest resolutions to the open issues.
+
 ## Questions?
-Questions or share feedback? email it-tools@salesforce.com
-
-
+Questions or share feedback? We would love to talk to you. Please feel free to contact the Salesforce IT-Continuous Delivery team via email: it-tools@salesforce.com
