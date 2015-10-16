@@ -88,7 +88,7 @@ On successful completion - the command should give you build success and it shou
 # Using Manifest files and Regexes
 
 Users can populate class names in the Manifest file and/or provide regular expressions(regexes) 
-Please refer https://github.com/forcedotcom/ApexUnit/wiki for the usecases where manifest file(s) and regex(es) option can be used
+Please refer https://github.com/forcedotcom/ApexUnit/wiki/Manifest-file-vs-regex for the usecases where manifest file(s) and regex(es) option can be used
 
 ## Integrating with CI pipeline
 CI engines like Jenkins(https://jenkins-ci.org/) can be used to seamlessly integrate ApexUnit with CI pipelines.
