@@ -7,28 +7,8 @@ ApexUnit comprises of two major components:
 1. A xUnit based testing framework for Force.com platform; 
 2. Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline.
 
-
 ## Key Features of ApexUnit
-
-- Queue and schedule Apex test runs asynchronously
-- Filter and group tests(xUnit based)
-  - Multi-Manifest file and Multi-Regex support for filtering and grouping the tests and sources classes
-- Summary of code coverage metrics and test execution with pass/fail rate
-  - Detailed test report in standard JUnit xml format with drill down feature for failure analysis
-  - Info on covered and uncovered code lines including line numbers
-  - Code coverage metrics for individual classes; sorted in ascending order of code coverage%
-  - Color schemes(red-green) to highlight classes with low code coverage 
-- Automatic health checks 
-  - Customizable code coverage thresholds at team level and org-wide level
-  - Halts the tool when code coverage thresholds are not met and/or when there are test failures
-  - Self-abort long running tests using customizable timeout threshold
-- Seamless integration with Jenkins and CD pipeline
-- Live test status logging
-  - Completed test execution count and remaining tests count
-  - Periodic test status logging
-  - Test execution time for each test
-- Handling and reporting the duplicate/invalid test class name entries in manifest files/regexes
-- Man page with details on available command line parameter options (-help)
+Please refer https://github.com/forcedotcom/ApexUnit/wiki to know about the key fearures of ApexUnit and its usage
 
 ## Pre-Requisites
 - Java 1.6 or later 
