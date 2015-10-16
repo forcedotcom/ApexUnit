@@ -87,19 +87,8 @@ On successful completion - the command should give you build success and it shou
 
 # Using Manifest files and Regexes
 
-Users can populate class names in the Manifest file and/or provide regular expressions(regexes) to filter the Apex classes
-Use cases
-
-**Manifest files:** 
-- The user can populate class names in manifest files. Multiple Manifest files can be created for unit tests, functional tests, integration tests etc. 
-- If your team has legacy test/source classes, for which no naming conventions have been followed, you can populate class names in the manifest file. Another use case for using Manifest file is if your team is transitioning from ApexUnit 1.0 and have the setup for manifest files, the team can continue to use the setup already in place
-- Multiple-manifest file support is provided; user can specify multiple comma separated manifest files.
-
-**Regexes:** 
-- Worried about maintaining manifest files each time a new Apex class is created or each time a class is renamed? Regular expressions(regexes) solves the overhead of maintaining the manifest files. 
-- In order to use regex, you must make sure that your classes follow a specific naming conventions like TEAM_PROJECT_MODULE_UNITTEST_MY-TEST-NAME.. In such a case you can specify the regex- "TEAM_PROJECT_MODULE_UNITTEST_*"; this would fetch all the classes from the org whose name matches the regex. 
-- If you do not wish to rename your existing apex classes, you could use manifest files to filter the classes. However, you could start leveraging the regex-support feature by making sure that the new classes follow a naming convention.
-- Multiple-regex support is provided; user can specify multiple comma separated regexes. 
+Users can populate class names in the Manifest file and/or provide regular expressions(regexes) 
+Please refer https://github.com/forcedotcom/ApexUnit/wiki for the usecases where manifest file(s) and regex(es) option can be used
 
 ## Integrating with CI pipeline
 CI engines like Jenkins(https://jenkins-ci.org/) can be used to seamlessly integrate ApexUnit with CI pipelines.
