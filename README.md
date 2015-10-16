@@ -79,7 +79,7 @@ Note: User must provide either of the (-regex.for.selecting.source.classes.for.c
 
 Sample command: 
 ```java
-mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner" -Dexec.args=" -org.login.url https://na14.salesforce.com -org.username rama_krishna@salesforce.com -org.password ****** -org.wide.code.coverage.threshold 75  -team.code.coverage.threshold 80 -org.client.id ******* -org.client.secret ***** -regex.for.selecting.test.classes.to.execute Sample*Test,Sample*test -regex.for.selecting.source.classes.for.code.coverage.computation Sample,Mobile,Wrapper -manifest.files.with.test.class.names.to.execute ManifestFile.txt -manifest.files.with.source.class.names.for.code.coverage.computation ClassManifestFile.txt -max.test.execution.time.threshold 10"
+mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner" -Dexec.args=" -org.login.url https://na14.salesforce.com -org.username test****@salesforce.com -org.password ****** -org.wide.code.coverage.threshold 75  -team.code.coverage.threshold 80 -org.client.id ******* -org.client.secret ***** -regex.for.selecting.test.classes.to.execute Sample*Test,Sample*test -regex.for.selecting.source.classes.for.code.coverage.computation Sample,Mobile,Wrapper -manifest.files.with.test.class.names.to.execute ManifestFile.txt -manifest.files.with.source.class.names.for.code.coverage.computation ClassManifestFile.txt -max.test.execution.time.threshold 10"
 ```
 Note: Multiple comma separated manifest files and regexes can be provided.Please do not include spaces while providing multiple regex or manifest files.
 
