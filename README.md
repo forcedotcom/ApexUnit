@@ -4,31 +4,11 @@ ApexUnit
 ## What is ApexUnit?
 ApexUnit is a powerful continuous integration tool for Force.com platform. ApexUnit is a Java application and it leverages the features exposed by the Force.com platform to queue and submit Apex tests for execution. Force.com tooling API's are used for fetching code coverage results. ApexUnit is intended to exercise integrated Force.com objects functionality through APIs beneath the Force.com UI layer.
 ApexUnit comprises of two major components:
-1. A xUnit based testing framework for Force.com platform; 
-2. Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline.
-
+- A xUnit based testing framework for Force.com platform; 
+- Extensive code coverage metrics with actionable detail for Apex source code. The code coverage results can be a component of the CI/CD pipeline.
 
 ## Key Features of ApexUnit
-
-- Queue and schedule Apex test runs asynchronously
-- Filter and group tests(xUnit based)
-  - Multi-Manifest file and Multi-Regex support for filtering and grouping the tests and sources classes
-- Summary of code coverage metrics and test execution with pass/fail rate
-  - Detailed test report in standard JUnit xml format with drill down feature for failure analysis
-  - Info on covered and uncovered code lines including line numbers
-  - Code coverage metrics for individual classes; sorted in ascending order of code coverage%
-  - Color schemes(red-green) to highlight classes with low code coverage 
-- Automatic health checks 
-  - Customizable code coverage thresholds at team level and org-wide level
-  - Halts the tool when code coverage thresholds are not met and/or when there are test failures
-  - Self-abort long running tests using customizable timeout threshold
-- Seamless integration with Jenkins and CD pipeline
-- Live test status logging
-  - Completed test execution count and remaining tests count
-  - Periodic test status logging
-  - Test execution time for each test
-- Handling and reporting the duplicate/invalid test class name entries in manifest files/regexes
-- Man page with details on available command line parameter options (-help)
+Please refer https://github.com/forcedotcom/ApexUnit/wiki to know about the key fearures of ApexUnit and its usage
 
 ## Pre-Requisites
 - Java 1.6 or later 
@@ -107,19 +87,8 @@ On successful completion - the command should give you build success and it shou
 
 # Using Manifest files and Regexes
 
-Users can populate class names in the Manifest file and/or provide regular expressions(regexes) to filter the Apex classes
-Use cases
-
-**Manifest files:** 
-- The user can populate class names in manifest files. Multiple Manifest files can be created for unit tests, functional tests, integration tests etc. 
-- If your team has legacy test/source classes, for which no naming conventions have been followed, you can populate class names in the manifest file. Another use case for using Manifest file is if your team is transitioning from ApexUnit 1.0 and have the setup for manifest files, the team can continue to use the setup already in place
-- Multiple-manifest file support is provided; user can specify multiple comma separated manifest files.
-
-**Regexes:** 
-- Worried about maintaining manifest files each time a new Apex class is created or each time a class is renamed? Regular expressions(regexes) solves the overhead of maintaining the manifest files. 
-- In order to use regex, you must make sure that your classes follow a specific naming conventions like TEAM_PROJECT_MODULE_UNITTEST_MY-TEST-NAME.. In such a case you can specify the regex- "TEAM_PROJECT_MODULE_UNITTEST_*"; this would fetch all the classes from the org whose name matches the regex. 
-- If you do not wish to rename your existing apex classes, you could use manifest files to filter the classes. However, you could start leveraging the regex-support feature by making sure that the new classes follow a naming convention.
-- Multiple-regex support is provided; user can specify multiple comma separated regexes. 
+Users can populate class names in the Manifest file and/or provide regular expressions(regexes) 
+Please refer https://github.com/forcedotcom/ApexUnit/wiki/Manifest-file-vs-regex for the usecases where manifest file(s) and regex(es) option can be used
 
 ## Integrating with CI pipeline
 CI engines like Jenkins(https://jenkins-ci.org/) can be used to seamlessly integrate ApexUnit with CI pipelines.
