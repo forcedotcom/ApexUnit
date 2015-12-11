@@ -85,12 +85,13 @@ public class ApexClassFetcherUtils {
 
 		if (CommandLineArguments.getTestManifestFiles() != null) {
 			LOG.debug(" Fetching apex test classes from location : " + CommandLineArguments.getTestManifestFiles());
-			testClassesAsArray = fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles());
+			testClassesAsArray = fetchApexClassesFromManifestFiles(CommandLineArguments.getTestNamespacePrefix(), 
+					CommandLineArguments.getTestManifestFiles());
 		}
 		if (CommandLineArguments.getTestRegex() != null) {
 			LOG.debug(" Fetching apex test classes with prefix : " + CommandLineArguments.getTestRegex());
 			consolidatedTestClassesAsArray = fetchApexClassesBasedOnMultipleRegexes(connection, testClassesAsArray,
-					CommandLineArguments.getTestRegex());
+					CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getTestRegex());
 		} else {
 			consolidatedTestClassesAsArray = testClassesAsArray;
 		}
@@ -115,16 +116,19 @@ public class ApexClassFetcherUtils {
 	 * method expects the manifest files are placed in /src/main/resources
 	 * folder of the maven package
 	 * 
+	 * @param namespacePrefix - The NamespacePrefix of the apex classes. 
+	 * Only classes in this namespace will be considered
+	 * 
 	 * @param manifestFiles - manifest file(s) that will be read to fetch the
 	 * apex class names
 	 */
-	public static String[] fetchApexClassesFromManifestFiles(String manifestFiles) {
+	public static String[] fetchApexClassesFromManifestFiles(String namespacePrefix, String manifestFiles) {
 		String[] classIdsAsArray = null;
 		if (manifestFiles != null) {
 			ApexManifestFileReader apexManifestFileReader = new ApexManifestFileReader();
 			// fetch test class id's based on the test classes mentioned in the
 			// manifest file(s)
-			classIdsAsArray = apexManifestFileReader.fetchClassNamesFromManifestFiles(manifestFiles);
+			classIdsAsArray = apexManifestFileReader.fetchClassNamesFromManifestFiles(namespacePrefix, manifestFiles);
 			if (classIdsAsArray == null || classIdsAsArray.length == 0) {
 				LOG.warn("Given manifest file(s) contains invalid/no Apex classes. 0 Apex class id's returned");
 			} else {
@@ -149,6 +153,9 @@ public class ApexClassFetcherUtils {
 	 * @param classesAsArray - Apex Class Ids passed by the calling method. The
 	 * returned string array of classes includes classes from this array as well
 	 * 
+	 * @param namespacePrefix - The NamespacePrefix of the apex classes. 
+	 * Only classes in this namespace will be considered
+	 * 
 	 * @param regexes - comma separated regexes that are used to fetch class
 	 * names from the org
 	 * 
@@ -156,7 +163,7 @@ public class ApexClassFetcherUtils {
 	 * concatenated
 	 */
 	public static String[] fetchApexClassesBasedOnMultipleRegexes(PartnerConnection connection, String[] classesAsArray,
-			String regexes) {
+			String namespacePrefix, String regexes) {
 
 		LOG.info("Using regex(es): " + regexes + " to fetch apex classes");
 		String cvsSplitBy = ",";
@@ -166,7 +173,7 @@ public class ApexClassFetcherUtils {
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 			// Also combine the results obtained for each regex
-			classesAsArray = fetchApexClassesBasedOnRegex(connection, classesAsArray, regex);
+			classesAsArray = fetchApexClassesBasedOnRegex(connection, classesAsArray, namespacePrefix, regex);
 		}
 		return classesAsArray;
 	}
@@ -181,20 +188,23 @@ public class ApexClassFetcherUtils {
 	 * @param classesAsArray - Apex Class Ids passed by the calling method. The
 	 * returned string array of classes includes classes from this array as well
 	 * 
+	 * @param namespacePrefix - The NamespacePrefix of the apex classes. 
+	 * Only classes in this namespace will be considered
+	 * 
 	 * @param regexes - regex that is used to fetch classes from the org
 	 */
 	private static String[] fetchApexClassesBasedOnRegex(PartnerConnection connection, String[] classesAsArray,
-			String regex) {
+			String namespacePrefix, String regex) {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
-			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(regex);
+			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespacePrefix, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 
-			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(regex);
+			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespacePrefix, regex);
 			String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
 
 			Set<String> uniqueSetOfClasses = new HashSet<String>();

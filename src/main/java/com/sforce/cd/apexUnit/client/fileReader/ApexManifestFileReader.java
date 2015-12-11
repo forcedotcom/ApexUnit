@@ -56,7 +56,7 @@ public class ApexManifestFileReader {
 	private static Logger LOG = LoggerFactory.getLogger(ApexManifestFileReader.class);
 	public static ArrayList<String> nonExistantApexClassEntries = new ArrayList<String>();
 
-	public String[] fetchClassNamesFromManifestFiles(String files) {
+	public String[] fetchClassNamesFromManifestFiles(String namespacePrefix, String files) {
 		String[] apexClassesStrArr = null;
 		String[] apexClassesStrArrForManifest = null;
 		LOG.info("Reading from Manifest files: " + files);
@@ -69,7 +69,7 @@ public class ApexManifestFileReader {
 			try {
 				inStr = this.getClass().getClassLoader().getResourceAsStream(file);
 				if (inStr != null) {
-					apexClassesStrArrForManifest = readInputStreamAndConstructClassArray(inStr);
+					apexClassesStrArrForManifest = readInputStreamAndConstructClassArray(inStr, namespacePrefix);
 				} else {
 					ApexUnitUtils.shutDownWithErrMsg(
 							"Unable to find the file " + file + " in the src->main->resources folder");
@@ -106,7 +106,7 @@ public class ApexManifestFileReader {
 	}
 
 	// Split up the method for testability
-	private String[] readInputStreamAndConstructClassArray(InputStream inStr) throws IOException {
+	private String[] readInputStreamAndConstructClassArray(InputStream inStr, String namespacePrefix) throws IOException {
 		String[] testClassesAsArray = null;
 		ArrayList<String> testClassList = new ArrayList<String>();
 
@@ -121,7 +121,7 @@ public class ApexManifestFileReader {
 			if (!newline.equals(strLine) && !strLine.equals("") && strLine.length() > 0) {
 				LOG.debug("The line says .... -  " + strLine);
 
-				String soql = QueryConstructor.generateQueryToFetchApexClass(strLine);
+				String soql = QueryConstructor.generateQueryToFetchApexClass(namespacePrefix, strLine);
 				// query using WSC
 				tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 						ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
@@ -129,7 +129,7 @@ public class ApexManifestFileReader {
 				if (tempTestClassId == null) {
 					// look if the given class name is a trigger if its not an
 					// ApexClass
-					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(strLine);
+					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespacePrefix, strLine);
 					// query using WSC
 					tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 							ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);

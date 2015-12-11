@@ -103,14 +103,14 @@ public class CodeCoverageComputer {
 		// read class names from manifest files
 		if (CommandLineArguments.getClassManifestFiles() != null) {
 			LOG.debug(" Fetching apex classes from location : " + CommandLineArguments.getClassManifestFiles());
-			classesAsArray = ApexClassFetcherUtils
-					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles());
+			classesAsArray = ApexClassFetcherUtils.fetchApexClassesFromManifestFiles(
+					CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getClassManifestFiles());
 		}
 		// fetch matching class names based on regex
 		if (CommandLineArguments.getSourceRegex() != null) {
 			LOG.debug(" Fetching apex classes with regex : " + CommandLineArguments.getSourceRegex());
 			classesAsArray = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(connection, classesAsArray,
-					CommandLineArguments.getSourceRegex());
+					CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getSourceRegex());
 		}
 		// Do not proceed if no class names are returned from both manifest
 		// files and/or regexes

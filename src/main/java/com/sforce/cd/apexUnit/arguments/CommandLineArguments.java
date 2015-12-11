@@ -52,7 +52,10 @@ public class CommandLineArguments {
 	public static final String MAX_TEST_EXECUTION_TIME_THRESHOLD = "-max.test.execution.time.threshold";
 	public static final String ORG_CLIENT_ID = "-org.client.id";
 	public static final String ORG_CLIENT_SECRET = "-org.client.secret";
+	public static final String TEST_NAMESPACE_PREFIX = "-test.namespace.prefix";
 	public static final String HELP = "-help";
+
+	public static final String DEFAULT_NAMESPACE_TOKEN = "_DEFAULT_";
 
 	/*
 	 * Define Parameters using JCommander framework
@@ -86,6 +89,9 @@ public class CommandLineArguments {
 	static private String clientId;
 	@Parameter(names = ORG_CLIENT_SECRET, description = "Client Secret associated with the org.", required = true)
 	static private String clientSecret;
+	@Parameter(names = TEST_NAMESPACE_PREFIX, description = "Namespace prefix of the test classes that will be executed. Defaults to '' (blank) if not specified. " + 
+			"To explicitly specify the default namespace, use the token \"_DEFAULT_\" for this parameter value.")
+	static private String testNamespacePrefix = "";
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
 
@@ -148,8 +154,20 @@ public class CommandLineArguments {
 		CommandLineArguments.clientSecret = clientSecret;
 	}
 
+	public static String getTestNamespacePrefix() {
+		// This allows you to explicitly specify the default namespace by passing "_DEFAULT_" as the value for the -test.namespace.prefix argument
+		if (DEFAULT_NAMESPACE_TOKEN.equals(testNamespacePrefix)) {
+			return "";
+		} else {
+			return testNamespacePrefix;
+		}
+	}
+	
+	public static void setTestNamespacePrefix(String testNamespacePrefix) {
+		CommandLineArguments.testNamespacePrefix = testNamespacePrefix;
+	}
+	
 	public static boolean isHelp() {
 		return help;
-
 	}
 }
