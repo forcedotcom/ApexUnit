@@ -42,6 +42,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
 import com.sforce.cd.apexUnit.ApexUnitUtils;
+import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
 import com.sforce.cd.apexUnit.client.connection.ConnectionHandler;
 import com.sforce.cd.apexUnit.client.fileReader.ApexManifestFileReader;
 import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
@@ -71,7 +72,7 @@ public class ApexManifestFileReaderTest {
 		File dir = new File(workingDir);
 		dir.mkdirs();
 		File file = new File(dir, fileName);
-		soql = "SELECT Id , Name FROM ApexClass LIMIT 10";
+		soql = "SELECT Id , Name FROM ApexClass WHERE NamespacePrefix = '" + CommandLineArguments.getTestNamespacePrefix() + "' ORDER BY Name LIMIT 10";
 		QueryResult queryResult = null;
 		try {
 			queryResult = connection.query(soql);
@@ -119,6 +120,9 @@ public class ApexManifestFileReaderTest {
 			if (sObjects != null) {
 				LOG.debug("Fetched the classes:");
 				for (SObject sobject : sObjects) {
+					if (apexClassesAsString == null) {
+						apexClassesAsString = "";
+					}
 					apexClassName = sobject.getField("Name").toString();
 					apexClassesAsString += apexClassName;
 					apexClassesAsString += "\n";

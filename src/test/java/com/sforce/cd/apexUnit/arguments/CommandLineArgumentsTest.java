@@ -61,6 +61,7 @@ public class CommandLineArgumentsTest {
 			.getProperty(CommandLineArguments.REGEX_FOR_SELECTING_SOURCE_CLASSES_FOR_CODE_COVERAGE_COMPUTATION);
 	private final String MAX_TEST_EXEC_TIME_THRESHOLD = System
 			.getProperty(CommandLineArguments.MAX_TEST_EXECUTION_TIME_THRESHOLD);
+	private final String TEST_NAMESPACE_PREFIX_PARAMETER = System.getProperty(CommandLineArguments.TEST_NAMESPACE_PREFIX);
 
 	@BeforeTest
 	public void setup() {
@@ -90,6 +91,8 @@ public class CommandLineArgumentsTest {
 		arguments.append(appendSpaces(CLIENT_ID));
 		arguments.append(CommandLineArguments.ORG_CLIENT_SECRET);
 		arguments.append(appendSpaces(CLIENT_SECRET));
+		arguments.append(CommandLineArguments.TEST_NAMESPACE_PREFIX);
+		arguments.append(appendSpaces(TEST_NAMESPACE_PREFIX_PARAMETER));
 		logs.info(arguments.toString());
 		String[] args = arguments.toString().split(" ");
 
@@ -152,6 +155,16 @@ public class CommandLineArgumentsTest {
 	@Test
 	public void getClientSecret() {
 		Assert.assertEquals(CommandLineArguments.getClientSecret(), CLIENT_SECRET);
+	}
+	
+	@Test
+	public void getTestNamespacePrefix() {
+		if (CommandLineArguments.DEFAULT_NAMESPACE_TOKEN.equals(TEST_NAMESPACE_PREFIX_PARAMETER)) {
+			// The "_DEFAULT_" token should be replaced by ""
+			Assert.assertEquals(CommandLineArguments.getTestNamespacePrefix(), "");
+		} else {
+			Assert.assertEquals(CommandLineArguments.getTestNamespacePrefix(), TEST_NAMESPACE_PREFIX_PARAMETER);
+		}
 	}
 
 	private String appendSpaces(String input) {

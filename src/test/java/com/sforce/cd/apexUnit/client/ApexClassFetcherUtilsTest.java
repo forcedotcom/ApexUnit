@@ -68,8 +68,8 @@ public class ApexClassFetcherUtilsTest {
 
 	@Test
 	public void fetchApexClassesFromManifestFilesTest() {
-		String[] testClasses = ApexClassFetcherUtils
-				.fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles());
+		String[] testClasses = ApexClassFetcherUtils.fetchApexClassesFromManifestFiles(
+				CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getTestManifestFiles());
 		if (testClasses != null && ApexClassFetcherUtils.apexClassMap != null
 				&& ApexClassFetcherUtils.apexClassMap.size() != testClasses.length) {
 			Assert.assertTrue(testClasses.length > 0 || ApexClassFetcherUtils.apexClassMap.size() > 0);
@@ -79,7 +79,7 @@ public class ApexClassFetcherUtilsTest {
 	@Test
 	public void fetchApexClassesBasedOnPrefixTest() {
 		String[] testClasses = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(conn, null,
-				CommandLineArguments.getTestRegex());
+				CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getTestRegex());
 		if (testClasses != null) {
 			Assert.assertTrue(testClasses.length > 0 || ApexClassFetcherUtils.apexClassMap.size() > 0);
 		}
@@ -87,7 +87,8 @@ public class ApexClassFetcherUtilsTest {
 
 	@Test(priority = 1)
 	public void constructTestClassArrayUsingWSC() {
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(CommandLineArguments.getTestRegex());
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(
+				CommandLineArguments.getTestNamespacePrefix(), CommandLineArguments.getTestRegex());
 		String[] testClasses = ApexClassFetcherUtils.constructClassIdArrayUsingWSC(conn, soql);
 		logFilteredTestClasses(testClasses);
 		if (testClasses != null) {
@@ -97,10 +98,11 @@ public class ApexClassFetcherUtilsTest {
 
 	@Test(priority = 2)
 	public void fetchApexClassIdFromNameTest() {
+		String namespacePrefix = CommandLineArguments.getTestNamespacePrefix();
 		String className = null;
 		String expectedTestClassId = null;
 		// pass empty string so that random classes gets picked
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex("*");
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespacePrefix, "*");
 		// limit the result to 1 . Thats all we need to test the method
 		// fetchApexClassIdFromName
 		soql += " limit 1";
@@ -112,7 +114,7 @@ public class ApexClassFetcherUtilsTest {
 				expectedTestClassId = testClass;
 			}
 		}
-		soql = QueryConstructor.generateQueryToFetchApexClass(className);
+		soql = QueryConstructor.generateQueryToFetchApexClass(namespacePrefix, className);
 		String testClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(conn, soql);
 		Assert.assertEquals(expectedTestClassId, testClassId);
 	}
@@ -122,7 +124,7 @@ public class ApexClassFetcherUtilsTest {
 		String classId = null;
 		String expectedClassName = null;
 		// pass empty string so that random classes gets picked
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex("*");
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(CommandLineArguments.getTestNamespacePrefix(), "*");
 		// limit the result to 1 . Thats all we need to test the method
 		// fetchApexClassIdFromName
 		soql += " limit 1";

@@ -48,9 +48,10 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex classes as String
 	 */
-	public static String generateQueryToFetchApexClassesBasedOnRegex(String regex) {
+	public static String generateQueryToFetchApexClassesBasedOnRegex(String namespacePrefix, String regex) {
 		String processedRegex = processRegexForSoqlQueries(regex);
-		String soql = "SELECT Id , Name FROM ApexClass WHERE Name like '" + escapeSingleQuote(processedRegex) + "'";
+		String soql = "SELECT Id , Name FROM ApexClass WHERE NamespacePrefix = '" + escapeSingleQuote(namespacePrefix) + 
+				"' AND Name like '" + escapeSingleQuote(processedRegex) + "'";
 		return soql;
 	}
 
@@ -64,9 +65,10 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex triggers as String
 	 */
-	public static String generateQueryToFetchApexTriggersBasedOnRegex(String regex) {
+	public static String generateQueryToFetchApexTriggersBasedOnRegex(String namespacePrefix, String regex) {
 		String processedRegex = processRegexForSoqlQueries(regex);
-		String soql = "SELECT Id , Name FROM ApexTrigger WHERE Name like '" + escapeSingleQuote(processedRegex) + "'";
+		String soql = "SELECT Id , Name FROM ApexTrigger WHERE NamespacePrefix = '" + escapeSingleQuote(namespacePrefix) + 
+				"' AND Name like '" + escapeSingleQuote(processedRegex) + "'";
 		return soql;
 	}
 
@@ -107,10 +109,11 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex class as String
 	 */
-	public static String generateQueryToFetchApexClass(String apexClassName) {
+	public static String generateQueryToFetchApexClass(String namespacePrefix, String apexClassName) {
 		String soql = "";
 		if (apexClassName != null && !apexClassName.equals("")) {
-			soql = "SELECT Id, Name FROM ApexClass WHERE Name = '" + escapeSingleQuote(apexClassName) + "'";
+			soql = "SELECT Id, Name FROM ApexClass WHERE NamespacePrefix = '" + escapeSingleQuote(namespacePrefix) + 
+				"' AND Name = '" + escapeSingleQuote(apexClassName) + "'";
 		}
 		return soql;
 	}
@@ -123,10 +126,11 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex trigger as String
 	 */
-	public static String generateQueryToFetchApexTrigger(String apexTriggerName) {
+	public static String generateQueryToFetchApexTrigger(String namespacePrefix, String apexTriggerName) {
 		String soql = "";
 		if (apexTriggerName != null && !apexTriggerName.equals("")) {
-			soql = "SELECT Id, Name FROM ApexTrigger WHERE Name = '" + escapeSingleQuote(apexTriggerName) + "'";
+			soql = "SELECT Id, Name FROM ApexTrigger WHERE NamespacePrefix = '" + escapeSingleQuote(namespacePrefix) + 
+				"' AND Name = '" + escapeSingleQuote(apexTriggerName) + "'";
 		}
 		return soql;
 	}
