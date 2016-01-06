@@ -73,6 +73,8 @@ Optional Parameters:
 - -manifest.files.with.test.class.names.to.execute : Manifest files containing the list of test classes to be executed
 - -manifest.files.with.source.class.names.for.code.coverage.computation : Manifest files containing the list of Apex classes for which code coverage is to be computed
 - -max.test.execution.time.threshold : Maximum execution time(in minutes) for a test before it gets aborted
+- -proxy.host : Proxy host for external access
+- -proxy.port : Proxy port for external access
 - -help : Displays options available for running this application
 
 Note: User must provide either of the (-regex.for.selecting.source.classes.for.code.coverage.computation OR -manifest.files.with.source.class.names.for.code.coverage.computation) AND either of  -(regex.for.selecting.test.classes.to.execute OR -manifest.files.with.test.class.names.to.execute)
