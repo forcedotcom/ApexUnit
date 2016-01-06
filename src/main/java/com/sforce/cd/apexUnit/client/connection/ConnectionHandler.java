@@ -110,6 +110,19 @@ public class ConnectionHandler {
 			config.setUsername(CommandLineArguments.getUsername());
 			config.setPassword(CommandLineArguments.getPassword());
 			config.setAuthEndpoint(CommandLineArguments.getOrgUrl() + "/services/Soap/u/" + SUPPORTED_VERSION);
+			
+			if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
+				LOG.info("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port " + CommandLineArguments.getProxyPort() );
+				Integer validatedPort = 0;
+				try{
+					validatedPort = Integer.parseInt(CommandLineArguments.getProxyPort());
+				} catch ( java.lang.NumberFormatException exception ){
+					LOG.error("The value for the proxy port " + CommandLineArguments.getProxyPort() + " is not a valid integer");	
+					return null;
+				}
+				config.setProxy( CommandLineArguments.getProxyHost() , validatedPort);
+			}	
+			
 			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
 					+ CommandLineArguments.getPassword() + " " + CommandLineArguments.getOrgUrl() + " "
 					+ config.getUsername() + " " + config.getPassword() + " " + config.getAuthEndpoint());
@@ -169,7 +182,18 @@ public class ConnectionHandler {
 		config.setRestEndpoint(restEndPoint);
 		config.setCompression(true);
 		config.setTraceMessage(false);
-		// config.setProxy("Proxy", 8080);
+
+		if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
+			LOG.info("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port " + CommandLineArguments.getProxyPort() );
+			Integer validatedPort = 0;
+			try{
+				validatedPort = Integer.parseInt(CommandLineArguments.getProxyPort());
+			} catch ( java.lang.NumberFormatException exception ){
+				LOG.error("The value for the proxy port " + CommandLineArguments.getProxyPort() + " is not a valid integer");	
+				return null;
+			}
+			config.setProxy( CommandLineArguments.getProxyHost() , validatedPort);
+		}
 		try {
 			bulkConnection = new BulkConnection(config);
 			LOG.info("Bulk connection established.");
@@ -214,3 +238,4 @@ public class ConnectionHandler {
 	}
 
 }
+
