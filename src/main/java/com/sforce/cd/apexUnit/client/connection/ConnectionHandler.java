@@ -110,6 +110,14 @@ public class ConnectionHandler {
 			config.setUsername(CommandLineArguments.getUsername());
 			config.setPassword(CommandLineArguments.getPassword());
 			config.setAuthEndpoint(CommandLineArguments.getOrgUrl() + "/services/Soap/u/" + SUPPORTED_VERSION);
+			
+			if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
+				LOG.debug("Setting proxy configuraiton to " + 
+					CommandLineArguments.getProxyHost() + 
+					" on port " + CommandLineArguments.getProxyPort() );
+				config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
+			}	
+			
 			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
 					+ CommandLineArguments.getPassword() + " " + CommandLineArguments.getOrgUrl() + " "
 					+ config.getUsername() + " " + config.getPassword() + " " + config.getAuthEndpoint());
@@ -169,7 +177,13 @@ public class ConnectionHandler {
 		config.setRestEndpoint(restEndPoint);
 		config.setCompression(true);
 		config.setTraceMessage(false);
-		// config.setProxy("Proxy", 8080);
+
+		if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
+			LOG.debug("Setting proxy configuraiton to " + 
+				CommandLineArguments.getProxyHost() + 
+				" on port " + CommandLineArguments.getProxyPort() );
+			config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
+		}
 		try {
 			bulkConnection = new BulkConnection(config);
 			LOG.info("Bulk connection established.");
@@ -214,3 +228,4 @@ public class ConnectionHandler {
 	}
 
 }
+

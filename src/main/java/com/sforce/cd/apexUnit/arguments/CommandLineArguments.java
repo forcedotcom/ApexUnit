@@ -52,6 +52,9 @@ public class CommandLineArguments {
 	public static final String MAX_TEST_EXECUTION_TIME_THRESHOLD = "-max.test.execution.time.threshold";
 	public static final String ORG_CLIENT_ID = "-org.client.id";
 	public static final String ORG_CLIENT_SECRET = "-org.client.secret";
+	public static final String PROXY_HOST = "-proxy.host";
+	public static final String PROXY_PORT = "-proxy.port";
+	
 	public static final String HELP = "-help";
 
 	/*
@@ -86,6 +89,10 @@ public class CommandLineArguments {
 	static private String clientId;
 	@Parameter(names = ORG_CLIENT_SECRET, description = "Client Secret associated with the org.", required = true)
 	static private String clientSecret;
+	@Parameter(names = PROXY_HOST, description = "Proxy host if required for access.", required = false)
+	static private String proxyHost;
+	@Parameter(names = PROXY_PORT, description = "Proxy port if required for access.", validateWith = PositiveIntegerValidator.class, required = false)
+	static private String proxyPort;
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
 
@@ -144,6 +151,14 @@ public class CommandLineArguments {
 		return clientSecret;
 	}
 
+	public static String getProxyHost() {
+		return proxyHost;
+	}
+
+	public static String getProxyPort() {
+		return proxyPort;
+	}
+
 	public static void setClientSecret(String clientSecret) {
 		CommandLineArguments.clientSecret = clientSecret;
 	}
@@ -153,3 +168,4 @@ public class CommandLineArguments {
 
 	}
 }
+

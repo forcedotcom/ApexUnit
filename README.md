@@ -52,8 +52,12 @@ mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner"
                            $manifest_Files_For_Apex_Test_Classes_To_Execute 
                      -manifest.files.with.source.class.names.for.code.coverage.computation 
                            $manifest_Files_For_Apex_Source_Classes_to_compute_code_coverage
-                    -max.test.execution.time.threshold 
+                     -max.test.execution.time.threshold 
                            $max_time_threshold_for_test_execution_to_abort"
+                     -proxy.host
+                           $prox_host
+                     -proxy.port
+                           $proxy_port
 
 ``` 
 *Please replace all $xyz with the values specific to your environment/project*
@@ -73,13 +77,15 @@ Optional Parameters:
 - -manifest.files.with.test.class.names.to.execute : Manifest files containing the list of test classes to be executed
 - -manifest.files.with.source.class.names.for.code.coverage.computation : Manifest files containing the list of Apex classes for which code coverage is to be computed
 - -max.test.execution.time.threshold : Maximum execution time(in minutes) for a test before it gets aborted
+- -proxy.host : Proxy host for external access
+- -proxy.port : Proxy port for external access
 - -help : Displays options available for running this application
 
 Note: User must provide either of the (-regex.for.selecting.source.classes.for.code.coverage.computation OR -manifest.files.with.source.class.names.for.code.coverage.computation) AND either of  -(regex.for.selecting.test.classes.to.execute OR -manifest.files.with.test.class.names.to.execute)
 
 Sample command: 
 ```java
-mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner" -Dexec.args=" -org.login.url https://na14.salesforce.com -org.username test****@salesforce.com -org.password ****** -org.wide.code.coverage.threshold 75  -team.code.coverage.threshold 80 -org.client.id ******* -org.client.secret ***** -regex.for.selecting.test.classes.to.execute Sample*Test,Sample*test -regex.for.selecting.source.classes.for.code.coverage.computation Sample,Mobile,Wrapper -manifest.files.with.test.class.names.to.execute ManifestFile.txt -manifest.files.with.source.class.names.for.code.coverage.computation ClassManifestFile.txt -max.test.execution.time.threshold 10"
+mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner" -Dexec.args=" -org.login.url https://na14.salesforce.com -org.username test****@salesforce.com -org.password ****** -org.wide.code.coverage.threshold 75  -team.code.coverage.threshold 80 -org.client.id ******* -org.client.secret ***** -regex.for.selecting.test.classes.to.execute Sample*Test,Sample*test -regex.for.selecting.source.classes.for.code.coverage.computation Sample,Mobile,Wrapper -manifest.files.with.test.class.names.to.execute ManifestFile.txt -manifest.files.with.source.class.names.for.code.coverage.computation ClassManifestFile.txt -max.test.execution.time.threshold 10 -proxy.host your.proxy-if-required.net -proxy.port 8080"
 ```
 Note: Multiple comma separated manifest files and regexes can be provided.Please do not include spaces while providing multiple regex or manifest files.
 
