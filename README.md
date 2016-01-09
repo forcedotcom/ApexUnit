@@ -52,8 +52,12 @@ mvn compile exec:java -Dexec.mainClass="com.sforce.cd.apexUnit.ApexUnitRunner"
                            $manifest_Files_For_Apex_Test_Classes_To_Execute 
                      -manifest.files.with.source.class.names.for.code.coverage.computation 
                            $manifest_Files_For_Apex_Source_Classes_to_compute_code_coverage
-                    -max.test.execution.time.threshold 
+                     -max.test.execution.time.threshold 
                            $max_time_threshold_for_test_execution_to_abort"
+                     -proxy.host
+                           $prox_host
+                     -proxy.port
+                           $proxy_port
 
 ``` 
 *Please replace all $xyz with the values specific to your environment/project*
