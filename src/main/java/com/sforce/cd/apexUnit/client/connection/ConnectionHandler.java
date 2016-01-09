@@ -112,7 +112,7 @@ public class ConnectionHandler {
 			config.setAuthEndpoint(CommandLineArguments.getOrgUrl() + "/services/Soap/u/" + SUPPORTED_VERSION);
 			
 			if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
-				LOG.info("Setting proxy configuraiton to " + 
+				LOG.debug("Setting proxy configuraiton to " + 
 					CommandLineArguments.getProxyHost() + 
 					" on port " + CommandLineArguments.getProxyPort() );
 				config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
@@ -179,7 +179,7 @@ public class ConnectionHandler {
 		config.setTraceMessage(false);
 
 		if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
-			LOG.info("Setting proxy configuraiton to " + 
+			LOG.debug("Setting proxy configuraiton to " + 
 				CommandLineArguments.getProxyHost() + 
 				" on port " + CommandLineArguments.getProxyPort() );
 			config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
