@@ -120,20 +120,21 @@ public class ApexManifestFileReader {
 		while ((strLine = bufferedReader.readLine()) != null) {
 			if (!newline.equals(strLine) && !strLine.equals("") && strLine.length() > 0) {
 				LOG.debug("The line says .... -  " + strLine);
-
-				String soql = QueryConstructor.generateQueryToFetchApexClass(strLine);
+				String[] namespaceAndName = ApexClassFetcherUtils.parseNamespaceAndName(strLine);
+				
+				String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName[0], namespaceAndName[1]);
 				// query using WSC
 				tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 						ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
-				LOG.debug("tempTestClassId: " + tempTestClassId);
+				LOG.info("***********tempTestClassId: " + tempTestClassId);
 				if (tempTestClassId == null) {
 					// look if the given class name is a trigger if its not an
 					// ApexClass
-					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(strLine);
+					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName[0], namespaceAndName[1]);
 					// query using WSC
 					tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 							ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);
-					LOG.debug("tempTestClassId(TriggerId: " + tempTestClassId);
+					LOG.info("tempTestClassId(TriggerId: " + tempTestClassId);
 				}
 				if (tempTestClassId != null) {
 					if (!testClassList.contains(tempTestClassId)) {
@@ -165,5 +166,4 @@ public class ApexManifestFileReader {
 		}
 		return testClassesAsArray;
 	}
-
 }

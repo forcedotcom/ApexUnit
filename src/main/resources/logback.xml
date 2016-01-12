@@ -30,9 +30,9 @@
     </layout>
   </appender>
 
-	<logger name="com.sforce.cd.apexUnit" level="INFO"/>
+	<logger name="com.sforce.cd.apexUnit" level="debug"/>
 
-  <root level="INFO">
+  <root level="debug">
     <appender-ref ref="STDOUT" />
   </root>
 

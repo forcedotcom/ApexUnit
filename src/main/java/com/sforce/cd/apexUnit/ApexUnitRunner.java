@@ -70,6 +70,7 @@ public class ApexUnitRunner {
 	public static void main(String[] args) {
 		Long start = System.currentTimeMillis();
 		// Read input arguments using JCommander
+		LOG.debug("DEBUG WORKS!!!!!");
 		CommandLineArguments cmdLineArgs = new CommandLineArguments();
 		JCommander jcommander = new JCommander(cmdLineArgs, args);
 		boolean skipCodeCoverageComputation = CommandLineArguments.getTeamCodeCoverageThreshold() == 0

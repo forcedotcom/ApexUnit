@@ -188,13 +188,15 @@ public class ApexClassFetcherUtils {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
-			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(regex);
+			String namespace = "";
+			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
+			LOG.info("*** THE CLASS IDS FROM REGEX "+ classesAsArrayUsingWSC[0]);
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 
-			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(regex);
+			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespace, regex);
 			String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
 
 			Set<String> uniqueSetOfClasses = new HashSet<String>();
@@ -431,6 +433,24 @@ public class ApexClassFetcherUtils {
 				}
 			}
 		}
+	}
+	
+	/*
+	 * Returns a string array of namespace and class/trigger name
+	 * 
+	 * @param strLine - String value of user provided <NAMESPACE>.<CLASS/TRIGGER>
+	 */
+	public static String[] parseNamespaceAndName(String strLine){
+		String[] namespaceAndName = new String[2];
+		namespaceAndName = strLine.split("\\.");
+		if(namespaceAndName.length==1){
+			String[] emptyNamespaceWithName = new String[2]; 
+			emptyNamespaceWithName[0] = "";
+			emptyNamespaceWithName[1] = strLine;
+			namespaceAndName = emptyNamespaceWithName;
+		}
+		LOG.info("THE LENGTH OF THE ARRAY IS "+ namespaceAndName.length);
+		return namespaceAndName;
 	}
 
 }

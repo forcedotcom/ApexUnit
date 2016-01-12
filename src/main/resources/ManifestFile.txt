@@ -1,4 +1,2 @@
-AuthorPageConfig
-AuthorPageConfigTest
-SampleClass2
+CodeCoverage
 
