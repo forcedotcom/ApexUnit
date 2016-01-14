@@ -188,11 +188,10 @@ public class ApexClassFetcherUtils {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
-			String namespace = "";
+			String namespace = null;
 			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
-			LOG.info("*** THE CLASS IDS FROM REGEX "+ classesAsArrayUsingWSC[0]);
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 
@@ -323,8 +322,8 @@ public class ApexClassFetcherUtils {
 		}
 		if (queryResult != null && queryResult.getDone()) {
 			String[] classIds = fetchApexClassesAsArray(queryResult);
-			for (String classId : classIds) {
-				apexClassId = classId;
+			if(classIds.length>0){
+				apexClassId = classIds[0];
 			}
 		}
 
@@ -440,16 +439,17 @@ public class ApexClassFetcherUtils {
 	 * 
 	 * @param strLine - String value of user provided <NAMESPACE>.<CLASS/TRIGGER>
 	 */
-	public static String[] parseNamespaceAndName(String strLine){
-		String[] namespaceAndName = new String[2];
-		namespaceAndName = strLine.split("\\.");
-		if(namespaceAndName.length==1){
-			String[] emptyNamespaceWithName = new String[2]; 
-			emptyNamespaceWithName[0] = "";
-			emptyNamespaceWithName[1] = strLine;
-			namespaceAndName = emptyNamespaceWithName;
+	public static Map<String, String> parseNamespaceAndName(String strLine){
+		Map<String, String> namespaceAndName = new HashMap<String, String>();
+		String [] parsedName = strLine.split("\\.");
+		if(parsedName.length==1){
+			namespaceAndName.put("name", strLine);
+		}else{
+			namespaceAndName.put("namespace", parsedName[0]);
+			namespaceAndName.put("name", parsedName[1]);
 		}
-		LOG.info("THE LENGTH OF THE ARRAY IS "+ namespaceAndName.length);
+		LOG.debug("\n Namespace provided is "+ namespaceAndName.get("namespace")+"\n"
+				+ "Name of class/Trigger is "+ namespaceAndName.get("name"));
 		return namespaceAndName;
 	}
 

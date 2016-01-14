@@ -41,6 +41,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -120,21 +121,23 @@ public class ApexManifestFileReader {
 		while ((strLine = bufferedReader.readLine()) != null) {
 			if (!newline.equals(strLine) && !strLine.equals("") && strLine.length() > 0) {
 				LOG.debug("The line says .... -  " + strLine);
-				String[] namespaceAndName = ApexClassFetcherUtils.parseNamespaceAndName(strLine);
+				Map<String, String> namespaceAndName = ApexClassFetcherUtils.parseNamespaceAndName(strLine);
 				
-				String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName[0], namespaceAndName[1]);
+				String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName.get("namespace"), 
+						namespaceAndName.get("name"));
 				// query using WSC
 				tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 						ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
-				LOG.info("***********tempTestClassId: " + tempTestClassId);
+				LOG.debug("tempTestClassId: " + tempTestClassId);
 				if (tempTestClassId == null) {
 					// look if the given class name is a trigger if its not an
 					// ApexClass
-					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName[0], namespaceAndName[1]);
+					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 
+							namespaceAndName.get("name"));
 					// query using WSC
 					tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 							ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);
-					LOG.info("tempTestClassId(TriggerId: " + tempTestClassId);
+					LOG.debug("tempTestClassId(TriggerId: " + tempTestClassId);
 				}
 				if (tempTestClassId != null) {
 					if (!testClassList.contains(tempTestClassId)) {
