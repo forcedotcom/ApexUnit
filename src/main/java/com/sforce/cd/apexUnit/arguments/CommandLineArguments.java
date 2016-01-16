@@ -92,7 +92,7 @@ public class CommandLineArguments {
 	@Parameter(names = PROXY_HOST, description = "Proxy host if required for access.", required = false)
 	static private String proxyHost;
 	@Parameter(names = PROXY_PORT, description = "Proxy port if required for access.", validateWith = PositiveIntegerValidator.class, required = false)
-	static private String proxyPort;
+	static private Integer proxyPort;
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
 
@@ -155,7 +155,7 @@ public class CommandLineArguments {
 		return proxyHost;
 	}
 
-	public static String getProxyPort() {
+	public static Integer getProxyPort() {
 		return proxyPort;
 	}
 
