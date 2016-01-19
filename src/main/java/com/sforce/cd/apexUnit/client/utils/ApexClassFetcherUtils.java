@@ -434,23 +434,4 @@ public class ApexClassFetcherUtils {
 		}
 	}
 	
-	/*
-	 * Returns a string array of namespace and class/trigger name
-	 * 
-	 * @param strLine - String value of user provided <NAMESPACE>.<CLASS/TRIGGER>
-	 */
-	public static Map<String, String> parseNamespaceAndName(String strLine){
-		Map<String, String> namespaceAndName = new HashMap<String, String>();
-		String [] parsedName = strLine.split("\\.");
-		if(parsedName.length==1){
-			namespaceAndName.put("name", strLine);
-		}else{
-			namespaceAndName.put("namespace", parsedName[0]);
-			namespaceAndName.put("name", parsedName[1]);
-		}
-		LOG.debug("\n Namespace provided is "+ namespaceAndName.get("namespace")+"\n"
-				+ "Name of class/Trigger is "+ namespaceAndName.get("name"));
-		return namespaceAndName;
-	}
-
 }
