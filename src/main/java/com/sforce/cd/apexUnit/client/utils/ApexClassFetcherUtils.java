@@ -322,7 +322,7 @@ public class ApexClassFetcherUtils {
 		}
 		if (queryResult != null && queryResult.getDone()) {
 			String[] classIds = fetchApexClassesAsArray(queryResult);
-			if(classIds.length>0){
+			if(classIds!=null && classIds.length>0){
 				apexClassId = classIds[0];
 			}
 		}
