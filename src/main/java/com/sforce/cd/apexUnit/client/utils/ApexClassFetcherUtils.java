@@ -188,13 +188,14 @@ public class ApexClassFetcherUtils {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
-			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(regex);
+			String namespace = null;
+			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 
-			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(regex);
+			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespace, regex);
 			String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
 
 			Set<String> uniqueSetOfClasses = new HashSet<String>();
@@ -321,8 +322,8 @@ public class ApexClassFetcherUtils {
 		}
 		if (queryResult != null && queryResult.getDone()) {
 			String[] classIds = fetchApexClassesAsArray(queryResult);
-			for (String classId : classIds) {
-				apexClassId = classId;
+			if(classIds!=null && classIds.length>0){
+				apexClassId = classIds[0];
 			}
 		}
 
@@ -432,5 +433,5 @@ public class ApexClassFetcherUtils {
 			}
 		}
 	}
-
+	
 }

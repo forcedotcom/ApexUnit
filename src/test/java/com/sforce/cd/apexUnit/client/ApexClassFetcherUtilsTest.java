@@ -87,7 +87,7 @@ public class ApexClassFetcherUtilsTest {
 
 	@Test(priority = 1)
 	public void constructTestClassArrayUsingWSC() {
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(CommandLineArguments.getTestRegex());
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(null, CommandLineArguments.getTestRegex());
 		String[] testClasses = ApexClassFetcherUtils.constructClassIdArrayUsingWSC(conn, soql);
 		logFilteredTestClasses(testClasses);
 		if (testClasses != null) {
@@ -100,7 +100,7 @@ public class ApexClassFetcherUtilsTest {
 		String className = null;
 		String expectedTestClassId = null;
 		// pass empty string so that random classes gets picked
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex("*");
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(null, "*");
 		// limit the result to 1 . Thats all we need to test the method
 		// fetchApexClassIdFromName
 		soql += " limit 1";
@@ -112,7 +112,7 @@ public class ApexClassFetcherUtilsTest {
 				expectedTestClassId = testClass;
 			}
 		}
-		soql = QueryConstructor.generateQueryToFetchApexClass(className);
+		soql = QueryConstructor.generateQueryToFetchApexClass(null, className);
 		String testClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(conn, soql);
 		Assert.assertEquals(expectedTestClassId, testClassId);
 	}
@@ -122,7 +122,7 @@ public class ApexClassFetcherUtilsTest {
 		String classId = null;
 		String expectedClassName = null;
 		// pass empty string so that random classes gets picked
-		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex("*");
+		soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(null,"*");
 		// limit the result to 1 . Thats all we need to test the method
 		// fetchApexClassIdFromName
 		soql += " limit 1";

@@ -40,7 +40,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -120,8 +122,10 @@ public class ApexManifestFileReader {
 		while ((strLine = bufferedReader.readLine()) != null) {
 			if (!newline.equals(strLine) && !strLine.equals("") && strLine.length() > 0) {
 				LOG.debug("The line says .... -  " + strLine);
-
-				String soql = QueryConstructor.generateQueryToFetchApexClass(strLine);
+				Map<String, String> namespaceAndName = new HashMap<String, String>();
+				namespaceAndName.put("name",strLine);				
+				String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName.get("namespace"), 
+						namespaceAndName.get("name"));
 				// query using WSC
 				tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 						ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
@@ -129,7 +133,8 @@ public class ApexManifestFileReader {
 				if (tempTestClassId == null) {
 					// look if the given class name is a trigger if its not an
 					// ApexClass
-					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(strLine);
+					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 
+							namespaceAndName.get("name"));
 					// query using WSC
 					tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 							ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);
@@ -165,5 +170,4 @@ public class ApexManifestFileReader {
 		}
 		return testClassesAsArray;
 	}
-
 }

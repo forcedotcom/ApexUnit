@@ -8,4 +8,4 @@ OtherNamingConventionClass1
 OtherNamingConventionClass2
 AuthorPageConfigTest
 
-AfterSpaceClass1
+SimpleClass1Test

@@ -48,9 +48,10 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex classes as String
 	 */
-	public static String generateQueryToFetchApexClassesBasedOnRegex(String regex) {
+	public static String generateQueryToFetchApexClassesBasedOnRegex(String namespace, String regex) {
 		String processedRegex = processRegexForSoqlQueries(regex);
-		String soql = "SELECT Id , Name FROM ApexClass WHERE Name like '" + escapeSingleQuote(processedRegex) + "'";
+		String soql = "SELECT Id , Name FROM ApexClass WHERE NamespacePrefix ="+ escapeSingleQuote(namespace) +" AND "
+				+ "Name like " + escapeSingleQuote(processedRegex);
 		return soql;
 	}
 
@@ -64,9 +65,10 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex triggers as String
 	 */
-	public static String generateQueryToFetchApexTriggersBasedOnRegex(String regex) {
+	public static String generateQueryToFetchApexTriggersBasedOnRegex(String namespace, String regex) {
 		String processedRegex = processRegexForSoqlQueries(regex);
-		String soql = "SELECT Id , Name FROM ApexTrigger WHERE Name like '" + escapeSingleQuote(processedRegex) + "'";
+		String soql = "SELECT Id , Name FROM ApexTrigger WHERE NamespacePrefix ="+ escapeSingleQuote(namespace) +" AND "
+				+ "Name like " + escapeSingleQuote(processedRegex);
 		return soql;
 	}
 
@@ -79,7 +81,7 @@ public class QueryConstructor {
 	 * @return - Query to fetch apex class as String
 	 */
 	public static String generateQueryToFetchApexClassFromId(String apexClassId) {
-		String soql = "SELECT Id, Name FROM ApexClass WHERE Id = '" + escapeSingleQuote(apexClassId) + "'";
+		String soql = "SELECT Id, Name FROM ApexClass WHERE Id = " + escapeSingleQuote(apexClassId);
 		return soql;
 	}
 
@@ -94,7 +96,7 @@ public class QueryConstructor {
 	public static String generateQueryToFetchApexTriggerFromId(String apexTriggerId) {
 		String soql = "";
 		if (apexTriggerId != null && !apexTriggerId.equals("")) {
-			soql = "SELECT Id, Name FROM ApexTrigger WHERE Id = '" + escapeSingleQuote(apexTriggerId) + "'";
+			soql = "SELECT Id, Name FROM ApexTrigger WHERE Id = " + escapeSingleQuote(apexTriggerId);
 		}
 		return soql;
 	}
@@ -107,10 +109,11 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex class as String
 	 */
-	public static String generateQueryToFetchApexClass(String apexClassName) {
+	public static String generateQueryToFetchApexClass(String namespace, String apexClassName) {
 		String soql = "";
 		if (apexClassName != null && !apexClassName.equals("")) {
-			soql = "SELECT Id, Name FROM ApexClass WHERE Name = '" + escapeSingleQuote(apexClassName) + "'";
+			soql = "SELECT Id, Name FROM ApexClass WHERE NamespacePrefix ="+ escapeSingleQuote(namespace) +" AND "
+					+ "Name = " + escapeSingleQuote(apexClassName);
 		}
 		return soql;
 	}
@@ -123,10 +126,11 @@ public class QueryConstructor {
 	 * 
 	 * @return - Query to fetch apex trigger as String
 	 */
-	public static String generateQueryToFetchApexTrigger(String apexTriggerName) {
+	public static String generateQueryToFetchApexTrigger(String namespace, String apexTriggerName) {
 		String soql = "";
 		if (apexTriggerName != null && !apexTriggerName.equals("")) {
-			soql = "SELECT Id, Name FROM ApexTrigger WHERE Name = '" + escapeSingleQuote(apexTriggerName) + "'";
+			soql = "SELECT Id, Name FROM ApexTrigger WHERE NamespacePrefix ="+ escapeSingleQuote(namespace) +" AND "
+					+ "Name = " + escapeSingleQuote(apexTriggerName);
 		}
 		return soql;
 	}
@@ -144,8 +148,8 @@ public class QueryConstructor {
 		if (testQueueItemId != null && !testQueueItemId.equals("")) {
 			// we need to limit the number of records we fetch to 1 because
 			// multiple records are returned for each ApexTestClass
-			soql = "select ParentJobId from ApexTestQueueItem where id  = '" + escapeSingleQuote(testQueueItemId)
-					+ "' limit 1";
+			soql = "select ParentJobId from ApexTestQueueItem where id  = " + escapeSingleQuote(testQueueItemId)
+					+ " limit 1";
 		}
 		return soql;
 	}
@@ -161,8 +165,8 @@ public class QueryConstructor {
 	public static String getTestExecutionStatus(String parentJobId) {
 		String soql = "";
 		if (parentJobId != null && !parentJobId.equals("")) {
-			soql = "Select Id, ApexClassId, ApexClass.Name, ExtendedStatus, ParentJobId, Status, SystemModstamp, CreatedDate From ApexTestQueueItem Where ParentJobId = '"
-					+ escapeSingleQuote(parentJobId) + "'";
+			soql = "Select Id, ApexClassId, ApexClass.Name, ExtendedStatus, ParentJobId, Status, SystemModstamp, CreatedDate "
+					+ "From ApexTestQueueItem Where ParentJobId = "+ escapeSingleQuote(parentJobId);
 		}
 		return soql;
 	}
@@ -178,8 +182,8 @@ public class QueryConstructor {
 	public static String fetchResultFromApexTestQueueItem(String parentJobId) {
 		String soql = "";
 		if (parentJobId != null && !parentJobId.equals("")) {
-			soql = "SELECT ApexClassId,AsyncApexJobId,Id,Message,MethodName,Outcome,QueueItemId,StackTrace,SystemModstamp,TestTimestamp FROM ApexTestResult WHERE AsyncApexJobId = '"
-					+ escapeSingleQuote(parentJobId) + "'";
+			soql = "SELECT ApexClassId,AsyncApexJobId,Id,Message,MethodName,Outcome,QueueItemId,StackTrace,SystemModstamp,TestTimestamp "
+					+ "FROM ApexTestResult WHERE AsyncApexJobId = "+ escapeSingleQuote(parentJobId);
 		}
 		return soql;
 	}
@@ -254,8 +258,8 @@ public class QueryConstructor {
 	public static String getApexClassInfo(String apexClassId) {
 		String soql = "";
 		if (apexClassId != null && !apexClassId.equals("")) {
-			soql = "SELECT Id,Name,ApiVersion,LengthWithoutComments FROM ApexClass where Id = '"
-					+ escapeSingleQuote(apexClassId) + "'";
+			soql = "SELECT Id,Name,ApiVersion,LengthWithoutComments FROM ApexClass where Id = "
+					+ escapeSingleQuote(apexClassId);
 		}
 		return soql;
 	}
@@ -271,14 +275,14 @@ public class QueryConstructor {
 	public static String getApexTriggerInfo(String apexClassId) {
 		String soql = "";
 		if (apexClassId != null && !apexClassId.equals("")) {
-			soql = "SELECT Id,Name,ApiVersion,LengthWithoutComments FROM ApexTrigger where Id = '"
-					+ escapeSingleQuote(apexClassId) + "'";
+			soql = "SELECT Id,Name,ApiVersion,LengthWithoutComments FROM ApexTrigger where Id = "
+					+ escapeSingleQuote(apexClassId);
 		}
 		return soql;
 	}
 
 	/*
-	 * Process regex provided by the user sp that the regex can be consumed by
+	 * Process regex provided by the user so that the regex can be consumed by
 	 * soql queries * is converted to % in the regex. If no * is found in the
 	 * regex, the regex is considered as a prefix and a % is added at the end of
 	 * regex
@@ -309,10 +313,10 @@ public class QueryConstructor {
 	 * @return : singleQuotrEscapedStr : String
 	 */
 	private static String escapeSingleQuote(String userInput) {
-		String singleQuoteEscapedStr = "";
+		String singleQuoteEscapedStr=null;
 		if (userInput != null) {
 			singleQuoteEscapedStr = userInput.replaceAll("'", "\'");
-
+			singleQuoteEscapedStr = "'"+singleQuoteEscapedStr+"'";
 		}
 		return singleQuoteEscapedStr;
 	}
