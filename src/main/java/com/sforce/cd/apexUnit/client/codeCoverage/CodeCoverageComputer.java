@@ -110,7 +110,7 @@ public class CodeCoverageComputer {
 		if (CommandLineArguments.getSourceRegex() != null) {
 			LOG.debug(" Fetching apex classes with regex : " + CommandLineArguments.getSourceRegex());
 			classesAsArray = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(connection, classesAsArray,
-					CommandLineArguments.getSourceRegex());
+					CommandLineArguments.getSourceRegex(), true);
 		}
 		// Do not proceed if no class names are returned from both manifest
 		// files and/or regexes

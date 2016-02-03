@@ -90,7 +90,7 @@ public class ApexClassFetcherUtils {
 		if (CommandLineArguments.getTestRegex() != null) {
 			LOG.debug(" Fetching apex test classes with prefix : " + CommandLineArguments.getTestRegex());
 			consolidatedTestClassesAsArray = fetchApexClassesBasedOnMultipleRegexes(connection, testClassesAsArray,
-					CommandLineArguments.getTestRegex());
+					CommandLineArguments.getTestRegex(), false);
 		} else {
 			consolidatedTestClassesAsArray = testClassesAsArray;
 		}
@@ -152,11 +152,13 @@ public class ApexClassFetcherUtils {
 	 * @param regexes - comma separated regexes that are used to fetch class
 	 * names from the org
 	 * 
+	 * @param includeTriggers - boolean value whether or not to include triggers
+	 *
 	 * TODO: rename the method name so that it reflects that class Arrays are
 	 * concatenated
 	 */
 	public static String[] fetchApexClassesBasedOnMultipleRegexes(PartnerConnection connection, String[] classesAsArray,
-			String regexes) {
+			String regexes, Boolean includeTriggers) {
 
 		LOG.info("Using regex(es): " + regexes + " to fetch apex classes");
 		String cvsSplitBy = ",";
@@ -166,7 +168,7 @@ public class ApexClassFetcherUtils {
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
 			// Also combine the results obtained for each regex
-			classesAsArray = fetchApexClassesBasedOnRegex(connection, classesAsArray, regex);
+			classesAsArray = fetchApexClassesBasedOnRegex(connection, classesAsArray, regex, includeTriggers);
 		}
 		return classesAsArray;
 	}
@@ -184,7 +186,7 @@ public class ApexClassFetcherUtils {
 	 * @param regexes - regex that is used to fetch classes from the org
 	 */
 	private static String[] fetchApexClassesBasedOnRegex(PartnerConnection connection, String[] classesAsArray,
-			String regex) {
+			String regex, Boolean includeTriggers) {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
@@ -194,9 +196,6 @@ public class ApexClassFetcherUtils {
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
 			// if both manifest file and testClass regex expression is provided
 			// as command line option, combine the results
-
-			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespace, regex);
-			String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
 
 			Set<String> uniqueSetOfClasses = new HashSet<String>();
 			ArrayList<String> duplicateList = new ArrayList<String>();
@@ -218,14 +217,23 @@ public class ApexClassFetcherUtils {
 					}
 				}
 			}
-			// eliminate duplicates from the triggers fetched using the prefix
-			if (triggersAsArrayUsingWSC != null && triggersAsArrayUsingWSC.length > 0) {
-				for (int i = 0; i < triggersAsArrayUsingWSC.length; i++) {
-					if (!uniqueSetOfClasses.add(triggersAsArrayUsingWSC[i])) {
-						duplicateList.add(triggersAsArrayUsingWSC[i]);
+
+			//if include triggers, add triggers to duplicate list
+			if(includeTriggers){
+				String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespace, regex);
+				String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
+
+				if (triggersAsArrayUsingWSC != null && triggersAsArrayUsingWSC.length > 0) {
+					for (int i = 0; i < triggersAsArrayUsingWSC.length; i++) {
+						if (!uniqueSetOfClasses.add(triggersAsArrayUsingWSC[i])) {
+							duplicateList.add(triggersAsArrayUsingWSC[i]);
+						}
 					}
 				}
 			}
+
+			// eliminate duplicates from the triggers fetched using the prefix
+
 			String[] uniqueClassesAsArray = uniqueSetOfClasses.toArray(new String[uniqueSetOfClasses.size()]);
 
 			// log the duplicate classes/triggers found by querying the org with
@@ -433,5 +441,5 @@ public class ApexClassFetcherUtils {
 			}
 		}
 	}
-	
+
 }
