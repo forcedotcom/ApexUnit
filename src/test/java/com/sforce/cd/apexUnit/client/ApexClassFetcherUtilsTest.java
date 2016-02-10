@@ -79,7 +79,7 @@ public class ApexClassFetcherUtilsTest {
 	@Test
 	public void fetchApexClassesBasedOnPrefixTest() {
 		String[] testClasses = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(conn, null,
-				CommandLineArguments.getTestRegex());
+				CommandLineArguments.getTestRegex(), true);
 		if (testClasses != null) {
 			Assert.assertTrue(testClasses.length > 0 || ApexClassFetcherUtils.apexClassMap.size() > 0);
 		}
