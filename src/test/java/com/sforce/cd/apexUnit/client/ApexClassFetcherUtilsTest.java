@@ -69,7 +69,7 @@ public class ApexClassFetcherUtilsTest {
 	@Test
 	public void fetchApexClassesFromManifestFilesTest() {
 		String[] testClasses = ApexClassFetcherUtils
-				.fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles());
+				.fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles(), true);
 		if (testClasses != null && ApexClassFetcherUtils.apexClassMap != null
 				&& ApexClassFetcherUtils.apexClassMap.size() != testClasses.length) {
 			Assert.assertTrue(testClasses.length > 0 || ApexClassFetcherUtils.apexClassMap.size() > 0);

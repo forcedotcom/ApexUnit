@@ -85,7 +85,7 @@ public class ApexClassFetcherUtils {
 
 		if (CommandLineArguments.getTestManifestFiles() != null) {
 			LOG.debug(" Fetching apex test classes from location : " + CommandLineArguments.getTestManifestFiles());
-			testClassesAsArray = fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles());
+			testClassesAsArray = fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles(), false);
 		}
 		if (CommandLineArguments.getTestRegex() != null) {
 			LOG.debug(" Fetching apex test classes with prefix : " + CommandLineArguments.getTestRegex());
@@ -118,10 +118,10 @@ public class ApexClassFetcherUtils {
 	 * @param manifestFiles - manifest file(s) that will be read to fetch the
 	 * apex class names
 	 */
-	public static String[] fetchApexClassesFromManifestFiles(String manifestFiles) {
+	public static String[] fetchApexClassesFromManifestFiles(String manifestFiles, boolean includeTriggers) {
 		String[] classIdsAsArray = null;
 		if (manifestFiles != null) {
-			ApexManifestFileReader apexManifestFileReader = new ApexManifestFileReader();
+			ApexManifestFileReader apexManifestFileReader = new ApexManifestFileReader(includeTriggers);
 			// fetch test class id's based on the test classes mentioned in the
 			// manifest file(s)
 			classIdsAsArray = apexManifestFileReader.fetchClassNamesFromManifestFiles(manifestFiles);

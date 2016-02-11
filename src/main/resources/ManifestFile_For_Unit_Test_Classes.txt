@@ -9,3 +9,5 @@ OtherNamingConventionClass2
 AuthorPageConfigTest
 
 SimpleClass1Test
+
+HelloWorldTrigger
