@@ -157,6 +157,7 @@ public class ApexManifestFileReader {
 				ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
 		LOG.debug("tempTestClassId: " + tempTestClassId);
 		
+		//triggers are included only for code coverage and not for tests to avoid exception by the platform
 		if (tempTestClassId == null && includeTriggers) {
 			// look if the given class name is a trigger if its not ApexClass
 			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 

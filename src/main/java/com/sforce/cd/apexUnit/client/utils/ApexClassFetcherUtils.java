@@ -218,7 +218,7 @@ public class ApexClassFetcherUtils {
 				}
 			}
 
-			//if include triggers, add triggers to duplicate list
+			//if include triggers, add triggers to duplicate list as Triggers cannot be tested on force.com
 			if(includeTriggers){
 				String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTriggersBasedOnRegex(namespace, regex);
 				String[] triggersAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soqlForTrigger);
