@@ -139,6 +139,12 @@ public class ApexManifestFileReader {
 		return testClassesAsArray;
 	}
 	
+	/*
+	 * inserts the classname from manifest file to the test class array
+	 * 
+	 * @param strLine - String type - classname provided on manifest file
+	 * @param testClassList - ArrayList of String - test classes saved so far
+	 */
 	private void insertIntoTestClassesArray(String strLine, ArrayList<String> testClassList){
 		String tempTestClassId = null;
 		Map<String, String> namespaceAndName = new HashMap<String, String>();
