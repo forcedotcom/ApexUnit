@@ -1,7 +1,8 @@
 language: java
-
 jdk:
-  - oraclejdk7
-
+- oraclejdk7
 script:
-  - mvn clean
+- echo $TEST_SECRET
+env:
+  global:
+    secure: Kzg6AT5NkLi/hJzJq+XyA+R8CZ7rUk182lxwuKwlLT12jjvHSJjTAHqX8qboZpLZGtVH9kx98Mxu/b4tgyqFL+7bkoRSf6us5Q0GQ1XnuCTu8wfpcnIjZqzr+3DDGldflXaAj1eLSbp2aA+xlpGS959eT6DTBLbhABc2CjI2LZAxZz/LC+OdvO6ddaCdZarAIBS+OkIToTMpPbvoXGVU9KeoUcjzP7YZ0AlNnagcwBz7j4RhylX5zeuYVYVtj+xZtwe4hHkh1m4uVA6/m1ygvx4AkqAFfXNuy47R7PE9xhUVhXH8Rs5pqR7mXOZb2wNAnQyUoELmFl/OR7fIKKGkX0wlIwd/3GnyMEMCIW2Wyw8Xu5fpenYbsEO0eUommm+Kbtq5WCvcWotPZflTGB6Yh60Z9ssfQQj5j+7qZuKRCjU/0rBit0mQk6Vy/eaaybpVn6z5JmLOkBA9U2mEkG60kSasyAMkAslk9vLOivLxqgwleR/QNu0yTUiwu+/VEtnalqGeHmomUmZrBOjTfZhYrWpgGbCyJ1otf2otDWywLiGVRNSqVoGhsCHg6VSyR1Mt3eMYP7jELikCSjFO1gMcwMdgM4dH9wnrxvuwGqmnjGa4AIljv9pt6shQUgKS8G9tRNc/camnyWgs3Iie9OIbfdKfVA3kxSfszRSqQtWSGn8=
