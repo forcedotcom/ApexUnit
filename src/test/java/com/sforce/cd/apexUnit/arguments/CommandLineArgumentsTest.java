@@ -90,7 +90,7 @@ public class CommandLineArgumentsTest {
 		arguments.append(appendSpaces(CLIENT_ID));
 		arguments.append(CommandLineArguments.ORG_CLIENT_SECRET);
 		arguments.append(appendSpaces(CLIENT_SECRET));
-		logs.info(arguments.toString());
+		//logs.info(arguments.toString());
 		String[] args = arguments.toString().split(" ");
 
 		JCommander jcommander = new JCommander(cmdLineArgs, args);
@@ -113,7 +113,7 @@ public class CommandLineArgumentsTest {
 	}
 
 	public void getPassword() {
-		logs.info(" cmdLineArgs.getPassword() is " + CommandLineArguments.getPassword());
+		//logs.info(" cmdLineArgs.getPassword() is " + CommandLineArguments.getPassword());
 		Assert.assertEquals(CommandLineArguments.getPassword(), ORG_PASSWORD_PARAMETER);
 
 	}
