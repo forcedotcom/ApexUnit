@@ -31,7 +31,7 @@
 
 	<groupId>com.sforce.cd.ApexUnit</groupId>
 	<artifactId>ApexUnit-core</artifactId>
-	<version>2.3.1.0</version>
+	<version>2.3.2</version>
 	<name>ApexUnit</name>
 	<description>Apex Unit v 2.0 with enhanced metrics and advanced features</description>
 	<!-- Fail fast for older Maven versions -->

@@ -57,6 +57,11 @@ import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 public class ApexManifestFileReader {
 	private static Logger LOG = LoggerFactory.getLogger(ApexManifestFileReader.class);
 	public static ArrayList<String> nonExistantApexClassEntries = new ArrayList<String>();
+	private boolean includeTriggers;
+
+	public ApexManifestFileReader(boolean includeTriggers) {
+		this.includeTriggers = includeTriggers;
+	}
 
 	public String[] fetchClassNamesFromManifestFiles(String files) {
 		String[] apexClassesStrArr = null;
@@ -117,50 +122,13 @@ public class ApexManifestFileReader {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(dataIS));
 		String strLine = null;
 		String newline = System.getProperty("line.separator");
-		String tempTestClassId = null;
-
+		
 		while ((strLine = bufferedReader.readLine()) != null) {
 			if (!newline.equals(strLine) && !strLine.equals("") && strLine.length() > 0) {
 				LOG.debug("The line says .... -  " + strLine);
-				Map<String, String> namespaceAndName = new HashMap<String, String>();
-				namespaceAndName.put("name",strLine);				
-				String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName.get("namespace"), 
-						namespaceAndName.get("name"));
-				// query using WSC
-				tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
-						ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
-				LOG.debug("tempTestClassId: " + tempTestClassId);
-				if (tempTestClassId == null) {
-					// look if the given class name is a trigger if its not an
-					// ApexClass
-					String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 
-							namespaceAndName.get("name"));
-					// query using WSC
-					tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
-							ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);
-					LOG.debug("tempTestClassId(TriggerId: " + tempTestClassId);
-				}
-				if (tempTestClassId != null) {
-					if (!testClassList.contains(tempTestClassId)) {
-						testClassList.add(tempTestClassId);
-						ApexClassFetcherUtils.apexClassMap.put(tempTestClassId, strLine);
-					} else {
-						LOG.warn("Duplicate entry found in manifest file for : " + strLine
-								+ " . Skipping multiple execution/code coverage computation of this test class/source class");
-						ApexClassFetcherUtils.duplicateApexClassMap.put(tempTestClassId, strLine);
-					}
-
-				} else {
-					LOG.warn("The class " + strLine + " does not exist in the org.");
-					if (!nonExistantApexClassEntries.contains(strLine)) {
-						nonExistantApexClassEntries.add(strLine);
-					}
-				}
-
+				insertIntoTestClassesArray(strLine, testClassList);
 			}
-			tempTestClassId = null;
 		}
-
 		dataIS.close();
 
 		Object[] apexClassesObjArr = testClassList.toArray();
@@ -169,5 +137,51 @@ public class ApexManifestFileReader {
 			ApexClassFetcherUtils.logTheFetchedApexClasses(testClassesAsArray);
 		}
 		return testClassesAsArray;
+	}
+	
+	/*
+	 * inserts the classname from manifest file to the test class array
+	 * 
+	 * @param strLine - String type - classname provided on manifest file
+	 * @param testClassList - ArrayList of String - test classes saved so far
+	 */
+	private void insertIntoTestClassesArray(String strLine, ArrayList<String> testClassList){
+		String tempTestClassId = null;
+		Map<String, String> namespaceAndName = new HashMap<String, String>();
+		namespaceAndName.put("name",strLine);				
+		
+		String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName.get("namespace"), 
+				namespaceAndName.get("name"));
+		// query using WSC
+		tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
+				ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
+		LOG.debug("tempTestClassId: " + tempTestClassId);
+		
+		//triggers are included only for code coverage and not for tests to avoid exception by the platform
+		if (tempTestClassId == null && includeTriggers) {
+			// look if the given class name is a trigger if its not ApexClass
+			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 
+					namespaceAndName.get("name"));
+			// query using WSC
+			tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
+					ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);
+			LOG.debug("tempTestClassId(TriggerId: " + tempTestClassId);
+		}
+		if (tempTestClassId != null) {
+			if (!testClassList.contains(tempTestClassId)) {
+				testClassList.add(tempTestClassId);
+				ApexClassFetcherUtils.apexClassMap.put(tempTestClassId, strLine);
+			} else {
+				LOG.warn("Duplicate entry found in manifest file for : " + strLine
+						+ " . Skipping multiple execution/code coverage computation of this test class/source class");
+				ApexClassFetcherUtils.duplicateApexClassMap.put(tempTestClassId, strLine);
+			}
+
+		} else {
+			LOG.warn("The class " + strLine + " does not exist in the org.");
+			if (!nonExistantApexClassEntries.contains(strLine)) {
+				nonExistantApexClassEntries.add(strLine);
+			}
+		}
 	}
 }

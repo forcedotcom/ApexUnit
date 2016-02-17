@@ -59,7 +59,7 @@ public class ApexManifestFileReaderTest {
 	ApexClassFetcherUtils apexClassFetcher = new ApexClassFetcherUtils();
 	int limit = 10;
 	String[] apexClasses = new String[limit];
-	ApexManifestFileReader apexManifestFileReader = new ApexManifestFileReader();
+	ApexManifestFileReader apexManifestFileReader = new ApexManifestFileReader(true);
 	String testClassesAsString = null;
 
 	@BeforeTest

@@ -104,7 +104,7 @@ public class CodeCoverageComputer {
 		if (CommandLineArguments.getClassManifestFiles() != null) {
 			LOG.debug(" Fetching apex classes from location : " + CommandLineArguments.getClassManifestFiles());
 			classesAsArray = ApexClassFetcherUtils
-					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles());
+					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles(), true);
 		}
 		// fetch matching class names based on regex
 		if (CommandLineArguments.getSourceRegex() != null) {
