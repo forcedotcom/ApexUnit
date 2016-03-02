@@ -189,8 +189,14 @@ public class ApexClassFetcherUtils {
 			String regex, Boolean includeTriggers) {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
-			// construct the query
 			String namespace = null;
+			// split out the namespace if present
+			String[] splits = regex.split("\\.", 2);
+			if (splits.length == 2) {
+				namespace = splits[0];
+				regex = splits[1];
+			}
+			// construct the query
 			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
