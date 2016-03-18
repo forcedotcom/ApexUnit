@@ -75,26 +75,25 @@ public class TestStatusPollerAndResultHandler {
 
 		LOG.debug(soql);
 		ApexReportBean[] apexReportBeans = null;
+		QueryResult queryResult = null;
 		try {
-			QueryResult queryResult = conn.query(soql);
-			if (queryResult.getDone()) {
-				int index = 0;
-				SObject[] sObjects = queryResult.getRecords();
-				if (sObjects != null) {
-					totalTestMethodsExecuted = sObjects.length;
-					apexReportBeans = new ApexReportBean[sObjects.length];
-					for (SObject sobject : sObjects) {
-						ApexReportBean apexReportBean = populateReportBean(conn, sobject);
-						apexReportBeans[index++] = apexReportBean;
-					}
-				}
-			}
-
+			 queryResult = conn.query(soql);
 		} catch (ConnectionException e) {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e, soql));
+					.logConnectionException(e, conn, soql));
 		}
-
+		if (queryResult.getDone()) {
+			int index = 0;
+			SObject[] sObjects = queryResult.getRecords();
+			if (sObjects != null) {
+				totalTestMethodsExecuted = sObjects.length;
+				apexReportBeans = new ApexReportBean[sObjects.length];
+				for (SObject sobject : sObjects) {
+					ApexReportBean apexReportBean = populateReportBean(conn, sobject);
+					apexReportBeans[index++] = apexReportBean;
+				}
+			}
+		}
 		return apexReportBeans;
 	}
 
@@ -264,8 +263,7 @@ public class TestStatusPollerAndResultHandler {
 									break;
 								} catch (ConnectionException e) {
 									ApexUnitUtils
-											.shutDownWithDebugLog(e, "**Connection exception encountered while executing update query"
-													+ e.getMessage());
+											.shutDownWithDebugLog(e, ConnectionHandler.logConnectionException(e, conn, soql));
 								}
 
 							}
@@ -300,8 +298,7 @@ public class TestStatusPollerAndResultHandler {
 			}
 		} catch (ConnectionException e) {
 			ApexUnitUtils
-					.shutDownWithDebugLog(e, "Connection exception encountered while executing query :"
-							+ soql);
+					.shutDownWithDebugLog(e, ConnectionHandler.logConnectionException(e, conn, soql));
 		}
 		return testsCompleted;
 
