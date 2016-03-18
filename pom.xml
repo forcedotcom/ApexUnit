@@ -1,29 +1,27 @@
-<!--
- * Copyright (c) 2015, salesforce.com, inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided
- * that the following conditions are met:
- *
- *    Redistributions of source code must retain the above copyright notice, this list of conditions and the
- *    following disclaimer.
- *
- *    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
- *    the following disclaimer in the documentation and/or other materials provided with the distribution.
- *
- *    Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or
- *    promote products derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
--->
+<!-- * Copyright (c) 2015, salesforce.com, inc.
+     * All rights reserved.
+     *
+	 * Redistribution and use in source and binary forms, with or without modification, are permitted provided
+	 * that the following conditions are met:
+	 *
+	 * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+	 * following disclaimer.
+	 *
+	 * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+	 * the following disclaimer in the documentation and/or other materials provided with the distribution.
+	 *
+	 * Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or
+	 * promote products derived from this software without specific prior written permission.
+	 *
+	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+	 * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+	 * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+	 * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+	 * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+	 * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+	 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+	 * POSSIBILITY OF SUCH DAMAGE.
+	 */ -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -31,33 +29,33 @@
 
 	<groupId>com.sforce.cd.ApexUnit</groupId>
 	<artifactId>ApexUnit-core</artifactId>
-	<version>2.3.2</version>
+	<version>2.3.3-SNAPSHOT</version>
 	<name>ApexUnit</name>
 	<description>Apex Unit v 2.0 with enhanced metrics and advanced features</description>
 	<!-- Fail fast for older Maven versions -->
 	<prerequisites>
 		<maven>3.0.4</maven>
 	</prerequisites>
-	<!-- If an artifact does not exist in the local repository, 
-	it will then attempt to download from the default repository and then search in below remote repository(s). 
-	The default central Maven repository lives on http://repo.maven.apache.org/maven2 -->
+	<!-- If an artifact does not exist in the local repository, it will then 
+		attempt to download from the default repository and then search in below 
+		remote repository(s). The default central Maven repository lives on http://repo.maven.apache.org/maven2 -->
 	<repositories>
-   		 <repository>
-   			  <releases>
-       		  <enabled>true</enabled>
-        	  <updatePolicy>daily</updatePolicy>
-              <checksumPolicy>warn</checksumPolicy>
-		      </releases>
-		      <snapshots>
-		        <enabled>true</enabled>
-		        <updatePolicy>never</updatePolicy>
-		        <checksumPolicy>warn</checksumPolicy>
-		      </snapshots>
-        	<id>oss-nexus-releases</id>
-        	<name>oss sonatype nexus</name>
-       		<url>https://oss.sonatype.org/content/repositories/releases</url>
-   		 </repository>
-	</repositories> 
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<id>oss-nexus-releases</id>
+			<name>oss sonatype nexus</name>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+		</repository>
+	</repositories>
 	<build>
 		<defaultGoal>deploy</defaultGoal>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -179,12 +177,12 @@
 		<dependency>
 			<groupId>com.force.api</groupId>
 			<artifactId>force-partner-api</artifactId>
-			<version>34.0</version>
+			<version>36.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.force.api</groupId>
 			<artifactId>force-wsc</artifactId>
-			<version>34.0</version>
+			<version>36.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -206,6 +204,5 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
 		</dependency>
-
 	</dependencies>
 </project>

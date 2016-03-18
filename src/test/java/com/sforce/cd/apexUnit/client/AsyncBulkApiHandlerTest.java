@@ -137,16 +137,10 @@ public class AsyncBulkApiHandlerTest {
 
 	@Test(priority = 5)
 	public void getParentJobId() {
-		try {
-
-			parentJobId = bulkApiHandler.getParentJobIdForTestQueueItems(batchResults,
-					ConnectionHandler.getConnectionHandlerInstance().getConnection());
-			LOG.info("ParentJobId in the test: " + parentJobId);
-			Assert.assertNotNull(parentJobId);
-		} catch (ConnectionException e) {
-			ApexUnitUtils
-			.shutDownWithDebugLog(e, e.getMessage());
-		}
+		parentJobId = bulkApiHandler.getParentJobIdForTestQueueItems(batchResults,
+				ConnectionHandler.getConnectionHandlerInstance().getConnection());
+		LOG.info("ParentJobId in the test: " + parentJobId);
+		Assert.assertNotNull(parentJobId);
 	}
 
 	@Test(priority = 6)

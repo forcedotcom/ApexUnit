@@ -56,12 +56,12 @@ import com.sforce.cd.apexUnit.client.testEngine.TestStatusPollerAndResultHandler
 import com.sforce.cd.apexUnit.report.ApexClassCodeCoverageBean;
 import com.sforce.cd.apexUnit.report.ApexCodeCoverageReportGenerator;
 import com.sforce.cd.apexUnit.report.ApexReportBean;
-import com.sforce.cd.apexUnit.report.ApexUnitTestReportGenerator;
 import com.sforce.cd.apexUnit.report.ApexUnitCodeCoverageResults;
+import com.sforce.cd.apexUnit.report.ApexUnitTestReportGenerator;
 
 public class ApexUnitRunner {
 	private static Logger LOG = LoggerFactory.getLogger(ApexUnitRunner.class);
-
+	
 	/*
 	 * main method: entry point to the ApexUnit 2.x
 	 * 

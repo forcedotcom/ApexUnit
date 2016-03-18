@@ -269,7 +269,7 @@ public class ApexClassFetcherUtils {
 			queryResult = connection.query(soql);
 		} catch (ConnectionException e) {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e, soql));
+					.logConnectionException(e, connection, soql));
 		}
 		if (queryResult != null) {
 			classIdsAsArray = fetchApexClassesAsArray(queryResult);
@@ -326,7 +326,7 @@ public class ApexClassFetcherUtils {
 			queryResult = connection.query(soqlBasedOnName);
 		} catch (ConnectionException e) {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e, soqlBasedOnName));
+					.logConnectionException(e, connection, soqlBasedOnName));
 		}
 		if (queryResult != null && queryResult.getDone()) {
 			String[] classIds = fetchApexClassesAsArray(queryResult);
@@ -357,7 +357,7 @@ public class ApexClassFetcherUtils {
 			queryResult = connection.query(soql);
 		} catch (ConnectionException e) {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e, soql));
+					.logConnectionException(e, connection, soql));
 		}
 		if (queryResult == null
 				|| (queryResult != null && queryResult.getRecords() != null && queryResult.getRecords().length <= 0)) {
@@ -368,7 +368,7 @@ public class ApexClassFetcherUtils {
 				queryResult = connection.query(soqlForTrigger);
 			} catch (ConnectionException e) {
 				ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-						.logConnectionException(e, soqlForTrigger));
+						.logConnectionException(e, connection, soqlForTrigger));
 			}
 		}
 		if (queryResult != null && queryResult.getDone()) {
@@ -407,7 +407,7 @@ public class ApexClassFetcherUtils {
 			queryResult = connection.query(soql);
 		} catch (ConnectionException e) {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e, soql));
+					.logConnectionException(e, connection, soql));
 		}
 		if (queryResult != null && queryResult.getDone()) {
 			SObject[] sObjects = queryResult.getRecords();
