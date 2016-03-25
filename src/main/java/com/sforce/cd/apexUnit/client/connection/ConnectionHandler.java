@@ -44,6 +44,7 @@ import com.sforce.async.AsyncApiException;
 import com.sforce.async.BulkConnection;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
+import com.sforce.cd.apexUnit.arguments.PositiveIntegerValidator;
 import com.sforce.soap.partner.Connector;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.ws.ConnectionException;
@@ -84,6 +85,8 @@ public class ConnectionHandler {
 			SUPPORTED_VERSION = prop.getProperty("API_VERSION");
 			MAX_TIME_OUT_IN_MS = prop.getProperty("MAX_TIME_OUT_IN_MS");
 		}
+		PositiveIntegerValidator positiveIntegerValidator = new PositiveIntegerValidator();
+		positiveIntegerValidator.validate("MAX_TIME_OUT_IN_MS", MAX_TIME_OUT_IN_MS);
 		try {
 			MAX_TIME_OUT_IN_MS_INT = Integer.parseInt(MAX_TIME_OUT_IN_MS);
 		} catch (NumberFormatException nfe) {
@@ -123,7 +126,7 @@ public class ConnectionHandler {
 			LOG.info("Updated connection time out value(from config.properties file): " 
 			+ config.getConnectionTimeout());
 			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
-					+ CommandLineArguments.getPassword() + " " + CommandLineArguments.getOrgUrl() + " "
+					+ CommandLineArguments.getOrgUrl() + " "
 					+ config.getUsername() + " " + config.getAuthEndpoint());
 			try {
 				connection = Connector.newConnection(config);

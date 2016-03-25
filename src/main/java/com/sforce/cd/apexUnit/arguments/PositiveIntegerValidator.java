@@ -51,6 +51,9 @@ public class PositiveIntegerValidator implements IParameterValidator {
 	 */
 	public void validate(String name, String value) throws ParameterException {
 		try {
+			if(value == null || value.isEmpty()){
+				ApexUnitUtils.shutDownWithDebugLog(new NumberFormatException() , "Null/No value specified for "+ name );
+			}
 			int n = Integer.parseInt(value);
 			if (n <= 0) {
 				ApexUnitUtils.shutDownWithErrMsg("ParameterException: Input value for the Parameter " + name
