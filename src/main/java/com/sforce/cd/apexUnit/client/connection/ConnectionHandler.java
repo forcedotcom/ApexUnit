@@ -56,7 +56,7 @@ public class ConnectionHandler {
 	Properties prop = new Properties();
 	String propFileName = "config.properties";
 	public static int MAX_TIME_OUT_IN_MS_INT;
-	private String SUPPORTED_VERSION = System.getProperty("API_VERSION");
+	public static String SUPPORTED_VERSION = System.getProperty("API_VERSION");
 	private String MAX_TIME_OUT_IN_MS = System.getProperty("MAX_TIME_OUT_IN_MS");
 
 	private String sessionIdFromConnectorConfig = null;
@@ -118,14 +118,10 @@ public class ConnectionHandler {
 			
 	private PartnerConnection createConnection() {
 		if (connection == null) {
-			ConnectorConfig config = createConfig();
-			config.setAuthEndpoint(CommandLineArguments.getOrgUrl() + "/services/Soap/u/" + SUPPORTED_VERSION);
-			config.setSessionRenewer(new SFDCSessionRenewer());
-			LOG.info("Default connection time out value is: " + config.getConnectionTimeout());
-			config.setConnectionTimeout(MAX_TIME_OUT_IN_MS_INT);
-			LOG.info("Updated connection time out value(from config.properties file): " 
-			+ config.getConnectionTimeout());
-			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
+			PartnerConnectionConnectorConfig pcConnectorConfig = new PartnerConnectionConnectorConfig();
+			ConnectorConfig config = pcConnectorConfig.createConfig();
+			
+			LOG.info("creating connection for : " + CommandLineArguments.getUsername() + " "
 					+ CommandLineArguments.getOrgUrl() + " "
 					+ config.getUsername() + " " + config.getAuthEndpoint());
 			try {
@@ -140,22 +136,6 @@ public class ConnectionHandler {
 		}
 		return connection;
 	}
-	
-	/**
-	 * @return ConnectorConfig
-	 */
- 	private ConnectorConfig createConfig() {
-	 		ConnectorConfig config = new ConnectorConfig();
-	 		config.setUsername(CommandLineArguments.getUsername());
-	 		config.setPassword(CommandLineArguments.getPassword());
-	 	    config.setCompression(true);
-	 		if (CommandLineArguments.getProxyHost() != null && CommandLineArguments.getProxyPort() != null) {
-	 			LOG.debug("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port "
-	 					+ CommandLineArguments.getProxyPort());
-	 			config.setProxy(CommandLineArguments.getProxyHost(), CommandLineArguments.getProxyPort());
-	 		}
-	 		return config;
-	 	}
 	
 	/*
 	 * method to retrieve sessionId from connector config
@@ -187,18 +167,9 @@ public class ConnectionHandler {
 	// BulkConnection instance is the base for using the Bulk API.
 	// The instance can be reused for the rest of the application life span.
 	private BulkConnection createBulkConnection() {
-		// When PartnerConnection is instantiated, a login is implicitly
-		// executed and, if successful,
-		// a valid session is stored in the ConnectorConfig instance.
-		// Use this key to initialize a BulkConnection:
-		String sessionId = getSessionIdFromConnectorConfig();
-		LOG.debug("SESSION  ID IN createBULKConn: " + sessionId);
-		ConnectorConfig config = createConfig();
-		config.setSessionId(sessionId);
-		String restEndPoint = CommandLineArguments.getOrgUrl() + "/services/async/" + SUPPORTED_VERSION;
-		config.setRestEndpoint(restEndPoint);
-		config.setTraceMessage(false);
-
+		
+		BulkConnectionConnectorConfig bcConnectorConfig = new BulkConnectionConnectorConfig();
+		ConnectorConfig config = bcConnectorConfig.createConfig();
 		try {
 			bulkConnection = new BulkConnection(config);
 			LOG.info("Bulk connection established.");

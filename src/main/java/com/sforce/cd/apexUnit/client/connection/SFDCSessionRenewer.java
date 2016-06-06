@@ -20,7 +20,9 @@ public class SFDCSessionRenewer implements SessionRenewer {
 		PartnerConnection connection = ConnectionHandler.getConnectionHandlerInstance().getConnection();
 		SessionRenewalHeader sessionRenewalHeader = new SessionRenewalHeader();
 		sessionRenewalHeader.name = new QName("urn:partner.soap.sforce.com", "SessionHeader");
-		sessionRenewalHeader.headerElement = connection.getSessionHeader();
+		if(connection != null ){
+			sessionRenewalHeader.headerElement = connection.getSessionHeader();
+		}
 		return sessionRenewalHeader;
 	}
 }
