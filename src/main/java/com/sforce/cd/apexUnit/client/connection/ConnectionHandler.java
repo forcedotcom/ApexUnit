@@ -121,7 +121,7 @@ public class ConnectionHandler {
 			PartnerConnectionConnectorConfig pcConnectorConfig = new PartnerConnectionConnectorConfig();
 			ConnectorConfig config = pcConnectorConfig.createConfig();
 			
-			LOG.info("creating connection for : " + CommandLineArguments.getUsername() + " "
+			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
 					+ CommandLineArguments.getOrgUrl() + " "
 					+ config.getUsername() + " " + config.getAuthEndpoint());
 			try {
