@@ -97,6 +97,14 @@ On successful completion - the command should give you build success and it shou
 Users can populate class names in the Manifest file and/or provide regular expressions(regexes) 
 Please refer https://github.com/forcedotcom/ApexUnit/wiki/Manifest-file-vs-regex for the usecases where manifest file(s) and regex(es) option can be used
 
+#Addional options
+
+Use src/main/resources/config.properties to set the below parameters.
+
+1. API_VERSION(Default value: 36.0) : The Partner API version in use for the org. 
+
+2. MAX_TIME_OUT_IN_MS(Default value : 1200000 ==> 20 minutes) : Time out setting for the session, Once timeout occurs, session renewer module is invoked which renews the session. Helpful when you face connection exception during query executions. 
+
 ## Integrating with CI pipeline
 CI engines like Jenkins(https://jenkins-ci.org/) can be used to seamlessly integrate ApexUnit with CI pipelines.
 Please find the details here: https://github.com/forcedotcom/ApexUnit/wiki/Integrating-with-CI-pipeline
