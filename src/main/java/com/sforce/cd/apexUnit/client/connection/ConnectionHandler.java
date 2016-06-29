@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ import com.sforce.async.AsyncApiException;
 import com.sforce.async.BulkConnection;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
+import com.sforce.cd.apexUnit.arguments.PositiveIntegerValidator;
 import com.sforce.soap.partner.Connector;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.ws.ConnectionException;
@@ -53,8 +55,9 @@ public class ConnectionHandler {
 	private static Logger LOG = LoggerFactory.getLogger(ConnectionHandler.class);
 	Properties prop = new Properties();
 	String propFileName = "config.properties";
-
-	private String SUPPORTED_VERSION = System.getProperty("API_VERSION");
+	public static int MAX_TIME_OUT_IN_MS_INT;
+	public static String SUPPORTED_VERSION = System.getProperty("API_VERSION");
+	private String MAX_TIME_OUT_IN_MS = System.getProperty("MAX_TIME_OUT_IN_MS");
 
 	private String sessionIdFromConnectorConfig = null;
 	PartnerConnection connection = null;
@@ -67,7 +70,7 @@ public class ConnectionHandler {
 	private ConnectionHandler() {
 		// execute below code Only when System.getProperty() call doesn't
 		// function
-		if (SUPPORTED_VERSION == null) {
+		if (SUPPORTED_VERSION == null || MAX_TIME_OUT_IN_MS == null) {
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 			if (inputStream != null) {
 				try {
@@ -80,7 +83,16 @@ public class ConnectionHandler {
 				}
 			}
 			SUPPORTED_VERSION = prop.getProperty("API_VERSION");
+			MAX_TIME_OUT_IN_MS = prop.getProperty("MAX_TIME_OUT_IN_MS");
 		}
+		PositiveIntegerValidator positiveIntegerValidator = new PositiveIntegerValidator();
+		positiveIntegerValidator.validate("MAX_TIME_OUT_IN_MS", MAX_TIME_OUT_IN_MS);
+		try {
+			MAX_TIME_OUT_IN_MS_INT = Integer.parseInt(MAX_TIME_OUT_IN_MS);
+		} catch (NumberFormatException nfe) {
+			ApexUnitUtils.shutDownWithErrMsg(
+					"Invalid value for MAX_TIME_OUT_IN_MS in the property file. Only positive integers are allowed");
+		}		
 	}
 
 	// singleton pattern.. Ensures the class has only one common instance of
@@ -106,21 +118,12 @@ public class ConnectionHandler {
 			
 	private PartnerConnection createConnection() {
 		if (connection == null) {
-			ConnectorConfig config = new ConnectorConfig();
-			config.setUsername(CommandLineArguments.getUsername());
-			config.setPassword(CommandLineArguments.getPassword());
-			config.setAuthEndpoint(CommandLineArguments.getOrgUrl() + "/services/Soap/u/" + SUPPORTED_VERSION);
-			
-			if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
-				LOG.debug("Setting proxy configuraiton to " + 
-					CommandLineArguments.getProxyHost() + 
-					" on port " + CommandLineArguments.getProxyPort() );
-				config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
-			}	
+			PartnerConnectionConnectorConfig pcConnectorConfig = new PartnerConnectionConnectorConfig();
+			ConnectorConfig config = pcConnectorConfig.createConfig();
 			
 			LOG.debug("creating connection for : " + CommandLineArguments.getUsername() + " "
-					+ CommandLineArguments.getPassword() + " " + CommandLineArguments.getOrgUrl() + " "
-					+ config.getUsername() + " " + config.getPassword() + " " + config.getAuthEndpoint());
+					+ CommandLineArguments.getOrgUrl() + " "
+					+ config.getUsername() + " " + config.getAuthEndpoint());
 			try {
 				connection = Connector.newConnection(config);
 				setSessionIdFromConnectorConfig(config);
@@ -128,7 +131,7 @@ public class ConnectionHandler {
 						+ sessionIdFromConnectorConfig);
 			} catch (ConnectionException connEx) {
 				ApexUnitUtils.shutDownWithDebugLog(connEx, ConnectionHandler
-						.logConnectionException(connEx));
+						.logConnectionException(connEx, connection));
 			}
 		}
 		return connection;
@@ -164,26 +167,9 @@ public class ConnectionHandler {
 	// BulkConnection instance is the base for using the Bulk API.
 	// The instance can be reused for the rest of the application life span.
 	private BulkConnection createBulkConnection() {
-		// When PartnerConnection is instantiated, a login is implicitly
-		// executed and, if successful,
-		// a valid session is stored in the ConnectorConfig instance.
-		// Use this key to initialize a BulkConnection:
-		String sessionId = getSessionIdFromConnectorConfig();
-		LOG.debug("SESSION  ID IN createBULKConn: " + sessionId);
-		ConnectorConfig config = new ConnectorConfig();
-
-		config.setSessionId(sessionId);
-		String restEndPoint = CommandLineArguments.getOrgUrl() + "/services/async/" + SUPPORTED_VERSION;
-		config.setRestEndpoint(restEndPoint);
-		config.setCompression(true);
-		config.setTraceMessage(false);
-
-		if (CommandLineArguments.getProxyHost() != null &&  CommandLineArguments.getProxyPort() !=null ){
-			LOG.debug("Setting proxy configuraiton to " + 
-				CommandLineArguments.getProxyHost() + 
-				" on port " + CommandLineArguments.getProxyPort() );
-			config.setProxy( CommandLineArguments.getProxyHost() , CommandLineArguments.getProxyPort());
-		}
+		
+		BulkConnectionConnectorConfig bcConnectorConfig = new BulkConnectionConnectorConfig();
+		ConnectorConfig config = bcConnectorConfig.createConfig();
 		try {
 			bulkConnection = new BulkConnection(config);
 			LOG.info("Bulk connection established.");
@@ -217,13 +203,19 @@ public class ConnectionHandler {
 		this.bulkConnection = bulkConnection;
 	}
 
-	public static String logConnectionException(ConnectionException connEx) {
-		return "Exception thrown while trying to create Partner Connection!!!" + connEx.getMessage();
+	public static String logConnectionException(ConnectionException connEx, PartnerConnection conn) {
+		return logConnectionException(connEx, conn, null);
 	}
 
-	public static String logConnectionException(ConnectionException e, String soql) {
-		return "Connection Exception encountered when trying to query : " + soql
-				+ " \n The connection exception description says : " + e.getMessage();
+	public static String logConnectionException(ConnectionException connEx, PartnerConnection conn, String soql) {
+		StringBuffer returnString = new StringBuffer("Connection Exception encountered ");
+		if (null != soql) {
+			returnString.append("when trying to query : " + soql);
+		}
+		returnString.append(" The connection exception description says : " + connEx.getMessage());
+		returnString.append(" Object dump for the Connection object: " + ReflectionToStringBuilder.toString(conn));
+
+		return returnString.toString();
 
 	}
 

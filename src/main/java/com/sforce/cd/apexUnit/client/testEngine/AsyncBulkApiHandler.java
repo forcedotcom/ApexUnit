@@ -114,9 +114,6 @@ public class AsyncBulkApiHandler {
 			ApexUnitUtils
 					.shutDownWithDebugLog(e, "Caught IO exception while trying to deal with bulk connection: "
 							+ e.getMessage());
-		} catch (ConnectionException e) {
-			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
-					.logConnectionException(e));
 		} finally {
 			bulkConnection = null;
 		}
@@ -307,8 +304,7 @@ public class AsyncBulkApiHandler {
 	/*
 	 * Fetches the parentJobId for the bulk results
 	 */
-	public String getParentJobIdForTestQueueItems(List<SaveResult> bulkResults, PartnerConnection conn)
-			throws ConnectionException {
+	public String getParentJobIdForTestQueueItems(List<SaveResult> bulkResults, PartnerConnection conn) {
 
 		String parentJobId = null;
 
@@ -317,7 +313,13 @@ public class AsyncBulkApiHandler {
 			String testQueueItemId = sr.getId();
 			String soql = QueryConstructor.fetchParentJobIdForApexTestQueueItem(testQueueItemId);
 			LOG.debug("Query used for fetching parent job ID for bulk results: " + soql);
-			QueryResult queryResult = conn.query(soql);
+			QueryResult queryResult = null;
+			try{
+				queryResult = conn.query(soql);
+			}catch (ConnectionException e) {
+				ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
+						.logConnectionException(e, conn, soql));
+			} 
 			if (queryResult.isDone()) {
 				// TODO: We need to verify what's the limit of records that the
 				// bulk api can insert in one transaction. multiple transactions
