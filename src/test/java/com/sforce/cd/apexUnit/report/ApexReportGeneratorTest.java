@@ -94,7 +94,7 @@ public class ApexReportGeneratorTest {
 				.calculateAggregatedCodeCoverageUsingToolingAPI();
 		String reportFileName = "ApexUnitReport.xml";
 
-		ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, apexClassCodeCoverageBeans, reportFileName);
+		ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, reportFileName);
 
 		File reportFile = new File(reportFileName);
 		LOG.info("justBeforeReportGeneration: " + justBeforeReportGeneration);
@@ -113,7 +113,7 @@ public class ApexReportGeneratorTest {
 				.calculateAggregatedCodeCoverageUsingToolingAPI();
 
 		if (apexClassCodeCoverageBeans != null) {
-			ApexCodeCoverageReportGenerator.generateHTMLReport(apexReportBeans, apexClassCodeCoverageBeans);
+			ApexCodeCoverageReportGenerator.generateHTMLReport(apexClassCodeCoverageBeans);
 		}
 		String reportFilePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "Report"
 				+ System.getProperty("file.separator") + "ApexUnitReport.html";

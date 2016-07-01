@@ -301,7 +301,8 @@ public class ApexClassFetcherUtils {
 							+ sobject.getField("Name").toString());
 				}
 				apexClassesObjArr = apexClasses.toArray();
-				return (Arrays.copyOf(apexClassesObjArr, apexClassesObjArr.length, String[].class));
+				//line below only works for java 1.6 and above
+				return Arrays.copyOf(apexClassesObjArr, apexClassesObjArr.length, String[].class);
 			}
 		}
 		return null;
