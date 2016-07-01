@@ -63,14 +63,14 @@ public class ApexUnitRunner {
 		}
 		if (CommandLineArguments.getClassManifestFiles() == null && CommandLineArguments.getSourceRegex() == null
 				&& !skipCodeCoverageComputation) {
-			ApexUnitUtils.shutDownWithErrMsg(
-					"Either of the source class manifest file or source class regex should be provided");
+			ApexUnitUtils.shutDownWithErrMsg("Either of the source class manifest file or source class regex should be provided");
 		}
 		// Invoke the FlowController.logicalFlow() that handles the entire
 		// logical flow of ApexUnit tool.
 		TestExecutor testExecutor = new TestExecutor();
-		LOG.info(
-				"####################################   Processing the Apex test classes specified by the user  #################################### ");
+		LOG.info("####################################   "
+				 + "Processing the Apex test classes specified by the user"
+				 + "  #################################### ");
 		ApexReportBean[] apexReportBeans = testExecutor.testExecutionFlow();
 
 		// constructing report file with test results and code coverage results
@@ -80,9 +80,9 @@ public class ApexUnitRunner {
 		// skip code coverage computation if team code coverage and org wide
 		// code coverage thresholds are set to 0
 		if (!skipCodeCoverageComputation) {
-			LOG.info(
-					"####################################    Computing code coverage for the team based on the Apex Class names(source class names) provided"
-							+ "  #################################### ");
+			LOG.info("####################################    "
+					+ "Computing code coverage for the team based on the Apex Class names(source class names) provided"
+					+ "   #################################### ");
 
 			CodeCoverageComputer toolingAPIInvoker = new CodeCoverageComputer();
 			apexClassCodeCoverageBeans = toolingAPIInvoker.calculateAggregatedCodeCoverageUsingToolingAPI();
@@ -94,22 +94,23 @@ public class ApexUnitRunner {
 			toolingAPIInvoker.getOrgWideCodeCoverage();
 			// generate the reports for publishing
 		} else {
-			LOG.info(
-					"####################################   Skipping code coverage computation. Please update the threshold parameters for team code coverage and "
-							+ "org wide code coverage to activate the code coverage computation feature   #################################### ");
+			LOG.info("####################################   Skipping code coverage computation. "
+					 + "Please update the threshold parameters for team code coverage and "
+					 + "org wide code coverage to activate the code coverage computation feature"
+					 + "   #################################### ");
 		}
 		Long end = System.currentTimeMillis();
 		LOG.debug("Total Time taken by ApexUnit tool in secs: " + (end - start) / 1000);
 		LOG.info("Total test methods executed: " + TestStatusPollerAndResultHandler.totalTestMethodsExecuted);
 		if (apexReportBeans != null && apexReportBeans.length > 0) {
 			String reportFile = "ApexUnitReport.xml";
-			ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, apexClassCodeCoverageBeans, reportFile);
+			ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, reportFile);
 		} else {
-			ApexUnitUtils.shutDownWithErrMsg(
-					"Unable to generate test report. " + "Did not find any test results for the job id");
+			ApexUnitUtils.shutDownWithErrMsg("Unable to generate test report. "
+											 + "Did not find any test results for the job id");
 		}
 		if (!skipCodeCoverageComputation) {
-			ApexCodeCoverageReportGenerator.generateHTMLReport(apexReportBeans, apexClassCodeCoverageBeans);
+			ApexCodeCoverageReportGenerator.generateHTMLReport(apexClassCodeCoverageBeans);
 
 			// validating the code coverage metrics against the thresholds
 			// provided by the user
@@ -157,8 +158,7 @@ public class ApexUnitRunner {
 		if (!runTimeExceptionMessage.equals("")) {
 			ApexUnitUtils.shutDownWithErrMsg(runTimeExceptionMessage);
 		} else {
-			LOG.info(
-					"Success!! No test failures and all code coverage thresholds are met!! Exiting ApexUnit.. Good bye..");
+			LOG.info("Success!! No test failures and all code coverage thresholds are met!! Exiting ApexUnit.. Good bye..");
 		}
 
 	}

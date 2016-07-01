@@ -213,7 +213,7 @@ public class CodeCoverageComputer {
 							coveredLinesList.add((Long) coveredLinesJsonArray.get(j));
 							LOG.debug("covered " + (Long) coveredLinesJsonArray.get(j));
 						}
-						if (coveredLinesList != null && coveredLinesList.size() > 0) {
+						if (coveredLinesList.size() > 0) {
 							apexClassCodeCoverageBean.setCoveredLinesList(coveredLinesList);
 						}
 
@@ -222,7 +222,7 @@ public class CodeCoverageComputer {
 							uncoveredLinesList.add((Long) uncoveredLinesJsonArray.get(k));
 							LOG.debug("uncovered " + (Long) uncoveredLinesJsonArray.get(k));
 						}
-						if (uncoveredLinesList != null && uncoveredLinesList.size() > 0) {
+						if (uncoveredLinesList.size() > 0) {
 							apexClassCodeCoverageBean.setUncoveredLinesList(uncoveredLinesList);
 						}
 					}
