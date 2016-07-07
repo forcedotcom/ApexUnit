@@ -165,7 +165,6 @@ public class CommandLineArguments {
 
 	public static boolean isHelp() {
 		return help;
-
 	}
 }
 

@@ -76,8 +76,7 @@ public class ConnectionHandler {
 				try {
 					prop.load(inputStream);
 				} catch (IOException e) {
-					ApexUnitUtils
-							.shutDownWithDebugLog(e, "Error while trying to load the property file "
+					ApexUnitUtils.shutDownWithDebugLog(e, "Error while trying to load the property file "
 									+ propFileName
 									+ " Unable to establish Connection with the org. Suspending the run..");
 				}
@@ -147,12 +146,10 @@ public class ConnectionHandler {
 	public String getSessionIdFromConnectorConfig() {
 		// if sessionId is null, in all probability connection is null(not
 		// created)
-		if (sessionIdFromConnectorConfig == null) {
-			if (connection == null) {
-				// createConnection() call creates connection and sets the
-				// sessionId
-				connection = createConnection();
-			}
+		if (sessionIdFromConnectorConfig == null && connection == null) {
+			// createConnection() call creates connection and sets the
+			// sessionId
+			connection = createConnection();
 		}
 		return sessionIdFromConnectorConfig;
 	}
