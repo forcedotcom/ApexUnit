@@ -359,7 +359,7 @@ public class ApexClassFetcherUtils {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
 					.logConnectionException(e, connection, soql));
 		}
-		if (queryResult == null || queryResult.getRecords().length <= 0) {
+		if (queryResult == null || (queryResult.getRecords() != null && queryResult.getRecords().length <= 0)) {
 			// if query result is null, try if the apexClassId is associated
 			// with a ApexTrigger table
 			String soqlForTrigger = QueryConstructor.getApexTriggerInfo(apexClassId);
