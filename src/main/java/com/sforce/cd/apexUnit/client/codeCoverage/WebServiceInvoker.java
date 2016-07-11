@@ -60,6 +60,8 @@ import com.google.gson.reflect.TypeToken;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
 
+import static java.net.URLEncoder.encode;
+
 /*
  * WebServiceInvoker provides interfaces for get and post methods for the REST APIs using OAUTH
  */
@@ -86,7 +88,7 @@ public class WebServiceInvoker {
 			// the client id and secret is applicable across all dev orgs
 			requestString = "grant_type=password&client_id=" + CommandLineArguments.getClientId() + "&client_secret="
 					+ CommandLineArguments.getClientSecret() + "&username=" + CommandLineArguments.getUsername()
-					+ "&password=" + CommandLineArguments.getPassword();
+					+ "&password=" + encode(CommandLineArguments.getPassword(), "UTF-8");
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
 
 			httpclient.getParams().setSoTimeout(0);
@@ -120,7 +122,7 @@ public class WebServiceInvoker {
 	public static JSONObject doGet(String relativeServiceURL, String soql, String accessToken) {
 		if (soql != null && !soql.equals("")) {
 			try {
-				relativeServiceURL += "/query/?q=" + URLEncoder.encode(soql, "UTF-8");
+				relativeServiceURL += "/query/?q=" + encode(soql, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 
 				ApexUnitUtils
