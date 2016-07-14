@@ -30,6 +30,8 @@
 
 package com.sforce.cd.apexUnit.client;
 
+import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
+import com.sforce.cd.apexUnit.client.codeCoverage.WebServiceInvoker;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,10 @@ import com.sforce.cd.apexUnit.client.codeCoverage.CodeCoverageComputer;
 import com.sforce.cd.apexUnit.client.connection.ConnectionHandler;
 import com.sforce.cd.apexUnit.report.ApexClassCodeCoverageBean;
 import com.sforce.soap.partner.PartnerConnection;
+
+import java.io.UnsupportedEncodingException;
+
+import static java.net.URLEncoder.encode;
 
 public class ToolingAPIInvokerTest {
 	CodeCoverageComputer codeCoverageComputer = null;
@@ -71,4 +77,14 @@ public class ToolingAPIInvokerTest {
 		Assert.assertTrue(orgWideCodeCoverage >= 0);
 	}
 
+	@Test
+	public void RequestStringPasswordIsEncodedTest() throws UnsupportedEncodingException {
+		WebServiceInvoker wsi = new WebServiceInvoker();
+		String requestString = wsi.generateRequestString();
+		String passwordIdentifier = "&password=";
+		String encodedPassword = encode(CommandLineArguments.getPassword(), "UTF-8");
+		int indexOfpasswordIdentifier = requestString.indexOf(passwordIdentifier);
+		String passwordInRequestString = requestString.substring(indexOfpasswordIdentifier + passwordIdentifier.length());
+		org.testng.Assert.assertEquals(encodedPassword, passwordInRequestString);
+	}
 }
