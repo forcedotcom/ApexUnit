@@ -60,6 +60,8 @@ import com.google.gson.reflect.TypeToken;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
 
+import static java.net.URLEncoder.encode;
+
 /*
  * WebServiceInvoker provides interfaces for get and post methods for the REST APIs using OAUTH
  */
@@ -84,9 +86,7 @@ public class WebServiceInvoker {
 
 		try {
 			// the client id and secret is applicable across all dev orgs
-			requestString = "grant_type=password&client_id=" + CommandLineArguments.getClientId() + "&client_secret="
-					+ CommandLineArguments.getClientSecret() + "&username=" + CommandLineArguments.getUsername()
-					+ "&password=" + CommandLineArguments.getPassword();
+			requestString = generateRequestString();
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
 
 			httpclient.getParams().setSoTimeout(0);
@@ -103,9 +103,7 @@ public class WebServiceInvoker {
 			}.getType());
 
 		} catch (Exception ex) {
-
-			ApexUnitUtils
-			.shutDownWithDebugLog(ex, "Exception during post method: " + ex);
+			ApexUnitUtils.shutDownWithDebugLog(ex, "Exception during post method: " + ex);
 			if(LOG.isDebugEnabled()) {
 				ex.printStackTrace();
 			}
@@ -117,10 +115,26 @@ public class WebServiceInvoker {
 
 	}
 
+	public String generateRequestString() {
+		String requestString = "";
+		try {
+			requestString = "grant_type=password&client_id=" + CommandLineArguments.getClientId() + "&client_secret="
+					+ CommandLineArguments.getClientSecret() + "&username=" + CommandLineArguments.getUsername()
+					+ "&password=" + encode(CommandLineArguments.getPassword(), "UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			ApexUnitUtils.shutDownWithDebugLog(ex, "Exception during request string generation: " + ex);
+			if(LOG.isDebugEnabled()) {
+				ex.printStackTrace();
+			}
+		}
+
+		return requestString;
+	}
+
 	public static JSONObject doGet(String relativeServiceURL, String soql, String accessToken) {
 		if (soql != null && !soql.equals("")) {
 			try {
-				relativeServiceURL += "/query/?q=" + URLEncoder.encode(soql, "UTF-8");
+				relativeServiceURL += "/query/?q=" + encode(soql, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 
 				ApexUnitUtils
