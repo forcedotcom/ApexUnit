@@ -115,9 +115,7 @@ public class CommandLineArguments {
 		return testManifestFiles;
 	}
 
-	public static String getClassManifestFiles() {
-		return classManifestFiles;
-	}
+	public static String getClassManifestFiles() { return classManifestFiles; }
 
 	public static String getTestRegex() {
 		return testRegex;

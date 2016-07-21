@@ -58,7 +58,6 @@ public class CodeCoverageComputer {
 	private static Logger LOG = LoggerFactory.getLogger(CodeCoverageComputer.class);
 	Properties prop = new Properties();
 	String propFileName = "config.properties";
-	InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 	private String SUPPORTED_VERSION = System.getProperty("API_VERSION");
 
 	/*
