@@ -95,8 +95,7 @@ public class ApexClassFetcherUtils {
 			consolidatedTestClassesAsArray = testClassesAsArray;
 		}
 		// if null, no apex test classes fetched to execute; throw warning
-		if (consolidatedTestClassesAsArray == null
-				|| (consolidatedTestClassesAsArray != null && consolidatedTestClassesAsArray.length == 0)) {
+		if (consolidatedTestClassesAsArray == null || consolidatedTestClassesAsArray.length == 0) {
 			ApexUnitUtils.shutDownWithErrMsg("No/Invalid test classes mentioned in manifest file and/or "
 					+ "regex pattern for ApexTestPrefix didn't return any test class names from the org");
 		} else {
@@ -238,7 +237,7 @@ public class ApexClassFetcherUtils {
 
 			// log the duplicate classes/triggers found by querying the org with
 			// the given regex
-			if (duplicateList != null && !duplicateList.isEmpty()) {
+			if (!duplicateList.isEmpty()) {
 				String logDuplicates = "Found duplicates from the classes fetched from the regex: " + regex
 						+ ". Skipping multiple execution/code coverage computation of these test class/source class(es) :";
 				for (int i = 0; i < duplicateList.size(); i++) {
@@ -302,7 +301,8 @@ public class ApexClassFetcherUtils {
 							+ sobject.getField("Name").toString());
 				}
 				apexClassesObjArr = apexClasses.toArray();
-				return (Arrays.copyOf(apexClassesObjArr, apexClassesObjArr.length, String[].class));
+				//line below only works for java 1.6 and above
+				return Arrays.copyOf(apexClassesObjArr, apexClassesObjArr.length, String[].class);
 			}
 		}
 		return null;
@@ -359,8 +359,7 @@ public class ApexClassFetcherUtils {
 			ApexUnitUtils.shutDownWithDebugLog(e, ConnectionHandler
 					.logConnectionException(e, connection, soql));
 		}
-		if (queryResult == null
-				|| (queryResult != null && queryResult.getRecords() != null && queryResult.getRecords().length <= 0)) {
+		if (queryResult == null || (queryResult.getRecords() != null && queryResult.getRecords().length <= 0)) {
 			// if query result is null, try if the apexClassId is associated
 			// with a ApexTrigger table
 			String soqlForTrigger = QueryConstructor.getApexTriggerInfo(apexClassId);

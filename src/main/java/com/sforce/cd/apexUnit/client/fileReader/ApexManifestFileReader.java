@@ -67,8 +67,7 @@ public class ApexManifestFileReader {
 		String[] apexClassesStrArr = null;
 		String[] apexClassesStrArrForManifest = null;
 		LOG.info("Reading from Manifest files: " + files);
-		String cvsSplitBy = ",";
-		String[] manifestFiles = files.split(cvsSplitBy);
+		String[] manifestFiles = files.split(",");
 
 		for (String file : manifestFiles) {
 			LOG.info("Reading Manifest file from location : " + file);
@@ -82,9 +81,7 @@ public class ApexManifestFileReader {
 							"Unable to find the file " + file + " in the src->main->resources folder");
 				}
 			} catch (IOException e) {
-				ApexUnitUtils
-						.shutDownWithDebugLog(e, "IOException while trying to read the manifest file "
-								+ file);
+				ApexUnitUtils.shutDownWithDebugLog(e, "IOException while trying to read the manifest file " + file);
 			}
 			if (apexClassesStrArrForManifest != null) {
 				apexClassesStrArr = (String[]) ArrayUtils.addAll(apexClassesStrArr, apexClassesStrArrForManifest);
@@ -94,14 +91,12 @@ public class ApexManifestFileReader {
 			}
 		}
 		Set<String> uniqueSetOfClasses = new HashSet<String>();
-		ArrayList<String> duplicateList = new ArrayList<String>();
 		if (apexClassesStrArr != null && apexClassesStrArr.length > 0) {
-			for (int i = 0; i < apexClassesStrArr.length; i++) {
-				if (!uniqueSetOfClasses.add(apexClassesStrArr[i])) {
+			for (String apexClass : apexClassesStrArr) {
+				if (!uniqueSetOfClasses.add(apexClass)) {
 					LOG.warn("Duplicate entry found across manifest files for : "
-							+ ApexClassFetcherUtils.apexClassMap.get(apexClassesStrArr[i])
+							+ ApexClassFetcherUtils.apexClassMap.get(apexClass)
 							+ " . Skipping multiple execution/code coverage computation of this test class/source class");
-					duplicateList.add(apexClassesStrArr[i]);
 				}
 			}
 		}

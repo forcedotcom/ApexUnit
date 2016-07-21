@@ -53,13 +53,12 @@ public class ApexUnitTestReportGenerator {
 	/**
 	 * Generates a JUnit/Jenkins compliant test report in XML for the given job.
 	 * 
-	 * @param apexClassCodeCoverageBeans
-	 * @param Id
+	 * @param reportBeans
+	 * @param reportFile
 	 *            of the job whose test report is to be generated
 	 * 
 	 */
-	public static void generateTestReport(ApexReportBean[] reportBeans,
-			ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans, String reportFile) {
+	public static void generateTestReport(ApexReportBean[] reportBeans, String reportFile) {
 		if (reportBeans != null && reportBeans.length > 0) {
 			// Create root element
 			Document document = new Document();

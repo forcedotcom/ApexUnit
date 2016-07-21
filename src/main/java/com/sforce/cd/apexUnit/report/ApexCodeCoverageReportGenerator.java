@@ -48,8 +48,7 @@ import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 
 public class ApexCodeCoverageReportGenerator {
 
-	public static void generateHTMLReport(ApexReportBean[] reportBeans,
-			ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans) {
+	public static void generateHTMLReport(ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans) {
 		// Preparing the table:
 		StringBuilder htmlBuilder = new StringBuilder();
 		htmlBuilder.append("<html>");

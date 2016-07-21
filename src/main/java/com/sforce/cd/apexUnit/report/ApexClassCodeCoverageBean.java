@@ -138,15 +138,19 @@ public class ApexClassCodeCoverageBean implements Comparable<ApexClassCodeCovera
 	}
 
 	/*
-	 * over riding compareTo method of Comparable imterface
+	 * over riding compareTo method of Comparable interface
 	 * 
 	 * (non-Javadoc)
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(ApexClassCodeCoverageBean codeCoverageBean) {
-		if (this.getCoveragePercentage() < codeCoverageBean.getCoveragePercentage()) return -1;
-		if (this.getCoveragePercentage() > codeCoverageBean.getCoveragePercentage()) return 1;
-		return 0;
+		if (this.getCoveragePercentage() < codeCoverageBean.getCoveragePercentage()) {
+			return -1;
+		} else if (this.getCoveragePercentage() > codeCoverageBean.getCoveragePercentage()) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

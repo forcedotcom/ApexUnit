@@ -65,10 +65,7 @@ public class TestExecutor {
 						+ parentJobId);
 				TestStatusPollerAndResultHandler queryPollerAndResultHandler = new TestStatusPollerAndResultHandler();
 				LOG.info("############################# Now executing - Apex tests.. #############################");
-				ApexReportBean[] apexReportBeans = queryPollerAndResultHandler.fetchResultsFromParentJobId(parentJobId,
-						conn);
-
-				return apexReportBeans;
+				return queryPollerAndResultHandler.fetchResultsFromParentJobId(parentJobId, conn);
 			}
 		}
 		return null;
