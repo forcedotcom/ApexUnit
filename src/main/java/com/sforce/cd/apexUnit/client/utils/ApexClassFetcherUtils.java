@@ -176,7 +176,7 @@ public class ApexClassFetcherUtils {
 
 			if (splitByPeriod.length == 2) {
 				namespace = splitByPeriod[0].trim();
-				regex = splitByPeriod[1];
+				regex = splitByPeriod[1].trim();
 			}
 
 			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
