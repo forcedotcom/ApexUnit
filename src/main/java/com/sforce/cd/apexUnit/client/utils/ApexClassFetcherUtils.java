@@ -171,10 +171,10 @@ public class ApexClassFetcherUtils {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
 			// if a period is specified, then the text before the period will be interpreted as the namespace
-			String[] splitByPeriod = regex.split("\\.");
+			String[] splitByPeriod = regex.split("\\.", 2);
 			String namespace = null;
 
-			if (splitByPeriod.length != 0) {
+			if (splitByPeriod.length == 2) {
 				namespace = splitByPeriod[0].trim();
 				regex = splitByPeriod[1];
 			}
