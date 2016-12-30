@@ -107,7 +107,7 @@ Please refer https://github.com/forcedotcom/ApexUnit/wiki/Manifest-file-vs-regex
 
 Use src/main/resources/config.properties to set the below parameters.
 
-1. API_VERSION(Default value: 36.0) : The Partner API version in use for the org. 
+1. API_VERSION(Default value: 37.0) : The Partner API version in use for the org. 
 
 2. MAX_TIME_OUT_IN_MS(Default value : 1200000 ==> 20 minutes) : Time out setting for the session, Once timeout occurs, session renewer module is invoked which renews the session. Helpful when you face a connection exception during query executions. 
 

@@ -163,7 +163,7 @@ public class QueryConstructor {
 	public static String fetchResultFromApexTestQueueItem(String parentJobId) {
 		String soql = "";
 		if (parentJobId != null && !parentJobId.equals("")) {
-			soql = "SELECT ApexClassId,AsyncApexJobId,Id,Message,MethodName,Outcome,QueueItemId,StackTrace,SystemModstamp,TestTimestamp "
+			soql = "SELECT ApexClassId,AsyncApexJobId,Id,Message,MethodName,Outcome,QueueItemId,RunTime,StackTrace,SystemModstamp,TestTimestamp "
 					+ "FROM ApexTestResult WHERE AsyncApexJobId = "+ escapeSingleQuote(parentJobId);
 		}
 		return soql;

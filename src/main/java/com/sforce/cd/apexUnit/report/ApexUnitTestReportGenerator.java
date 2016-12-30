@@ -48,6 +48,7 @@ public class ApexUnitTestReportGenerator {
 
 			int failureCount = 0;
 			int testCount = 0;
+			Long totalTimeInMillis = 0L;
 
 			for (ApexReportBean reportBean : reportBeans) {
 				testCount++;
@@ -79,6 +80,11 @@ public class ApexUnitTestReportGenerator {
 				// set class test method
 				testcase.setAttribute("name", reportBean.getMethodName());
 
+				// set time and accumulate for class
+				Long timeInMillis = new Long(reportBean.getTimeElapsed());
+				totalTimeInMillis += timeInMillis;
+				testcase.setAttribute("time", Double.toString(timeInMillis.doubleValue() / 1000));
+
 				// Increment pass/fail counters
 				if (reportBean.getOutcome().equalsIgnoreCase("pass")) {
 					Element success = new Element("Success");
@@ -99,6 +105,7 @@ public class ApexUnitTestReportGenerator {
 			// Add the pass, fail counters as attributes to root element
 			rootElement.setAttribute("failures", Integer.toString(failureCount));
 			rootElement.setAttribute("tests", Integer.toString(testCount));
+			rootElement.setAttribute("time", Double.toString(totalTimeInMillis.doubleValue() / 1000));
 
 			// Write the DOM to xml file
 			try {
