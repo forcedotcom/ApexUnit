@@ -106,6 +106,9 @@ public class TestStatusPollerAndResultHandler {
 					failedTestMethods.add(apexReportBean.getApexClassName() + "." + apexReportBean.getMethodName());
 				}
 			}
+			if (sobject.getField("RunTime") != null) {
+				apexReportBean.setTimeElapsed(Long.parseLong(sobject.getField("RunTime").toString()));
+			}
 			if (sobject.getField("StackTrace") != null) {
 				apexReportBean.setStackTrace(sobject.getField("StackTrace").toString());
 			}
