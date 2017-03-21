@@ -102,8 +102,8 @@ public class ApexUnitRunner {
 		Long end = System.currentTimeMillis();
 		LOG.debug("Total Time taken by ApexUnit tool in secs: " + (end - start) / 1000);
 		//LOG.info("Total test methods executed: " + TestStatusPollerAndResultHandler.totalTestMethodsExecuted);
-		LOG.info("Total test methods executed: " + apexReportBeans.length);
 		if (apexReportBeans != null && apexReportBeans.length > 0) {
+			LOG.info("Total test methods executed: " + apexReportBeans.length);
 			String reportFile = "ApexUnitReport.xml";
 			ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, reportFile);
 		} else {

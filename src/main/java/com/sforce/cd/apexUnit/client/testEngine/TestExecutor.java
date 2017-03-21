@@ -65,6 +65,7 @@ public class TestExecutor {
 		String[] testClassesInBatch = null;
 		String parentJobId;
 		ArrayList<ApexReportBean> apexReportBean = null;
+		ApexReportBean[] apexReportBeanArray = null;
 		
 
 		if (conn == null) {
@@ -109,8 +110,10 @@ public class TestExecutor {
 					TestStatusPollerAndResultHandler queryPollerAndResultHandler = new TestStatusPollerAndResultHandler();
 					LOG.info(
 							"############################# Now executing - Apex tests.. #############################");
-					
-					 apexReportBean.addAll(Arrays.asList(queryPollerAndResultHandler.fetchResultsFromParentJobId(parentJobId, conn)));
+					apexReportBeanArray = queryPollerAndResultHandler.fetchResultsFromParentJobId(parentJobId, conn);
+					if(apexReportBeanArray != null){
+						apexReportBean.addAll(Arrays.asList(apexReportBeanArray));
+					}
 
 				}
 
