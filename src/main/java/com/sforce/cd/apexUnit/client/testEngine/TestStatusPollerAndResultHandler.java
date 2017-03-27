@@ -68,6 +68,7 @@ public class TestStatusPollerAndResultHandler {
 			SObject[] sObjects = queryResult.getRecords();
 			if (sObjects != null) {
 				totalTestMethodsExecuted = sObjects.length;
+				LOG.info("Total test methods executed: " + TestStatusPollerAndResultHandler.totalTestMethodsExecuted);
 				apexReportBeans = new ApexReportBean[sObjects.length];
 				for (SObject sobject : sObjects) {
 					ApexReportBean apexReportBean = populateReportBean(conn, sobject);
