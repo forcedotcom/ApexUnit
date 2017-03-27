@@ -30,32 +30,6 @@ public class TestExecutor {
 	private static Logger LOG = LoggerFactory.getLogger(TestExecutor.class);
 	private static final int BATCH_SIZE = 200;
 
-	/*public ApexReportBean[] testExecutionFlow() {
-		ConnectionHandler connectionHandler = ConnectionHandler.getConnectionHandlerInstance();
-		PartnerConnection conn = connectionHandler.getConnection();
-		if (conn == null) {
-			ApexUnitUtils.shutDownWithErrMsg("Unable to establish Connection with the org. Suspending the run..");
-		}
-		String[] testClassesAsArray = ApexClassFetcherUtils.constructTestClassesArray(conn);
-		if (LOG.isDebugEnabled()) {
-			ApexClassFetcherUtils.logTheFetchedApexClasses(testClassesAsArray);
-		}
-		if (testClassesAsArray != null && testClassesAsArray.length > 0) {
-			BulkConnection bulkConnection = connectionHandler.getBulkConnection();
-			AsyncBulkApiHandler bulkApiHandler = new AsyncBulkApiHandler();
-			String parentJobId = bulkApiHandler.handleBulkApiFlow(conn, bulkConnection, testClassesAsArray);
-
-			if (parentJobId != null) {
-				LOG.info("Parent job ID for the submission of the test classes to the Force.com platform is: "
-						+ parentJobId);
-				TestStatusPollerAndResultHandler queryPollerAndResultHandler = new TestStatusPollerAndResultHandler();
-				LOG.info("############################# Now executing - Apex tests.. #############################");
-				return queryPollerAndResultHandler.fetchResultsFromParentJobId(parentJobId, conn);
-			}
-		}
-		return null;
-	}*/
-	
 	public ApexReportBean[] testExecutionFlow() {
 
 		ConnectionHandler connectionHandler = ConnectionHandler.getConnectionHandlerInstance();
