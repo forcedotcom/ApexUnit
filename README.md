@@ -6,7 +6,7 @@ ApexUnit
 ApexUnit is a continuous integration tool for the Force.com platform that executes Apex tests and fetches code coverage results.
 
 ApexUnit comprises of two major components:
-- An xUnit based testing framework for the Force.com platform 
+- An xUnit based testing framework for the Force.com platform
 - Extensive code coverage metrics with actionable detail for specified Apex classes
 
 ## Key Features of ApexUnit
