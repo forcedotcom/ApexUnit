@@ -123,11 +123,16 @@ public class ApexManifestFileReader {
 	 */
 	private void insertIntoTestClassesArray(String strLine, ArrayList<String> testClassList){
 		String tempTestClassId = null;
-		Map<String, String> namespaceAndName = new HashMap<String, String>();
-		namespaceAndName.put("name",strLine);				
+		String[] splitByPeriod = strLine.split("\\.", 2);
+		String namespace = null;
+		String classname = strLine;
+
+		if (splitByPeriod.length == 2) {
+			namespace = splitByPeriod[0].trim();
+			classname = splitByPeriod[1].trim();
+		}
 		
-		String soql = QueryConstructor.generateQueryToFetchApexClass(namespaceAndName.get("namespace"), 
-				namespaceAndName.get("name"));
+		String soql = QueryConstructor.generateQueryToFetchApexClass(namespace, classname);
 		// query using WSC
 		tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 				ConnectionHandler.getConnectionHandlerInstance().getConnection(), soql);
@@ -136,8 +141,7 @@ public class ApexManifestFileReader {
 		//triggers are included only for code coverage and not for tests to avoid exception by the platform
 		if (tempTestClassId == null && includeTriggers) {
 			// look if the given class name is a trigger if its not ApexClass
-			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespaceAndName.get("namespace"), 
-					namespaceAndName.get("name"));
+			String soqlForTrigger = QueryConstructor.generateQueryToFetchApexTrigger(namespace, classname);
 			// query using WSC
 			tempTestClassId = ApexClassFetcherUtils.fetchAndAddToMapApexClassIdBasedOnName(
 					ConnectionHandler.getConnectionHandlerInstance().getConnection(), soqlForTrigger);

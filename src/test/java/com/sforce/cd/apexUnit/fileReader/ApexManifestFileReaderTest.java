@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
+import org.testng.annotations.Test;
 
 public class ApexManifestFileReaderTest {
 	private final static Logger LOG = LoggerFactory.getLogger(ApexManifestFileReaderTest.class);
@@ -154,5 +156,21 @@ public class ApexManifestFileReaderTest {
 		} else {
 			LOG.info("Test files directory does not exist; hence not deleted");
 		}
+	}
+
+	@Test
+	public void namespaceParserTest() {
+		String stringWithNamespaceAndClassname = "namespace.classname";
+		String[] splitByPeriod = stringWithNamespaceAndClassname.split("\\.", 2);
+		String namespace = null;
+		String classname = stringWithNamespaceAndClassname;
+
+		if (splitByPeriod.length == 2) {
+			namespace = splitByPeriod[0].trim();
+			classname = splitByPeriod[1].trim();
+		}
+
+		Assert.assertEquals(namespace, "namespace");
+		Assert.assertEquals(classname, "classname");
 	}
 }

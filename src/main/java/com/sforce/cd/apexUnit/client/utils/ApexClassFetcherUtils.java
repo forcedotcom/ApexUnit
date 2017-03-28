@@ -170,7 +170,15 @@ public class ApexClassFetcherUtils {
 		if (regex != null && !regex.equals(" ")) {
 			LOG.info("Using regex: \"" + regex + "\" to fetch apex classes");
 			// construct the query
+			// if a period is specified, then the text before the period will be interpreted as the namespace
+			String[] splitByPeriod = regex.split("\\.", 2);
 			String namespace = null;
+
+			if (splitByPeriod.length == 2) {
+				namespace = splitByPeriod[0].trim();
+				regex = splitByPeriod[1].trim();
+			}
+
 			String soql = QueryConstructor.generateQueryToFetchApexClassesBasedOnRegex(namespace, regex);
 			// fire the query using WSC and fetch the results
 			String[] classesAsArrayUsingWSC = constructClassIdArrayUsingWSC(connection, soql);
