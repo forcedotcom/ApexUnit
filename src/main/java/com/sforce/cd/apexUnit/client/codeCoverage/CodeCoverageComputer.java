@@ -16,6 +16,7 @@ package com.sforce.cd.apexUnit.client.codeCoverage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,7 @@ public class CodeCoverageComputer {
 	public ApexClassCodeCoverageBean[] calculateAggregatedCodeCoverageUsingToolingAPI() {
 		PartnerConnection connection = ConnectionHandler.getConnectionHandlerInstance().getConnection();
 
-		ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans = null;
+		List<ApexClassCodeCoverageBean> apexClassCodeCoverageBeans = new ArrayList<ApexClassCodeCoverageBean>();
 		String[] classesAsArray = null;
 
 		/*
@@ -95,28 +96,47 @@ public class CodeCoverageComputer {
 		// Do not proceed if no class names are returned from both manifest
 		// files and/or regexes
 		if (classesAsArray != null && classesAsArray.length > 0) {
-			String classArrayAsStringForQuery = processClassArrayForQuery(classesAsArray);
-			String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
-			// compute aggregated code coverage
-			String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
-
-			JSONObject responseJsonObject = null;
-			responseJsonObject = WebServiceInvoker.doGet(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken());
-			LOG.debug("responseJsonObject says " + responseJsonObject + "\n relativeServiceURL is " + relativeServiceURL
-					+ "\n soqlcc is " + soqlcc);
-			if (responseJsonObject != null) {
-				apexClassCodeCoverageBeans = processJSONResponseAndConstructCodeCoverageBeans(connection,
-						responseJsonObject);
+			List<List<String>> listClassesAsArray = new ArrayList<List<String>>();
+			int N = classesAsArray.length;
+			List<String> lclassesAsArray = Arrays.asList(classesAsArray);
+			for (int i = 0; i < N; i += 100) {
+			    listClassesAsArray.add(lclassesAsArray.subList(i, Math.min(N, i + 100)));
 			}
-			if (apexClassCodeCoverageBeans == null) {
-				ApexUnitUtils.shutDownWithErrMsg(
-						"Code coverage metrics not computed. Null object returned while processing the JSON response from the Tooling API");
+			int T = listClassesAsArray.size();
+			JSONObject[] responseJsonObjects = new JSONObject[T];
+			for(int j=0;j<T;j++){
+				List<String> lf = new ArrayList<String>();
+				for(int w=0;w < (listClassesAsArray.get(j)).size();w++){
+					lf.add((listClassesAsArray.get(j)).get(w));
+				}
+				String[] toProcess = new String[lf.size()];LOG.info(" ### LF = "+lf.toArray(toProcess));
+				String classArrayAsStringForQuery = processClassArrayForQuery(lf.toArray(toProcess));
+				String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
+				// compute aggregated code coverage
+				String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
+				responseJsonObjects[j] = WebServiceInvoker.doGet(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken());
+				LOG.info("responseJsonObject says " + responseJsonObjects[j] + "\n relativeServiceURL is " + relativeServiceURL
+						+ "\n soqlcc is " + soqlcc);
+								
+				if (responseJsonObjects[j] != null) {
+					ApexClassCodeCoverageBean[] results = processJSONResponseAndConstructCodeCoverageBeans(connection, responseJsonObjects[j]);LOG.info("### results = "+results);
+					if(results != null && results.length > 0){
+						for(ApexClassCodeCoverageBean result:results){ 
+							apexClassCodeCoverageBeans.add(result);
+						}
+					}
+				}
+				if (apexClassCodeCoverageBeans == null) {
+					ApexUnitUtils.shutDownWithErrMsg(
+							"Code coverage metrics not computed. Null object returned while processing the JSON response from the Tooling API");
+				}
 			}
 		} else {
 			ApexUnitUtils.shutDownWithErrMsg("No/Invalid Apex source classes mentioned in manifest file and/or "
 					+ "regex pattern for ApexSourceClassPrefix didn't return any Apex source class names from the org");
 		}
-		return apexClassCodeCoverageBeans;
+		int M = apexClassCodeCoverageBeans.size();
+		return (ApexClassCodeCoverageBean[]) apexClassCodeCoverageBeans.toArray(new ApexClassCodeCoverageBean[M]);
 	}
 
 	/*
@@ -305,16 +325,18 @@ public class CodeCoverageComputer {
 
 		if (responseJsonObject != null) {
 			String responseStr = responseJsonObject.toJSONString();
-			LOG.debug("responseStr during org wide code coverage" + responseStr);
+			LOG.info("responseStr during org wide code coverage" + responseStr);
 			JSONArray recordObject = (JSONArray) responseJsonObject.get("records");
-			for (int i = 0; i < recordObject.size(); ++i) {
+			if(recordObject != null && recordObject.size() > 0) {
+				for (int i = 0; i < recordObject.size(); ++i) {
 
-				JSONObject rec = (JSONObject) recordObject.get(i);
+					JSONObject rec = (JSONObject) recordObject.get(i);
 
-				coverage = Integer.valueOf((String) rec.get("PercentCovered").toString());
-				LOG.info(
-						"####################################   Org wide code coverage result  #################################### ");
-				LOG.info("Org wide code coverage : " + coverage + "%");
+					coverage = Integer.valueOf((String) rec.get("PercentCovered").toString());
+					LOG.info(
+							"####################################   Org wide code coverage result  #################################### ");
+					LOG.info("Org wide code coverage : " + coverage + "%");
+				}
 			}
 		} else {
 			ApexUnitUtils.shutDownWithErrMsg("Org wide code coverage not computed");

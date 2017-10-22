@@ -32,6 +32,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import com.google.gson.Gson;
 import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,8 +154,9 @@ public class WebServiceInvoker {
 		try {
 			instream = executeHTTPMethod(httpclient, get, authorizationServerURL);
 			LOG.debug("done with get operation");
-
-			JSONObject json = (JSONObject) JSONValue.parse(new InputStreamReader(instream));
+			Object jarr = JSONValue.parse(new InputStreamReader(instream));
+			Gson gson = new Gson();
+			JSONObject json = (JSONObject)JSONValue.parse(gson.toJson(jarr)); 
 			LOG.debug("is json null? :" + json == null ? "true" : "false");
 			if (json != null) {
 				if (LOG.isDebugEnabled()) {
