@@ -115,7 +115,7 @@ public class ApexCodeCoverageReportGenerator {
 		String workingDir = reportDir.getPath();
 		String apexUnitTestReportPath = "";
 		if (!workingDir.contains("jenkins")) {
-			apexUnitTestReportPath = workingDir + System.getProperty("file.separator") + "ApexUnitReport.xml";
+			apexUnitTestReportPath = "." + System.getProperty("file.separator") + "ApexUnitReport.xml";
 		} else {
 			int lastIndexOfSlash = workingDir.lastIndexOf('/');
 			String jobName = workingDir.substring(lastIndexOfSlash + 1);
