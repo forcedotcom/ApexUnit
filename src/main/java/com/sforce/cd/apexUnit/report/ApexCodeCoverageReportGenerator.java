@@ -29,7 +29,7 @@ import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 
 public class ApexCodeCoverageReportGenerator {
 
-	public static void generateHTMLReport(ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans) {
+	public static void generateHTMLReport(ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans, File reportDir) {
 		// Preparing the table:
 		StringBuilder htmlBuilder = new StringBuilder();
 		htmlBuilder.append("<html>");
@@ -112,7 +112,7 @@ public class ApexCodeCoverageReportGenerator {
 		// provide link to the test report
 		appendTag(htmlBuilder, "header", "Apex Test Report: ");
 		appendLineSpaces(htmlBuilder, 2);
-		String workingDir = System.getProperty("user.dir");
+		String workingDir = reportDir.getPath();
 		String apexUnitTestReportPath = "";
 		if (!workingDir.contains("jenkins")) {
 			apexUnitTestReportPath = workingDir + System.getProperty("file.separator") + "ApexUnitReport.xml";
@@ -122,7 +122,7 @@ public class ApexCodeCoverageReportGenerator {
 			apexUnitTestReportPath = "https://jenkins.internal.salesforce.com/job/" + jobName
 					+ "/lastCompletedBuild/testReport/";
 		}
-		appendTag(htmlBuilder, "a", "style=\"font-size:125%\"; href=" + apexUnitTestReportPath, "Detailed Test Report");
+		appendTag(htmlBuilder, "a", "style=\"font-size:125%\"; href=\"" + apexUnitTestReportPath + "\"", "Detailed Test Report");
 		appendLineSpaces(htmlBuilder, 2);
 
 		appendTag(htmlBuilder, "header", "Detailed code coverage report: ");
@@ -216,17 +216,14 @@ public class ApexCodeCoverageReportGenerator {
 		htmlBuilder.append("</body>");
 		htmlBuilder.append("</html>");
 
-		createHTMLReport(htmlBuilder.toString());
+		createHTMLReport(htmlBuilder.toString(), reportDir);
 	}
 
-	private static void createHTMLReport(String htmlBuffer) {
+	private static void createHTMLReport(String htmlBuffer, File reportDir) {
 
 		File tmpFile = null;
 		FileOutputStream tmpOut = null;
-		String workingDir = System.getProperty("user.dir") + System.getProperty("file.separator") + "Report";
-		File dir = new File(workingDir);
-		dir.mkdirs();
-		tmpFile = new File(dir, "ApexUnitReport.html");
+		tmpFile = new File(reportDir, "ApexUnitReport.html");
 		byte[] reportAsBytes;
 		try {
 			tmpOut = new FileOutputStream(tmpFile);

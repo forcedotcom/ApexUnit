@@ -22,6 +22,8 @@
 
 package com.sforce.cd.apexUnit;
 
+import java.io.File;
+import java.time.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -101,16 +103,19 @@ public class ApexUnitRunner {
 		}
 		Long end = System.currentTimeMillis();
 		LOG.debug("Total Time taken by ApexUnit tool in secs: " + (end - start) / 1000);
+		String reportDir = System.getProperty("user.dir") + System.getProperty("file.separator") + LocalDate.now() + "_Report";
+		File dir = new File(reportDir);
+		dir.mkdirs();
 		if (apexReportBeans != null && apexReportBeans.length > 0) {
 			LOG.info("Total test methods executed: " + apexReportBeans.length);
-			String reportFile = "ApexUnitReport.xml";
+			String reportFile = reportDir + System.getProperty("file.separator") + "ApexUnitReport.xml";
 			ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, reportFile);
 		} else {
 			ApexUnitUtils.shutDownWithErrMsg("Unable to generate test report. "
 											 + "Did not find any test results for the job id");
 		}
 		if (!skipCodeCoverageComputation) {
-			ApexCodeCoverageReportGenerator.generateHTMLReport(apexClassCodeCoverageBeans);
+			ApexCodeCoverageReportGenerator.generateHTMLReport(apexClassCodeCoverageBeans, dir);
 
 			// validating the code coverage metrics against the thresholds
 			// provided by the user
