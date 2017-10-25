@@ -114,33 +114,32 @@ public class ApexUnitRunner {
 			ApexUnitUtils.shutDownWithErrMsg("Unable to generate test report. "
 											 + "Did not find any test results for the job id");
 		}
+		boolean teamCodeCoverageThresholdError = false;
+		boolean orgWideCodeCoverageThresholdError = false;
 		if (!skipCodeCoverageComputation) {
 			ApexCodeCoverageReportGenerator.generateHTMLReport(apexClassCodeCoverageBeans, dir);
 
 			// validating the code coverage metrics against the thresholds
 			// provided by the user
-			boolean teamCodeCoverageThresholdError = false;
-			boolean orgWideCodeCoverageThresholdError = false;
 			if (ApexUnitCodeCoverageResults.teamCodeCoverage < CommandLineArguments.getTeamCodeCoverageThreshold()) {
 				if (ApexUnitCodeCoverageResults.teamCodeCoverage == -1) {
 					LOG.warn("No source class names provided. Team Code coverage not computed ");
 				} else {
-					teamCodeCoverageThresholdError = !CommandLineArguments.getSkipCoverageEnforcement();
+					teamCodeCoverageThresholdError = true;
 				}
 			}
-			if (ApexUnitCodeCoverageResults.orgWideCodeCoverage < CommandLineArguments
-					.getOrgWideCodeCoverageThreshold()) {
-				orgWideCodeCoverageThresholdError = !CommandLineArguments.getSkipCoverageEnforcement();
+			if (ApexUnitCodeCoverageResults.orgWideCodeCoverage < CommandLineArguments.getOrgWideCodeCoverageThreshold()) {
+				orgWideCodeCoverageThresholdError = true;
 			}
 
-			if (teamCodeCoverageThresholdError) {
+			if (teamCodeCoverageThresholdError && !CommandLineArguments.getSkipCoverageEnforcement()) {
 				runTimeExceptionMessage += "Failed to meet the Team code coverage threshold : "
 						+ CommandLineArguments.getTeamCodeCoverageThreshold()
 						+ " The team code coverage for the given classes is: "
 						+ ApexUnitCodeCoverageResults.teamCodeCoverage + "%\n"
 						+ "Calibrate your threshold values if you are happy with the current code coverage\n";
 			}
-			if (orgWideCodeCoverageThresholdError) {
+			if (orgWideCodeCoverageThresholdError && !CommandLineArguments.getSkipCoverageEnforcement()) {
 				runTimeExceptionMessage += "Failed to meet the Org code coverage threshold : "
 						+ CommandLineArguments.getOrgWideCodeCoverageThreshold()
 						+ " The org code coverage for the org is: " + ApexUnitCodeCoverageResults.orgWideCodeCoverage
@@ -163,10 +162,10 @@ public class ApexUnitRunner {
 		if (!runTimeExceptionMessage.equals("")) {
 			ApexUnitUtils.shutDownWithErrMsg(runTimeExceptionMessage);
 		} else {
-			LOG.info("Build successful!!" + 
-				+(TestStatusPollerAndResultHandler.testFailures?" There are tests failures :(":" No test failures!!") + 
-				+((ApexUnitCodeCoverageResults.teamCodeCoverage < CommandLineArguments.getTeamCodeCoverageThreshold() && !(ApexUnitCodeCoverageResults.teamCodeCoverage == -1)) || (ApexUnitCodeCoverageResults.orgWideCodeCoverage < CommandLineArguments.getOrgWideCodeCoverageThreshold())?" and all code coverage thresholds are not met :(":" and all code coverage thresholds are met!!")+ 
-				+" Exiting ApexUnit.. Good bye..");
+			LOG.info("Build successful!!"
+				+(TestStatusPollerAndResultHandler.testFailures ? " - But "+TestStatusPollerAndResultHandler.failedTestMethods.size()+" Test failure(s) amongst the Apex tests executed : "+TestStatusPollerAndResultHandler.failedTestMethods.toString():" - No test failures!!")
+				+(teamCodeCoverageThresholdError || orgWideCodeCoverageThresholdError ? (teamCodeCoverageThresholdError ? " - Failed to meet the Team code coverage threshold : "+ApexUnitCodeCoverageResults.teamCodeCoverage+"% < "+CommandLineArguments.getTeamCodeCoverageThreshold()+"%":"")+(orgWideCodeCoverageThresholdError ? " - Failed to meet the Org code coverage threshold : "+ApexUnitCodeCoverageResults.orgWideCodeCoverage+"% < "+CommandLineArguments.getOrgWideCodeCoverageThreshold()+"%":""):" - All code coverage thresholds are met!!")
+				+" - Exiting ApexUnit.. Good bye..");
 		}
 
 	}
