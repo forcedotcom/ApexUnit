@@ -125,12 +125,12 @@ public class ApexUnitRunner {
 				if (ApexUnitCodeCoverageResults.teamCodeCoverage == -1) {
 					LOG.warn("No source class names provided. Team Code coverage not computed ");
 				} else {
-					teamCodeCoverageThresholdError = true;
+					teamCodeCoverageThresholdError = !CommandLineArguments.getSkipCoverageEnforcement();
 				}
 			}
 			if (ApexUnitCodeCoverageResults.orgWideCodeCoverage < CommandLineArguments
 					.getOrgWideCodeCoverageThreshold()) {
-				orgWideCodeCoverageThresholdError = true;
+				orgWideCodeCoverageThresholdError = !CommandLineArguments.getSkipCoverageEnforcement();
 			}
 
 			if (teamCodeCoverageThresholdError) {

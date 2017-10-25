@@ -35,6 +35,7 @@ public class CommandLineArguments {
 	public static final String ORG_CLIENT_SECRET = "-org.client.secret";
 	public static final String PROXY_HOST = "-proxy.host";
 	public static final String PROXY_PORT = "-proxy.port";
+	public static final String INGORE_CODE_COVERAGE_THRESHOLD_ENFORCEMENT = "-ignore.code.coverage.threshold";
 	
 	public static final String HELP = "-help";
 
@@ -74,6 +75,8 @@ public class CommandLineArguments {
 	static private String proxyHost;
 	@Parameter(names = PROXY_PORT, description = "Proxy port if required for access.", validateWith = PositiveIntegerValidator.class, required = false)
 	static private Integer proxyPort;
+	@Parameter(names = INGORE_CODE_COVERAGE_THRESHOLD_ENFORCEMENT, description = "Build does not fail if the code coverage thresholds are not met.", required = false)
+	static private boolean skipCoverageEnforcement = false;
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
 
@@ -140,6 +143,10 @@ public class CommandLineArguments {
 
 	public static void setClientSecret(String clientSecret) {
 		CommandLineArguments.clientSecret = clientSecret;
+	}
+
+	public static boolean getSkipCoverageEnforcement() {
+		return skipCoverageEnforcement;
 	}
 
 	public static boolean isHelp() {
