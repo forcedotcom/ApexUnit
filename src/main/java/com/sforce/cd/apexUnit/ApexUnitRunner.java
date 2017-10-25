@@ -149,7 +149,7 @@ public class ApexUnitRunner {
 		}
 
 		// if there are test failures, concatenate error messages
-		if (TestStatusPollerAndResultHandler.testFailures) {
+		if (TestStatusPollerAndResultHandler.testFailures && !CommandLineArguments.getIgnoreTestFailure()) {
 			runTimeExceptionMessage += "Test failures amongst the Apex tests executed. ";
 			if (TestStatusPollerAndResultHandler.failedTestMethods != null
 					&& TestStatusPollerAndResultHandler.failedTestMethods.size() > 0) {

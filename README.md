@@ -87,6 +87,7 @@ Optional Parameters:
 - -proxy.host : Proxy host for external access
 - -proxy.port : Proxy port for external access
 - -ignore.code.coverage.threshold : Build does not fail if the code coverage thresholds are not met
+- -ignore.test.failure : Build does not fail if there are tests failures
 - -help : Displays options available for running this application
 
 Note: You must provide either of the (-regex.for.selecting.source.classes.for.code.coverage.computation OR -manifest.files.with.source.class.names.for.code.coverage.computation) AND either of  -(regex.for.selecting.test.classes.to.execute OR -manifest.files.with.test.class.names.to.execute)
