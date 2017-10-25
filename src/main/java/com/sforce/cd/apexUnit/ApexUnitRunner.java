@@ -163,7 +163,10 @@ public class ApexUnitRunner {
 		if (!runTimeExceptionMessage.equals("")) {
 			ApexUnitUtils.shutDownWithErrMsg(runTimeExceptionMessage);
 		} else {
-			LOG.info("Success!! No test failures and all code coverage thresholds are met!! Exiting ApexUnit.. Good bye..");
+			LOG.info("Build successful!!" + 
+				+(TestStatusPollerAndResultHandler.testFailures?" There are tests failures :(":" No test failures!!") + 
+				+((ApexUnitCodeCoverageResults.teamCodeCoverage < CommandLineArguments.getTeamCodeCoverageThreshold() && !(ApexUnitCodeCoverageResults.teamCodeCoverage == -1)) || (ApexUnitCodeCoverageResults.orgWideCodeCoverage < CommandLineArguments.getOrgWideCodeCoverageThreshold())?" and all code coverage thresholds are not met :(":" and all code coverage thresholds are met!!")+ 
+				+" Exiting ApexUnit.. Good bye..");
 		}
 
 	}
