@@ -14,6 +14,9 @@
 
 package com.sforce.cd.apexUnit.client;
 
+import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
 
 /*
  * Constructs and returns queries for the client to invoke web services and fetch the data from the org
@@ -301,4 +304,36 @@ public class QueryConstructor {
 		}
 		return singleQuoteEscapedStr;
 	}
+	/*
+	 * Query to check class exists in Apex Test queue 
+	 * @param : userInput: String
+	 * 
+	 * @return : singleQuotrEscapedStr : String
+	 *
+	 */
+	
+	public static String getQueryForApexClassInfo(String apexClassess){
+		String sql ="";
+		if(apexClassess !=null){
+			sql = "SELECT Id FROM ApexTestQueueItem WHERE  ApexClassId IN "+ "("+apexClassess+")";
+		}
+		return sql;
+	}
+	
+	public static String updateQueryForReload(JSONObject ids){
+		String sql ="";
+		String idSet = "";
+		for (Object key : ids.keySet()) {
+			if(!idSet.isEmpty()){
+				idSet+= ",";
+			}
+			idSet+= (String)(ids.get((String)key));
+		}
+		if(ids !=null){
+			sql = "update ApexTestQueueItem SET Status ='Aborted' WHERE  Id IN "+ "("+idSet+")";
+		}
+		return sql;
+	}
+	
+	
 }
