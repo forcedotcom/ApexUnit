@@ -108,7 +108,7 @@ public class CodeCoverageComputer {
 					multiRequestHandler.reloadTest(relativeServiceURL, QueryConstructor.updateQueryForReload(multiRequestHandler.getIdJson()));
 				}
 				else{
-					
+					return null;
 				}
 			}
 			
