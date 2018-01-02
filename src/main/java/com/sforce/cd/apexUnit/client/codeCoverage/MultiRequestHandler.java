@@ -9,7 +9,8 @@ public class MultiRequestHandler {
 	
 	public boolean isClassAvailable(String relativeServiceURL, String soql){
 		boolean result = false;
-		JSONObject json =WebServiceInvoker.doGet(relativeServiceURL, soql, OAuthTokenGenerator.getOrgToken());
+		String org_tocket = OAuthTokenGenerator.getOrgToken();
+		JSONObject json =WebServiceInvoker.doGet(relativeServiceURL, soql, org_tocket);
 		if(  json != null){
 			result = true;
 			this.idJson = json;
@@ -20,7 +21,8 @@ public class MultiRequestHandler {
 	
 	public String reloadTest(String relativeServiceURL, String soql){
 		String result = null;
-		JSONObject json =WebServiceInvoker.doGet(relativeServiceURL, soql, OAuthTokenGenerator.getOrgToken());
+		String org_tocket = OAuthTokenGenerator.getOrgToken();
+		JSONObject json =WebServiceInvoker.doGet(relativeServiceURL, soql, org_tocket);
 		if(json != null){
 			result ="OK";
 		}
@@ -29,5 +31,11 @@ public class MultiRequestHandler {
 
 	public JSONObject getIdJson() {
 		return idJson;
+	}
+	
+	public static void main(String []a){
+		System.out.println("org_tocket "+ OAuthTokenGenerator.getOrgToken());
+		System.out.println("");
+		
 	}
 }
