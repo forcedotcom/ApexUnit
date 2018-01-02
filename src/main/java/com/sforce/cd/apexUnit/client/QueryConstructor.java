@@ -317,7 +317,7 @@ public class QueryConstructor {
 	public static String getQueryForApexClassInfo(String apexClassess){
 		String sql ="";
 		if(apexClassess !=null){
-			sql = "SELECT Id FROM ApexTestQueueItem WHERE  ApexClassId IN "+ "("+apexClassess+") AND status IN ('Queued', 'Processing')";
+			sql = "SELECT Id FROM ApexTestQueueItem WHERE  ApexClassId IN "+ "("+apexClassess+") AND status IN ('Queued', 'Processing', 'Completed')";
 		}
 		return sql;
 	}
