@@ -63,6 +63,7 @@ public class TestExecutor {
 			LOG.debug(e.getMessage());
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
+		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords()[0].getName());
 		boolean submitTest = true;
 		if(queryresult != null){
 			if(CommandLineArguments.isTestReload()){
