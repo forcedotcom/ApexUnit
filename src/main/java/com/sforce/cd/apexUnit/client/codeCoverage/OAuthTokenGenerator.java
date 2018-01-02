@@ -47,6 +47,7 @@ public class OAuthTokenGenerator {
 		WebServiceInvoker webServiceInvoker = new WebServiceInvoker();
 		// get response map using a post web service call to the service url
 		HashMap<String, String> responseMap = webServiceInvoker.doPost(oAuthTokenServiceUrl);
+		LOG.info("*****Response Map "+ responseMap);
 		if (responseMap != null && responseMap.containsKey("access_token")) {
 			orgToken = responseMap.get("access_token");
 			LOG.debug("Org token : " + orgToken);

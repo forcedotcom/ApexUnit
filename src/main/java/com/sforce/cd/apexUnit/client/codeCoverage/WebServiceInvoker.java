@@ -94,6 +94,7 @@ public class WebServiceInvoker {
 			post.releaseConnection();
 		}
 
+		LOG.info("^^^^^^^^Tocken Map "+ responseMap);
 		return responseMap;
 
 	}
