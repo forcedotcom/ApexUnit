@@ -68,6 +68,8 @@ public class WebServiceInvoker {
 		try {
 			// the client id and secret is applicable across all dev orgs
 			requestString = generateRequestString();
+			LOG.info("@@@@@@@@@@@@@@@requestString@@@@@@@@@@@@@@@@@@@@@@@@@");
+			LOG.info(requestString);
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
 			LOG.info("@@@@@@@@@@@@@@@authorizationServerURL@@@@@@@@@@@@@@@@@@@@@@@@@");
 			LOG.info(authorizationServerURL);
