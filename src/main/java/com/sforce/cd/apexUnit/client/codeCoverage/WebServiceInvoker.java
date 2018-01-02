@@ -68,11 +68,9 @@ public class WebServiceInvoker {
 		try {
 			// the client id and secret is applicable across all dev orgs
 			requestString = generateRequestString();
-			LOG.info("@@@@@@@@@@@@@@@requestString@@@@@@@@@@@@@@@@@@@@@@@@@");
-			LOG.info(requestString);
+			LOG.info("@@@@@@@@@@@@@@@requestString@@@@@@@@@@@@@@@@@@@@@@@@@  "+requestString);
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
-			LOG.info("@@@@@@@@@@@@@@@authorizationServerURL@@@@@@@@@@@@@@@@@@@@@@@@@");
-			LOG.info(authorizationServerURL);
+			LOG.info("@@@@@@@@@@@@@@@authorizationServerURL@@@@@@@@@@@@@@@@@@@@@@@@@  "+ authorizationServerURL);
 
 			httpclient.getParams().setSoTimeout(0);
 			post = new PostMethod(authorizationServerURL);

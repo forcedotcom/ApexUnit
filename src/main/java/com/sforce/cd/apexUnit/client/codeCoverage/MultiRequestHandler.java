@@ -33,9 +33,9 @@ public class MultiRequestHandler {
 		return idJson;
 	}
 	
-	public static void main(String []a){
-		System.out.println("org_tocket "+ OAuthTokenGenerator.getOrgToken());
-		System.out.println("");
-		
-	}
+//	public static void main(String []a){
+//		System.out.println("org_tocket "+ OAuthTokenGenerator.getOrgToken());
+//		System.out.println("");
+//		
+//	}
 }
