@@ -66,7 +66,8 @@ public class TestExecutor {
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		SObject []s= queryresult.getRecords();
 		for (SObject sObject : s) {
-			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getField("Id"));
+			
+			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getId());
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		boolean submitTest = true;
