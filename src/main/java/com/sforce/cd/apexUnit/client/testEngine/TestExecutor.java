@@ -28,6 +28,7 @@ import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 import com.sforce.cd.apexUnit.report.ApexReportBean;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.soap.partner.QueryResult;
+import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
 public class TestExecutor {
@@ -63,7 +64,11 @@ public class TestExecutor {
 			LOG.debug(e.getMessage());
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
-		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords()[0].getValue());
+		SObject []s= queryresult.getRecords();
+		for (SObject sObject : s) {
+			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getField("Id"));
+		}
+		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		boolean submitTest = true;
 		if(queryresult != null){
 			if(CommandLineArguments.isTestReload()){
