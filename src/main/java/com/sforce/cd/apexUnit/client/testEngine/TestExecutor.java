@@ -74,6 +74,12 @@ public class TestExecutor {
 		if(queryresult.getSize() != 0){
 			if(!CommandLineArguments.isTestReload()){
 				String soql1 = QueryConstructor.updateQueryForReload(queryresult.getRecords());
+				try {
+					conn.query(soql1);
+				} catch (ConnectionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else{
 				submitTest = false;
