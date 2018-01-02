@@ -21,10 +21,14 @@ import org.slf4j.LoggerFactory;
 
 import com.sforce.async.BulkConnection;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
+import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
+import com.sforce.cd.apexUnit.client.QueryConstructor;
 import com.sforce.cd.apexUnit.client.connection.ConnectionHandler;
 import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 import com.sforce.cd.apexUnit.report.ApexReportBean;
 import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.partner.QueryResult;
+import com.sforce.ws.ConnectionException;
 
 public class TestExecutor {
 	private static Logger LOG = LoggerFactory.getLogger(TestExecutor.class);
@@ -47,10 +51,34 @@ public class TestExecutor {
 		}
 
 		String[] testClassesAsArray = ApexClassFetcherUtils.constructTestClassesArray(conn);
-
 		if (LOG.isDebugEnabled()) {
 			ApexClassFetcherUtils.logTheFetchedApexClasses(testClassesAsArray);
 		}
+		String soql = QueryConstructor.getQueryForApexClassInfo(processClassArrayForQuery(testClassesAsArray));
+		QueryResult queryresult = null;
+		try {
+			queryresult = conn.query(soql);
+		} catch (ConnectionException e) {
+			
+			LOG.debug(e.getMessage());
+		}
+		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
+		boolean submitTest = true;
+		if(queryresult != null){
+			if(CommandLineArguments.isTestReload()){
+				String soql1 = QueryConstructor.updateQueryForReload(queryresult.getRecords());
+			}
+			else{
+				submitTest = false;
+			}
+			
+			
+		}
+
+		if(!submitTest){
+			ApexUnitUtils.shutDownWithErrMsg("Test for these classes already running/enqueue at server...");
+		}
+		else{
 
 		if (testClassesAsArray != null && testClassesAsArray.length > 0) {
 
@@ -94,7 +122,21 @@ public class TestExecutor {
 			}
 			
 		}
+		}
 		return apexReportBean.toArray(new ApexReportBean[0]);
+		
+	}
+	
+	private String processClassArrayForQuery(String[] classesAsArray) {
+		String queryString = "";
+		for (int i = 0; i < classesAsArray.length; i++) {
+			queryString += "'" + classesAsArray[i] + "'";
+			queryString += ",";
+		}
+		if (queryString.length() > 1) {
+			queryString = queryString.substring(0, queryString.length() - 1);
+		}
+		return queryString;
 	}
 
 }

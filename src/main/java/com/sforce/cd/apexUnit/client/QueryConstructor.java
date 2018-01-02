@@ -17,6 +17,7 @@ package com.sforce.cd.apexUnit.client;
 import org.json.simple.JSONObject;
 
 import com.google.gson.JsonObject;
+import com.sforce.soap.partner.sobject.SObject;
 
 /*
  * Constructs and returns queries for the client to invoke web services and fetch the data from the org
@@ -320,14 +321,11 @@ public class QueryConstructor {
 		return sql;
 	}
 	
-	public static String updateQueryForReload(JSONObject ids){
+	public static String updateQueryForReload(SObject[] ids){
 		String sql ="";
 		String idSet = "";
-		for (Object key : ids.keySet()) {
-			if(!idSet.isEmpty()){
-				idSet+= ",";
-			}
-			idSet+= (String)(ids.get((String)key));
+		for (SObject key : ids) {
+			
 		}
 		if(ids !=null){
 			sql = "update ApexTestQueueItem SET Status ='Aborted' WHERE  Id IN "+ "("+idSet+")";
