@@ -14,15 +14,16 @@
 
 package com.sforce.cd.apexUnit.client;
 
-import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonObject;
 import com.sforce.soap.partner.sobject.SObject;
 
 /*
  * Constructs and returns queries for the client to invoke web services and fetch the data from the org
  */
 public class QueryConstructor {
+	private static Logger logger = LoggerFactory.getLogger(QueryConstructor.class);
 	/*
 	 * construct query that fetches Id and Name of the ApexClass based on regex
 	 * provided by the user * is converted to % in the regex. If no * is found
@@ -328,6 +329,8 @@ public class QueryConstructor {
 			idSet = idSet + sObject.getId();
 			idSet =idSet + ",";
 		}
+		String idSetStr = idSet.substring(0, idSet.length()-1);
+		logger.info(idSetStr);
 		if(ids !=null){
 			sql = "update ApexTestQueueItem SET Status ='Aborted' WHERE  Id IN "+ "("+idSet+")";
 		}
