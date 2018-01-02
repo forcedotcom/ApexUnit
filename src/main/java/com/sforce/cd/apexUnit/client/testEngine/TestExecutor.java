@@ -72,7 +72,7 @@ public class TestExecutor {
 		LOG.info("$$$$$$$$ Records are "+queryresult.getSize());
 		boolean submitTest = true;
 		if(queryresult.getSize() != 0){
-			if(CommandLineArguments.isTestReload()){
+			if(!CommandLineArguments.isTestReload()){
 				String soql1 = QueryConstructor.updateQueryForReload(queryresult.getRecords());
 			}
 			else{
