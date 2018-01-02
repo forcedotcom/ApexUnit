@@ -71,7 +71,7 @@ public class TestExecutor {
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		boolean submitTest = true;
-		if(queryresult != null){
+		/*if(queryresult != null){
 			if(CommandLineArguments.isTestReload()){
 				String soql1 = QueryConstructor.updateQueryForReload(queryresult.getRecords());
 			}
@@ -80,7 +80,7 @@ public class TestExecutor {
 			}
 			
 			
-		}
+		}*/
 
 		if(!submitTest){
 			ApexUnitUtils.shutDownWithErrMsg("Test for these classes already running/enqueue at server...");
