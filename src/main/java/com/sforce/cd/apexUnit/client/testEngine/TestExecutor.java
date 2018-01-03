@@ -15,6 +15,7 @@ package com.sforce.cd.apexUnit.client.testEngine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,10 +66,15 @@ public class TestExecutor {
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		SObject []s= queryresult.getRecords();
+		SObject[] updateResult = new SObject[s.length];
+		int i =0;
 		for (SObject sObject : s) {
-			
+			SObject obj = new SObject();
+			obj.setType("ApexTestQueueItem");
+			obj.setId(sObject.getId());
 			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getId());
-			sObject.setField("status", "Aborted");
+			obj.setField("status", "Aborted");
+			updateResult[i++] = obj;
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getSize());
 		boolean submitTest = true;
@@ -77,7 +83,7 @@ public class TestExecutor {
 			if(!CommandLineArguments.isTestReload()){
 				
 				try {
-					conn.update(s);
+					conn.update(updateResult);
 				} catch (ConnectionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
