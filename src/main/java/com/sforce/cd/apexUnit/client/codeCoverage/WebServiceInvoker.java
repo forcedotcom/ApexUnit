@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -40,6 +41,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
+import com.sforce.soap.partner.sobject.SObject;
 
 import static java.net.URLEncoder.encode;
 
@@ -78,6 +80,8 @@ public class WebServiceInvoker {
 			post.addRequestHeader("X-PrettyPrint", "1");
 			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
 			httpclient.executeMethod(post);
+			
+			LOG.info("OAUTH Response ###### "+ post.getResponseBodyAsString());
 
 			Gson json = new Gson();
 			// obtain the result map from the response body and get the access
@@ -274,4 +278,11 @@ public class WebServiceInvoker {
 			set.add(clazz.cast(o));
 		return set;
 	}
+	
+	public Map<String, String> doPost(String relativeServiceURL, SObject[] sObject) {
+	 Map<String, String> response = new HashMap<String, String>();
+	 
+	 return response;
+	}
+	
 }

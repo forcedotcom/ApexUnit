@@ -1,6 +1,10 @@
 package com.sforce.cd.apexUnit.client.codeCoverage;
 
+import java.util.Map;
+
 import org.json.simple.JSONObject;
+
+import com.sforce.soap.partner.sobject.SObject;
 
 public class MultiRequestHandler {
 
@@ -19,10 +23,10 @@ public class MultiRequestHandler {
 		return result;
 	}
 	
-	public String reloadTest(String relativeServiceURL, String soql){
+	public String reloadTest(String relativeServiceURL, SObject[] ids){
 		String result = null;
-		String org_tocket = OAuthTokenGenerator.getOrgToken();
-		JSONObject json =WebServiceInvoker.doGet(relativeServiceURL, soql, org_tocket);
+		WebServiceInvoker webServiceInvoker = new WebServiceInvoker();
+		Map<String, String> json =webServiceInvoker.doPost(relativeServiceURL, ids);
 		if(json != null){
 			result ="OK";
 		}
