@@ -68,14 +68,16 @@ public class TestExecutor {
 		for (SObject sObject : s) {
 			
 			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getId());
+			sObject.setField("status", "Aborted");
 		}
 		LOG.info("$$$$$$$$ Records are "+queryresult.getSize());
 		boolean submitTest = true;
-		/*if(queryresult.getSize() != 0){
+		if(queryresult.getSize() != 0){
+			LOG.info("&&&&&&&&&&& Test Reload "+ CommandLineArguments.isTestReload());
 			if(CommandLineArguments.isTestReload()){
-				String soql1 = QueryConstructor.updateQueryForReload(queryresult.getRecords());
+				
 				try {
-					conn.query(soql1);
+					conn.update(s);
 				} catch (ConnectionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -86,7 +88,7 @@ public class TestExecutor {
 			}
 			
 			
-		}*/
+		}
 
 		if(!submitTest){
 			ApexUnitUtils.shutDownWithErrMsg("Test for these classes already running/enqueue at server...");
