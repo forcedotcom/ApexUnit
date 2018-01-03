@@ -82,7 +82,8 @@ public class WebServiceInvoker {
 			StringRequestEntity requestEntity = new StringRequestEntity(requestString,
 					"application/x-www-form-urlencoded", "UTF-8");
 			LOG.info("requestEntity "+requestEntity.toString());
-			post.setRequestEntity(requestEntity);
+			//post.setRequestEntity(requestEntity);
+			post.setRequestBody(requestString);
 			httpclient.executeMethod(post);
 			
 			
