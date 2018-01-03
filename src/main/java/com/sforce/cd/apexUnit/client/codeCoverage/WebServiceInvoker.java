@@ -78,8 +78,11 @@ public class WebServiceInvoker {
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.addRequestHeader("X-PrettyPrint", "1");
-		
-			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
+			
+			StringRequestEntity requestEntity = new StringRequestEntity(requestString,
+					"application/x-www-form-urlencoded", "UTF-8");
+			LOG.info("requestEntity "+requestEntity.toString());
+			post.setRequestEntity(requestEntity);
 			httpclient.executeMethod(post);
 			
 			
