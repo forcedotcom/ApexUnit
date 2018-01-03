@@ -101,17 +101,6 @@ public class CodeCoverageComputer {
 			String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
 			// compute aggregated code coverage
 			String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
-			MultiRequestHandler multiRequestHandler = new MultiRequestHandler();
-			/*if(multiRequestHandler.isClassAvailable(relativeServiceURL, QueryConstructor.getQueryForApexClassInfo(classArrayAsStringForQuery))){
-			
-				if(CommandLineArguments.isTestReload() ){
-					multiRequestHandler.reloadTest(relativeServiceURL, QueryConstructor.updateQueryForReload(multiRequestHandler.getIdJson()));
-				}
-				else{
-					return null;
-				}
-			}*/
-			
 			
 			JSONObject responseJsonObject = null;
 			responseJsonObject = WebServiceInvoker.doGet(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken());

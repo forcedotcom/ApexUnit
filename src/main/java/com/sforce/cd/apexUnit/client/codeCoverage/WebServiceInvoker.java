@@ -13,17 +13,15 @@
 
 package com.sforce.cd.apexUnit.client.codeCoverage;
 
-import static java.net.URLEncoder.encode;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -42,7 +40,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
-import com.sforce.soap.partner.sobject.SObject;
+
+import static java.net.URLEncoder.encode;
 
 /*
  * WebServiceInvoker provides interfaces for get and post methods for the REST APIs using OAUTH
@@ -77,13 +76,8 @@ public class WebServiceInvoker {
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.addRequestHeader("X-PrettyPrint", "1");
-		
 			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
 			httpclient.executeMethod(post);
-			
-			
-			LOG.info("OAUTH Response ###### "+post.getStatusCode());
-			LOG.info("OAUTH Response ###### "+ post.getResponseBodyAsString());
 
 			Gson json = new Gson();
 			// obtain the result map from the response body and get the access
@@ -100,7 +94,6 @@ public class WebServiceInvoker {
 			post.releaseConnection();
 		}
 
-		LOG.info("^^^^^^^^Tocken Map "+ responseMap);
 		return responseMap;
 
 	}
@@ -110,8 +103,8 @@ public class WebServiceInvoker {
 		try {
 			requestString = "grant_type=password&client_id=" + CommandLineArguments.getClientId() + "&client_secret="
 					+ CommandLineArguments.getClientSecret() + "&username=" + CommandLineArguments.getUsername()
-					+ "&password=" + CommandLineArguments.getPassword();
-		} catch (Exception ex) {
+					+ "&password=" + encode(CommandLineArguments.getPassword(), "UTF-8");
+		} catch (UnsupportedEncodingException ex) {
 			ApexUnitUtils.shutDownWithDebugLog(ex, "Exception during request string generation: " + ex);
 			if(LOG.isDebugEnabled()) {
 				ex.printStackTrace();
@@ -280,11 +273,4 @@ public class WebServiceInvoker {
 			set.add(clazz.cast(o));
 		return set;
 	}
-	
-	public Map<String, String> doPost(String relativeServiceURL, SObject[] sObject) {
-	 Map<String, String> response = new HashMap<String, String>();
-	 
-	 return response;
-	}
-	
 }

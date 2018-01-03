@@ -64,7 +64,6 @@ public class TestExecutor {
 			
 			LOG.debug(e.getMessage());
 		}
-		LOG.info("$$$$$$$$ Records are "+queryresult.getRecords());
 		SObject []s= queryresult.getRecords();
 		SObject[] updateResult = new SObject[s.length];
 		int i =0;
@@ -72,21 +71,19 @@ public class TestExecutor {
 			SObject obj = new SObject();
 			obj.setType("ApexTestQueueItem");
 			obj.setId(sObject.getId());
-			LOG.info("%%%%%%%%%%%%%%hghghh  "+sObject.getId());
 			obj.setField("status", "Aborted");
 			updateResult[i++] = obj;
 		}
-		LOG.info("$$$$$$$$ Records are "+queryresult.getSize());
+		LOG.info("No of test classes running tests "+queryresult.getSize());
 		boolean submitTest = true;
 		if(queryresult.getSize() != 0){
-			LOG.info("&&&&&&&&&&& Test Reload "+ CommandLineArguments.isTestReload());
+			LOG.info("Test Reload "+ CommandLineArguments.isTestReload());
 			if(CommandLineArguments.isTestReload()){
 				
 				try {
 					conn.update(updateResult);
 				} catch (ConnectionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOG.debug(e.getMessage());
 				}
 			}
 			else{

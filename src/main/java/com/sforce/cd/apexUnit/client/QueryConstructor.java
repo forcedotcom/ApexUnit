@@ -322,20 +322,6 @@ public class QueryConstructor {
 		return sql;
 	}
 	
-	public static String updateQueryForReload(SObject[] ids){
-		String sql ="";
-		String idSet = "";
-		for (SObject sObject : ids) {
-			idSet = idSet + sObject.getId();
-			idSet =idSet + ",";
-		}
-		String idSetStr = idSet.substring(0, idSet.length()-1);
-		logger.info(idSetStr);
-		if(ids !=null){
-			sql = "update ApexTestQueueItem SET Status ='Aborted' WHERE  Id IN "+ "("+idSet+")";
-		}
-		return sql;
-	}
 	
 	
 }
