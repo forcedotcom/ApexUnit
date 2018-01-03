@@ -82,6 +82,8 @@ public class WebServiceInvoker {
 			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
 			httpclient.executeMethod(post);
 			
+			
+			LOG.info("post.getStatusCode() ###### "+post.getStatusCode());
 			LOG.info("OAUTH Response ###### "+ post.getResponseBodyAsString());
 
 			Gson json = new Gson();
