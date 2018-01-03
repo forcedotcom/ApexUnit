@@ -77,8 +77,8 @@ public class CommandLineArguments {
 	static private Integer proxyPort;
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
-	@Parameter(names = TEST_RELOAD, description = "Want to reload test if same class changes submitted again.", required = false)
-	static private boolean testReload;
+	@Parameter(names = TEST_RELOAD, description = "Want to reload test if same class changes submitted again.")
+	static private boolean testReload = false;
 
 	/*
 	 * Static getter methods for each of the CLI parameter
