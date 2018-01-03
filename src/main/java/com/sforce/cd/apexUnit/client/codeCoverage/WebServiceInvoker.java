@@ -78,6 +78,7 @@ public class WebServiceInvoker {
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.addRequestHeader("X-PrettyPrint", "1");
+		
 			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
 			httpclient.executeMethod(post);
 			
@@ -108,8 +109,8 @@ public class WebServiceInvoker {
 		try {
 			requestString = "grant_type=password&client_id=" + CommandLineArguments.getClientId() + "&client_secret="
 					+ CommandLineArguments.getClientSecret() + "&username=" + CommandLineArguments.getUsername()
-					+ "&password=" + encode(CommandLineArguments.getPassword(), "UTF-8");
-		} catch (UnsupportedEncodingException ex) {
+					+ "&password=" + CommandLineArguments.getPassword();
+		} catch (Exception ex) {
 			ApexUnitUtils.shutDownWithDebugLog(ex, "Exception during request string generation: " + ex);
 			if(LOG.isDebugEnabled()) {
 				ex.printStackTrace();
