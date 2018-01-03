@@ -74,7 +74,7 @@ public class TestExecutor {
 		boolean submitTest = true;
 		if(queryresult.getSize() != 0){
 			LOG.info("&&&&&&&&&&& Test Reload "+ CommandLineArguments.isTestReload());
-			if(CommandLineArguments.isTestReload()){
+			if(!CommandLineArguments.isTestReload()){
 				
 				try {
 					conn.update(s);
