@@ -13,11 +13,12 @@
 
 package com.sforce.cd.apexUnit.client.codeCoverage;
 
+import static java.net.URLEncoder.encode;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,8 +43,6 @@ import com.google.gson.reflect.TypeToken;
 import com.sforce.cd.apexUnit.ApexUnitUtils;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
 import com.sforce.soap.partner.sobject.SObject;
-
-import static java.net.URLEncoder.encode;
 
 /*
  * WebServiceInvoker provides interfaces for get and post methods for the REST APIs using OAUTH
@@ -78,16 +77,12 @@ public class WebServiceInvoker {
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.addRequestHeader("X-PrettyPrint", "1");
-			
-			StringRequestEntity requestEntity = new StringRequestEntity(requestString,
-					"application/x-www-form-urlencoded", "UTF-8");
-			LOG.info("requestEntity "+requestEntity.toString());
-			//post.setRequestEntity(requestEntity);
-			post.setRequestBody(requestString);
+		
+			post.setRequestEntity(new StringRequestEntity(requestString, "application/x-www-form-urlencoded", "UTF-8"));
 			httpclient.executeMethod(post);
 			
 			
-			LOG.info("post.getStatusCode() ###### "+post.getStatusCode());
+			LOG.info("OAUTH Response ###### "+post.getStatusCode());
 			LOG.info("OAUTH Response ###### "+ post.getResponseBodyAsString());
 
 			Gson json = new Gson();
