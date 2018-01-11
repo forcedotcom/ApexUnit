@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-- oraclejdk7
+- openjdk7
 
 script:
 - mvn test -D-org.login.url="https://na14.salesforce.com" -D-org.username=$USERNAME -D-org.password=$PASSWORD -D-org.client.id=$CLIENT_ID -D-org.client.secret=$CLIENT_SECRET -D-org.wide.code.coverage.threshold=40 -D-team.code.coverage.threshold=40 -D-regex.for.selecting.source.classes.for.code.coverage.computation=HelloWorld -D-regex.for.selecting.test.classes.to.execute=HelloWord* -D-manifest.files.with.test.class.names.to.execute=ManifestFile_For_Unit_Test_Classes.txt -D-manifest.files.with.source.class.names.for.code.coverage.computation=ManifestFile.txt -D-max.test.execution.time.threshold=10
