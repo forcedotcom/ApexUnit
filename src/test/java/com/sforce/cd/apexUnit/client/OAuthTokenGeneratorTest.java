@@ -17,10 +17,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.apache.commons.lang.StringUtils;
+import org.junit.Ignore;
 
 import com.sforce.cd.apexUnit.arguments.CommandLineArgumentsTest;
 import com.sforce.cd.apexUnit.client.codeCoverage.OAuthTokenGenerator;
 
+@Ignore
 public class OAuthTokenGeneratorTest {
 	private final static Logger LOG = LoggerFactory.getLogger(OAuthTokenGeneratorTest.class);
 

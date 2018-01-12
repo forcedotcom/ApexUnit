@@ -14,6 +14,7 @@ package com.sforce.cd.apexUnit.client;
 import com.sforce.cd.apexUnit.arguments.CommandLineArguments;
 import com.sforce.cd.apexUnit.client.codeCoverage.WebServiceInvoker;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -29,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 
 import static java.net.URLEncoder.encode;
 
+@Ignore
 public class ToolingAPIInvokerTest {
 	CodeCoverageComputer codeCoverageComputer = null;
 	PartnerConnection conn = null;
@@ -39,7 +41,7 @@ public class ToolingAPIInvokerTest {
 		new CommandLineArgumentsTest().setup();
 		codeCoverageComputer = new CodeCoverageComputer();
 		ConnectionHandler connectionHandler = ConnectionHandler.getConnectionHandlerInstance();
-		conn = connectionHandler.getConnection();
+		//conn = connectionHandler.getConnection();
 	}
 
 	@Test
