@@ -41,7 +41,7 @@ public class ApexClassFetcherUtilsTest {
 		//conn = connHandler.getConnection();
 	}
 
-	@Test
+	/*@Test
 	public void constructTestClassesArrayTest() {
 		String[] testClasses = ApexClassFetcherUtils.constructTestClassesArray(conn);
 		if (testClasses != null) {
@@ -49,7 +49,7 @@ public class ApexClassFetcherUtilsTest {
 		}
 	}
 
-	/*@Test
+	@Test
 	public void fetchApexClassesFromManifestFilesTest() {
 		String[] testClasses = ApexClassFetcherUtils
 				.fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles(), true);
