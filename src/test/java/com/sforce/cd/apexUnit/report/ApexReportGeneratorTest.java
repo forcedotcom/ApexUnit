@@ -55,7 +55,10 @@ public class ApexReportGeneratorTest {
 				SObject[] sObjects = queryResult.getRecords();
 				if (sObjects != null) {
 					for (SObject sobject : sObjects) {
-						parentJobId = sobject.getField("AsyncApexJobId").toString();
+						Object parentJob = sobject.getField("AsyncApexJobId");
+						if(parentJob !=null){
+						  parentJobId = sobject.getField("AsyncApexJobId").toString();
+						}
 					}
 				}
 			}
