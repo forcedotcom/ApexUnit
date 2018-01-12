@@ -139,7 +139,7 @@ public class CommandLineArgumentsTest {
 	}
 	
 	@Test
-	public void tempTest(){
+	public void tempTest1(){
 		Assert.assertNotNull("temp");
 	}
 
