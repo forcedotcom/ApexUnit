@@ -46,11 +46,9 @@ public class CommandLineArgumentsTest {
 		StringBuffer arguments = new StringBuffer();
 
 		arguments.append(CommandLineArguments.ORG_LOGIN_URL);
-		logs.info("^^^^^^ORG_LOGIN_URL is : "+ SERVER_ORG_LOGIN_URL_PARAMETER);
 		arguments.append(appendSpaces(SERVER_ORG_LOGIN_URL_PARAMETER));
 		arguments.append(CommandLineArguments.ORG_USERNAME);
 		arguments.append(appendSpaces(ORG_USERNAME_PARAMETER));
-		logs.info("^^^^^^ORG_USERNAME_PARAMETER is : "+ ORG_USERNAME_PARAMETER);
 		arguments.append(CommandLineArguments.ORG_PASSWORD);
 		arguments.append(appendSpaces(ORG_PASSWORD_PARAMETER));
 		arguments.append(CommandLineArguments.MANIFEST_FILES_WITH_TEST_CLASS_NAMES_TO_EXECUTE);
@@ -69,13 +67,11 @@ public class CommandLineArgumentsTest {
 		arguments.append(appendSpaces(MAX_TEST_EXEC_TIME_THRESHOLD));
 		arguments.append(CommandLineArguments.ORG_CLIENT_ID);
 		arguments.append(appendSpaces(CLIENT_ID));
-		logs.info("^^^^^^Client Id is : "+ CLIENT_ID);
 		arguments.append(CommandLineArguments.ORG_CLIENT_SECRET);
 		arguments.append(appendSpaces(CLIENT_SECRET));
-		logs.info("^^^^^^CLIENT_SECRET is : "+ CLIENT_SECRET);
 		String[] args = arguments.toString().split(" ");
 
-		JCommander jcommander = new JCommander(cmdLineArgs, args);
+		//JCommander jcommander = new JCommander(cmdLineArgs, args);
 	}
 
 	@Test
