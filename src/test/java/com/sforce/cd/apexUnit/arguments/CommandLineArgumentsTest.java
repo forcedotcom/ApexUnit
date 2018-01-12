@@ -71,7 +71,7 @@ public class CommandLineArgumentsTest {
 		arguments.append(appendSpaces(CLIENT_SECRET));
 		String[] args = arguments.toString().split(" ");
 
-		JCommander jcommander = new JCommander(cmdLineArgs, args);
+		JCommander jcommander = new JCommander(arguments, args);
 	}
 
 	@Test
