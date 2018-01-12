@@ -67,7 +67,7 @@ public class AsyncBulkApiHandlerTest {
 
 	}
 
-	@Test(priority = 1)
+	/*@Test(priority = 1)
 	public void createJob() {
 		try {
 			ConnectorConfig connConfig = bulkConnection.getConfig();
@@ -137,5 +137,5 @@ public class AsyncBulkApiHandlerTest {
 		boolean isTestsExecutionCompleted = queryPollerAndResultHandler.waitForTestsToComplete(parentJobId, conn);
 		Assert.assertEquals(true, isTestsExecutionCompleted);
 		Assert.assertTrue(apexReportBeans.length > 0);
-	}
+	}*/
 }

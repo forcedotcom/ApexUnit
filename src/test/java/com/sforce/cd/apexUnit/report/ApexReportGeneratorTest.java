@@ -69,7 +69,7 @@ public class ApexReportGeneratorTest {
 		}*/
 	}
 
-	@Test
+	/*@Test
 	public void generateTestReportTest() {
 
 		TestStatusPollerAndResultHandler queryPollerAndResultHandler = new TestStatusPollerAndResultHandler();
@@ -108,7 +108,7 @@ public class ApexReportGeneratorTest {
 		Assert.assertTrue(FileUtils.isFileNewer(reportFile, justBeforeReportGeneration));
 
 	}
-
+*/
 	public void cleanUpReports() {
 
 		String testReportPath = System.getProperty("user.dir") + System.getProperty("file.separator")

@@ -33,7 +33,7 @@ public class ConnectionHandlerTest {
 	ConnectionHandler connHandler = ConnectionHandler.getConnectionHandlerInstance();
 	private static Logger LOG = LoggerFactory.getLogger(ConnectionHandlerTest.class);
 
-	@Test(priority = 1)
+	/*@Test(priority = 1)
 	public void createConnection() throws ConnectionException {
 		PartnerConnection partnerConn = connHandler.getConnection();
 		LoginResult loginRes = null;
@@ -55,6 +55,6 @@ public class ConnectionHandlerTest {
 		LOG.info("Rest  end point:" + connConfig.getRestEndpoint());
 		Assert.assertEquals(sessionId, connConfig.getSessionId());
 
-	}
+	}*/
 
 }

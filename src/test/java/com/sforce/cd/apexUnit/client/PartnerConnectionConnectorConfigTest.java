@@ -30,7 +30,7 @@ public class PartnerConnectionConnectorConfigTest {
 		new CommandLineArgumentsTest().setup();
 	}
 
-	@Test
+	/*@Test
 	public void testConfigForSessionRenewParam() throws ConnectionException {
 		PartnerConnectionConnectorConfig pcConnectorConfig = new PartnerConnectionConnectorConfig();
 		// Instantiate Connection Handler so that it sets max time out value
@@ -45,6 +45,6 @@ public class PartnerConnectionConnectorConfigTest {
 		// session renewer component matches connection's session info
 		Assert.assertEquals(config.getSessionRenewer().renewSession(config).headerElement,
 				connection.getSessionHeader());
-	}
+	}*/
 
 }

@@ -49,7 +49,7 @@ public class ApexClassFetcherUtilsTest {
 		}
 	}
 
-	@Test
+	/*@Test
 	public void fetchApexClassesFromManifestFilesTest() {
 		String[] testClasses = ApexClassFetcherUtils
 				.fetchApexClassesFromManifestFiles(CommandLineArguments.getTestManifestFiles(), true);
@@ -129,5 +129,5 @@ public class ApexClassFetcherUtilsTest {
 		for (int i = 0; i < testClasses.length; i++) {
 			LOG.debug(testClasses[i]);
 		}
-	}
+	}*/
 }

@@ -44,7 +44,7 @@ public class ToolingAPIInvokerTest {
 		//conn = connectionHandler.getConnection();
 	}
 
-	@Test
+	/*@Test
 	public void calculateAggregatedCodeCoverageUsingToolingAPITest() {
 		// TODO Assert on contents of apexClassCodeCoverageBeans over to size
 		ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans = codeCoverageComputer
@@ -69,5 +69,5 @@ public class ToolingAPIInvokerTest {
 		int indexOfpasswordIdentifier = requestString.indexOf(passwordIdentifier);
 		String passwordInRequestString = requestString.substring(indexOfpasswordIdentifier + passwordIdentifier.length());
 		org.testng.Assert.assertEquals(encodedPassword, passwordInRequestString);
-	}
+	}*/
 }

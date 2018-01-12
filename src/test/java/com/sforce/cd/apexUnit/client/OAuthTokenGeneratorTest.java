@@ -31,7 +31,7 @@ public class OAuthTokenGeneratorTest {
 		new CommandLineArgumentsTest().setup();
 	}
 
-	@Test
+	/*@Test
 	public void getOrgToken() {
 		String orgToken = "";
 		// generate/get the orgToken and test if the token has been generated
@@ -39,5 +39,5 @@ public class OAuthTokenGeneratorTest {
 		LOG.debug(orgToken + "  -->  This is the orgToken");
 		Assert.assertNotEquals(orgToken, null);
 		Assert.assertTrue(StringUtils.isNotEmpty(orgToken));
-	}
+	}*/
 }
