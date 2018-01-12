@@ -38,7 +38,7 @@ public class ApexClassFetcherUtilsTest {
 	public void setup() {
 		new CommandLineArgumentsTest().setup();
 		connHandler = ConnectionHandler.getConnectionHandlerInstance();
-		conn = connHandler.getConnection();
+		//conn = connHandler.getConnection();
 	}
 
 	@Test
