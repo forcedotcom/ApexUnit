@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -25,6 +26,7 @@ import com.sforce.cd.apexUnit.client.connection.ConnectionHandler;
 import com.sforce.cd.apexUnit.client.utils.ApexClassFetcherUtils;
 import com.sforce.soap.partner.PartnerConnection;
 
+@Ignore
 public class ApexClassFetcherUtilsTest {
 	private static Logger LOG = LoggerFactory.getLogger(ApexClassFetcherUtilsTest.class);
 	ConnectionHandler connHandler = null;
