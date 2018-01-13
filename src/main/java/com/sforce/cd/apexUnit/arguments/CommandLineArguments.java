@@ -35,6 +35,7 @@ public class CommandLineArguments {
 	public static final String ORG_CLIENT_SECRET = "-org.client.secret";
 	public static final String PROXY_HOST = "-proxy.host";
 	public static final String PROXY_PORT = "-proxy.port";
+	public static final String TEST_RELOAD = "-test.reload";
 	
 	public static final String HELP = "-help";
 
@@ -76,6 +77,8 @@ public class CommandLineArguments {
 	static private Integer proxyPort;
 	@Parameter(names = HELP, help = true, description = "Displays options available for running this application")
 	static private boolean help;
+	@Parameter(names = TEST_RELOAD, description = "Want to reload test if same class changes submitted again.", arity=1)
+	static private boolean testReload;
 
 	/*
 	 * Static getter methods for each of the CLI parameter
@@ -144,6 +147,10 @@ public class CommandLineArguments {
 
 	public static boolean isHelp() {
 		return help;
+	}
+
+	public static boolean isTestReload() {
+		return testReload;
 	}
 }
 

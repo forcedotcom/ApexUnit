@@ -14,11 +14,16 @@
 
 package com.sforce.cd.apexUnit.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sforce.soap.partner.sobject.SObject;
 
 /*
  * Constructs and returns queries for the client to invoke web services and fetch the data from the org
  */
 public class QueryConstructor {
+	private static Logger logger = LoggerFactory.getLogger(QueryConstructor.class);
 	/*
 	 * construct query that fetches Id and Name of the ApexClass based on regex
 	 * provided by the user * is converted to % in the regex. If no * is found
@@ -301,4 +306,22 @@ public class QueryConstructor {
 		}
 		return singleQuoteEscapedStr;
 	}
+	/*
+	 * Query to check class exists in Apex Test queue 
+	 * @param : userInput: String
+	 * 
+	 * @return : singleQuotrEscapedStr : String
+	 *
+	 */
+	
+	public static String getQueryForApexClassInfo(String apexClassess){
+		String sql ="";
+		if(apexClassess !=null){
+			sql = "SELECT Id FROM ApexTestQueueItem WHERE  ApexClassId IN "+ "("+apexClassess+") AND status IN ('Queued', 'Processing')";
+		}
+		return sql;
+	}
+	
+	
+	
 }

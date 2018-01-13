@@ -69,7 +69,6 @@ public class WebServiceInvoker {
 			// the client id and secret is applicable across all dev orgs
 			requestString = generateRequestString();
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
-
 			httpclient.getParams().setSoTimeout(0);
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
