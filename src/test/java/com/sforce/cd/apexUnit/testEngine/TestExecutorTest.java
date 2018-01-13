@@ -27,7 +27,7 @@ public class TestExecutorTest {
 	@BeforeTest
 	public void setup() {
 		ConnectionHandler connectionHandler = ConnectionHandler.getConnectionHandlerInstance();
-		conn = connectionHandler.getConnection();
+		//conn = connectionHandler.getConnection();
 	}
 
 	// @Test

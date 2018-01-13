@@ -17,6 +17,7 @@ package com.sforce.cd.apexUnit.client.codeCoverage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -81,6 +82,7 @@ public class CodeCoverageComputer {
 		 * file and array from regex prefix
 		 */
 		// read class names from manifest files
+		
 		if (CommandLineArguments.getClassManifestFiles() != null) {
 			LOG.debug(" Fetching apex classes from location : " + CommandLineArguments.getClassManifestFiles());
 			classesAsArray = ApexClassFetcherUtils
@@ -99,7 +101,7 @@ public class CodeCoverageComputer {
 			String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
 			// compute aggregated code coverage
 			String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
-
+			
 			JSONObject responseJsonObject = null;
 			responseJsonObject = WebServiceInvoker.doGet(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken());
 			LOG.debug("responseJsonObject says " + responseJsonObject + "\n relativeServiceURL is " + relativeServiceURL

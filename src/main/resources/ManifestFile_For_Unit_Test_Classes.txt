@@ -1,13 +1,1 @@
-MyTeamTestClass1
-MyTeamTestClass2
-MyTeamTestClass3
-Sample_Unit_Test
-Sample_Integration_Test
-Sample_Unit_Test
-OtherNamingConventionClass1
-OtherNamingConventionClass2
-AuthorPageConfigTest
-
-SimpleClass1Test
-
-HelloWorldTrigger
+test1test

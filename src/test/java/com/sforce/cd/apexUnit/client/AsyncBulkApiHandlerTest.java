@@ -16,6 +16,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -39,6 +40,7 @@ import com.sforce.soap.partner.SaveResult;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
+@Ignore
 public class AsyncBulkApiHandlerTest {
 	private static Logger LOG = LoggerFactory.getLogger(AsyncBulkApiHandlerTest.class);
 	BulkConnection bulkConnection = null;
@@ -52,7 +54,7 @@ public class AsyncBulkApiHandlerTest {
 
 	@BeforeTest
 	public void setup() {
-		new CommandLineArgumentsTest().setup();
+	/*	new CommandLineArgumentsTest().setup();
 		ConnectionHandler connHandler = ConnectionHandler.getConnectionHandlerInstance();
 		bulkConnection = connHandler.getBulkConnection();
 		PartnerConnection conn = connHandler.getConnection();
@@ -61,11 +63,11 @@ public class AsyncBulkApiHandlerTest {
 		// {"01p300000000KcmAAE","01p300000000KcnAAE", "01pQ00000007axIIAQ",
 		// "01pQ00000007axJIAQ", "01pQ00000007axKIAQ",
 		// "01pQ00000007axLIAQ", "01pQ00000007axMIAQ","01pQ00000007axNIAQ"};
-		apexClasses = ApexClassFetcherUtils.constructTestClassesArray(conn);
+		apexClasses = ApexClassFetcherUtils.constructTestClassesArray(conn);*/
 
 	}
 
-	@Test(priority = 1)
+	/*@Test(priority = 1)
 	public void createJob() {
 		try {
 			ConnectorConfig connConfig = bulkConnection.getConfig();
@@ -135,5 +137,5 @@ public class AsyncBulkApiHandlerTest {
 		boolean isTestsExecutionCompleted = queryPollerAndResultHandler.waitForTestsToComplete(parentJobId, conn);
 		Assert.assertEquals(true, isTestsExecutionCompleted);
 		Assert.assertTrue(apexReportBeans.length > 0);
-	}
+	}*/
 }
