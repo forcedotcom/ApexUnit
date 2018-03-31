@@ -1,16 +1,34 @@
 /* 
- * Copyright (c) 2016, salesforce.com, inc.
+ * Copyright (c) 2015, salesforce.com, inc.
  * All rights reserved.
- * Licensed under the BSD 3-Clause license.
- * For full license text, see LICENSE.txt file in the repo root  or https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided
+ * that the following conditions are met:
+ *
+ *    Redistributions of source code must retain the above copyright notice, this list of conditions and the
+ *    following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+ *    the following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ *    Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or
+ *    promote products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 /*
  * Class to compute code coverage for the given class names and org wide code coverage
  * 
  * @author adarsh.ramakrishna@salesforce.com
- */ 
- 
+ */
 
 package com.sforce.cd.apexUnit.client.codeCoverage;
 
@@ -21,6 +39,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,7 +63,9 @@ public class CodeCoverageComputer {
 	private static Logger LOG = LoggerFactory.getLogger(CodeCoverageComputer.class);
 	Properties prop = new Properties();
 	String propFileName = "config.properties";
+	InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 	private String SUPPORTED_VERSION = System.getProperty("API_VERSION");
+	private final int BATCH_SIZE = 100;
 
 	/*
 	 * Constructor for CodeCoverageComputer Initialize SUPPORTED_VERSION
@@ -70,6 +95,7 @@ public class CodeCoverageComputer {
 	 * 
 	 * @return code coverage result(beans) as array
 	 */
+	@SuppressWarnings("unchecked")
 	public ApexClassCodeCoverageBean[] calculateAggregatedCodeCoverageUsingToolingAPI() {
 		PartnerConnection connection = ConnectionHandler.getConnectionHandlerInstance().getConnection();
 
@@ -82,37 +108,100 @@ public class CodeCoverageComputer {
 		 * file and array from regex prefix
 		 */
 		// read class names from manifest files
-		
 		if (CommandLineArguments.getClassManifestFiles() != null) {
 			LOG.debug(" Fetching apex classes from location : " + CommandLineArguments.getClassManifestFiles());
 			classesAsArray = ApexClassFetcherUtils
-					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles(), true);
+					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles(),true);
 		}
 		// fetch matching class names based on regex
 		if (CommandLineArguments.getSourceRegex() != null) {
 			LOG.debug(" Fetching apex classes with regex : " + CommandLineArguments.getSourceRegex());
 			classesAsArray = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(connection, classesAsArray,
-					CommandLineArguments.getSourceRegex(), true);
+					CommandLineArguments.getSourceRegex(),true);
 		}
 		// Do not proceed if no class names are returned from both manifest
 		// files and/or regexes
 		if (classesAsArray != null && classesAsArray.length > 0) {
-			String classArrayAsStringForQuery = processClassArrayForQuery(classesAsArray);
-			String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
-			// compute aggregated code coverage
-			String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
-			
-			JSONObject responseJsonObject = null;
-			responseJsonObject = WebServiceInvoker.doGet(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken());
-			LOG.debug("responseJsonObject says " + responseJsonObject + "\n relativeServiceURL is " + relativeServiceURL
-					+ "\n soqlcc is " + soqlcc);
-			if (responseJsonObject != null) {
-				apexClassCodeCoverageBeans = processJSONResponseAndConstructCodeCoverageBeans(connection,
-						responseJsonObject);
-			}
-			if (apexClassCodeCoverageBeans == null) {
-				ApexUnitUtils.shutDownWithErrMsg(
-						"Code coverage metrics not computed. Null object returned while processing the JSON response from the Tooling API");
+
+			if (classesAsArray.length > BATCH_SIZE) {
+				// Creating multiple threads for sending request if URL is huge.
+
+				ExecutorService threadPool = Executors.newFixedThreadPool(5);
+				CompletionService<JSONObject> pool = new ExecutorCompletionService<JSONObject>(threadPool);
+
+				int numOfBatches = 1;
+				int fromIndex = 0;
+				int toIndex = BATCH_SIZE;
+				JSONArray recordObject = new JSONArray();
+				JSONObject responseJsonObject = null;
+				LOG.info("Total number of classes: " + classesAsArray.length);
+
+				if (classesAsArray.length % BATCH_SIZE == 0) {
+					numOfBatches = classesAsArray.length / BATCH_SIZE;
+				} else {
+					numOfBatches = classesAsArray.length / BATCH_SIZE + 1;
+				}
+
+				for (int count = 0; count < numOfBatches; count++) {
+					String[] ClassesInBatch = Arrays.copyOfRange(classesAsArray, fromIndex, toIndex);
+					String classArrayAsStringForQuery = processClassArrayForQuery(ClassesInBatch);
+					LOG.debug("Classes i nthis query: " + classArrayAsStringForQuery);
+					LOG.info("Total number of classes in this query: " + ClassesInBatch.length);
+					String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
+					// compute aggregated code coverage
+					String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
+					pool.submit(new CodeCoverageTask(relativeServiceURL, soqlcc, OAuthTokenGenerator.getOrgToken()));
+
+					if (toIndex == classesAsArray.length) {
+						break;
+					} else {
+						fromIndex = fromIndex + BATCH_SIZE;
+						if ((toIndex + BATCH_SIZE) < (classesAsArray.length)) {
+							toIndex = toIndex + BATCH_SIZE;
+						} else {
+							toIndex = classesAsArray.length;
+						}
+					}
+
+				}
+
+				for (int i = 0; i < numOfBatches; i++) {
+					try {
+						recordObject.addAll((JSONArray) pool.take().get().get("records"));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
+
+				}
+
+				threadPool.shutdown();
+
+				if (recordObject.size() > 0) {
+					apexClassCodeCoverageBeans = processJSONResponseAndConstructCodeCoverageBeans(connection,
+							recordObject);
+				}
+
+			} else {
+				String classArrayAsStringForQuery = processClassArrayForQuery(classesAsArray);
+				String relativeServiceURL = "/services/data/v" + SUPPORTED_VERSION + "/tooling";
+				// compute aggregated code coverage
+				String soqlcc = QueryConstructor.getAggregatedCodeCoverage(classArrayAsStringForQuery);
+
+				JSONObject responseJsonObject = null;
+				responseJsonObject = WebServiceInvoker.doGet(relativeServiceURL, soqlcc,
+						OAuthTokenGenerator.getOrgToken());
+				LOG.debug("responseJsonObject says " + responseJsonObject + "\n relativeServiceURL is "
+						+ relativeServiceURL + "\n soqlcc is " + soqlcc);
+				if (responseJsonObject != null) {
+					apexClassCodeCoverageBeans = processJSONResponseAndConstructCodeCoverageBeans(connection,
+							(JSONArray) responseJsonObject.get("records"));
+				}
+				if (apexClassCodeCoverageBeans == null) {
+					ApexUnitUtils.shutDownWithErrMsg(
+							"Code coverage metrics not computed. Null object returned while processing the JSON response from the Tooling API");
+				}
 			}
 		} else {
 			ApexUnitUtils.shutDownWithErrMsg("No/Invalid Apex source classes mentioned in manifest file and/or "
@@ -152,13 +241,11 @@ public class CodeCoverageComputer {
 	 * @return code coverage result(beans) as array
 	 */
 	private ApexClassCodeCoverageBean[] processJSONResponseAndConstructCodeCoverageBeans(PartnerConnection connection,
-			JSONObject responseJsonObject) {
+			JSONArray aggregateRecordObject) {
 		int classCounter = 0;
 		int coveredLinesForTheTeam = 0;
 		int unCoveredLinesForTheTeam = 0;
-		String responseStr = responseJsonObject.toJSONString();
-		LOG.debug(responseStr);
-		JSONArray recordObject = (JSONArray) responseJsonObject.get("records");
+		JSONArray recordObject = aggregateRecordObject;
 		if (recordObject != null && recordObject.size() > 0) {
 			ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans = new ApexClassCodeCoverageBean[recordObject.size()];
 			for (int i = 0; i < recordObject.size(); ++i) {
@@ -195,7 +282,7 @@ public class CodeCoverageComputer {
 							coveredLinesList.add((Long) coveredLinesJsonArray.get(j));
 							LOG.debug("covered " + (Long) coveredLinesJsonArray.get(j));
 						}
-						if (coveredLinesList.size() > 0) {
+						if (coveredLinesList != null && coveredLinesList.size() > 0) {
 							apexClassCodeCoverageBean.setCoveredLinesList(coveredLinesList);
 						}
 
@@ -204,7 +291,7 @@ public class CodeCoverageComputer {
 							uncoveredLinesList.add((Long) uncoveredLinesJsonArray.get(k));
 							LOG.debug("uncovered " + (Long) uncoveredLinesJsonArray.get(k));
 						}
-						if (uncoveredLinesList.size() > 0) {
+						if (uncoveredLinesList != null && uncoveredLinesList.size() > 0) {
 							apexClassCodeCoverageBean.setUncoveredLinesList(uncoveredLinesList);
 						}
 					}
