@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
@@ -64,12 +65,23 @@ public class WebServiceInvoker {
 		HttpClient httpclient = new HttpClient();
 		String requestString = "";
 		HashMap<String, String> responseMap = new HashMap<String, String>();
+		
 
 		try {
 			// the client id and secret is applicable across all dev orgs
 			requestString = generateRequestString();
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
 			httpclient.getParams().setSoTimeout(0);
+
+			// Set proxy if needed
+			if (CommandLineArguments.getProxyHost() != null && CommandLineArguments.getProxyPort() != null) {
+				LOG.debug("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port "
+						+ CommandLineArguments.getProxyPort());
+				HostConfiguration hostConfiguration = httpclient.getHostConfiguration();
+				hostConfiguration.setProxy(CommandLineArguments.getProxyHost(),CommandLineArguments.getProxyPort());
+				httpclient.setHostConfiguration(hostConfiguration);
+			}
+
 			post = new PostMethod(authorizationServerURL);
 			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.addRequestHeader("X-PrettyPrint", "1");
@@ -140,6 +152,14 @@ public class WebServiceInvoker {
 
 		LOG.debug("relativeServiceURL in doGet method:" + relativeServiceURL);
 		HttpClient httpclient = new HttpClient();
+		// Set proxy if needed
+		if (CommandLineArguments.getProxyHost() != null && CommandLineArguments.getProxyPort() != null) {
+			LOG.debug("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port "
+				+ CommandLineArguments.getProxyPort());
+			HostConfiguration hostConfiguration = httpclient.getHostConfiguration();
+			hostConfiguration.setProxy(CommandLineArguments.getProxyHost(),CommandLineArguments.getProxyPort());
+			httpclient.setHostConfiguration(hostConfiguration);
+		}
 		GetMethod get = null;
 
 		String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
