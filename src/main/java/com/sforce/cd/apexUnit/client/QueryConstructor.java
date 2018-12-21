@@ -292,7 +292,7 @@ public class QueryConstructor {
 	}
 
 	/*
-	 * Escape single quotes in the user input during qyery execution
+	 * Escape single quotes in the user input during query execution
 	 * 
 	 * @param : userInput: String
 	 * 
