@@ -47,7 +47,7 @@ public class ApexManifestFileReaderTest {
 	public void setup() throws IOException, URISyntaxException {
 		String soql = "";
 		// writing to a file in the current working directory
-		LOG.info("Working directory : " + workingDir);
+		/**LOG.info("Working directory : " + workingDir);
 		PartnerConnection connection = ConnectionHandler.getConnectionHandlerInstance().getConnection();
 		File dir = new File(workingDir);
 		dir.mkdirs();
@@ -85,7 +85,7 @@ public class ApexManifestFileReaderTest {
 		} catch (IOException e) {
 			ApexUnitUtils
 			.shutDownWithDebugLog(e, "IO Exception caught \n");
-		}
+		}*/
 
 	}
 
@@ -141,7 +141,7 @@ public class ApexManifestFileReaderTest {
 
 	@AfterTest
 	public void cleanUpTestFiles() {
-		String testFilesDirPath = System.getProperty("user.dir") + System.getProperty("file.separator")
+		/*String testFilesDirPath = System.getProperty("user.dir") + System.getProperty("file.separator")
 				+ "MockTestFiles";
 		File testFilesDir = new File(testFilesDirPath);
 		if (testFilesDir.exists()) {
@@ -153,6 +153,6 @@ public class ApexManifestFileReaderTest {
 			LOG.info("Test files directory deleted");
 		} else {
 			LOG.info("Test files directory does not exist; hence not deleted");
-		}
+		}*/
 	}
 }

@@ -8,6 +8,7 @@ package com.sforce.cd.apexUnit.client;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -20,6 +21,7 @@ import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
+@Ignore
 public class PartnerConnectionConnectorConfigTest {
 	private static Logger LOG = LoggerFactory.getLogger(PartnerConnectionConnectorConfigTest.class);
 
@@ -28,7 +30,7 @@ public class PartnerConnectionConnectorConfigTest {
 		new CommandLineArgumentsTest().setup();
 	}
 
-	@Test
+	/*@Test
 	public void testConfigForSessionRenewParam() throws ConnectionException {
 		PartnerConnectionConnectorConfig pcConnectorConfig = new PartnerConnectionConnectorConfig();
 		// Instantiate Connection Handler so that it sets max time out value
@@ -43,6 +45,6 @@ public class PartnerConnectionConnectorConfigTest {
 		// session renewer component matches connection's session info
 		Assert.assertEquals(config.getSessionRenewer().renewSession(config).headerElement,
 				connection.getSessionHeader());
-	}
+	}*/
 
 }
