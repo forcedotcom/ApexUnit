@@ -67,7 +67,7 @@ public class TestStatusPollerAndResultHandler {
 			int index = 0;
 			SObject[] sObjects = queryResult.getRecords();
 			if (sObjects != null) {
-				totalTestMethodsExecuted = sObjects.length;
+				totalTestMethodsExecuted += sObjects.length;
 				LOG.info("Total test methods executed: " + TestStatusPollerAndResultHandler.totalTestMethodsExecuted);
 				apexReportBeans = new ApexReportBean[sObjects.length];
 				for (SObject sobject : sObjects) {
@@ -141,7 +141,7 @@ public class TestStatusPollerAndResultHandler {
 				if (sObjects != null) {
 					String status = "";
 					int totalTests = sObjects.length;
-					totalTestClasses = totalTests;
+					totalTestClasses += totalTests;
 					int remainingTests = totalTests;
 					LOG.info("Total test classes to execute: " + totalTestClasses);
 					String testId = "";

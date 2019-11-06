@@ -1,7 +1,7 @@
 /* 
  * Copyright (c) 2016, salesforce.com, inc.
  * All rights reserved.
- *Licensed under the BSD 3-Clause license.
+ * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root  or https://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -9,7 +9,8 @@
  * Class to compute code coverage for the given class names and org wide code coverage
  * 
  * @author adarsh.ramakrishna@salesforce.com
- */
+ */ 
+ 
 
 package com.sforce.cd.apexUnit.client.codeCoverage;
 
@@ -92,13 +93,13 @@ public class CodeCoverageComputer {
 		if (CommandLineArguments.getClassManifestFiles() != null) {
 			LOG.debug(" Fetching apex classes from location : " + CommandLineArguments.getClassManifestFiles());
 			classesAsArray = ApexClassFetcherUtils
-					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles(),true);
+					.fetchApexClassesFromManifestFiles(CommandLineArguments.getClassManifestFiles(), true);
 		}
 		// fetch matching class names based on regex
 		if (CommandLineArguments.getSourceRegex() != null) {
 			LOG.debug(" Fetching apex classes with regex : " + CommandLineArguments.getSourceRegex());
 			classesAsArray = ApexClassFetcherUtils.fetchApexClassesBasedOnMultipleRegexes(connection, classesAsArray,
-					CommandLineArguments.getSourceRegex(),true);
+					CommandLineArguments.getSourceRegex(), true);
 		}
 		// Do not proceed if no class names are returned from both manifest
 		// files and/or regexes
@@ -146,6 +147,7 @@ public class CodeCoverageComputer {
 
 				}
 
+				// results are processed separately from thread submissions
 				for (int i = 0; i < numOfBatches; i++) {
 					try {
 						recordObject.addAll((JSONArray) pool.take().get().get("records"));
@@ -176,6 +178,8 @@ public class CodeCoverageComputer {
 				LOG.debug("responseJsonObject says " + responseJsonObject + "\n relativeServiceURL is "
 						+ relativeServiceURL + "\n soqlcc is " + soqlcc);
 				if (responseJsonObject != null) {
+					String responseStr = responseJsonObject.toJSONString();
+					LOG.debug(responseStr);
 					apexClassCodeCoverageBeans = processJSONResponseAndConstructCodeCoverageBeans(connection,
 							(JSONArray) responseJsonObject.get("records"));
 				}
