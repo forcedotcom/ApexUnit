@@ -29,9 +29,11 @@ import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.slf4j.Logger;
@@ -72,6 +74,8 @@ public class WebServiceInvoker {
 			requestString = generateRequestString();
 			String authorizationServerURL = CommandLineArguments.getOrgUrl() + relativeServiceURL;
 			httpclient.getParams().setSoTimeout(0);
+			//solve Cookie rejected: "$Version=0; BrowserId=Su_SOgNxEeqrrjGlvnCIuA; $Path=/; $Domain=.salesforce.com". Domain attribute ".salesforce.com" violates RFC 2109: host minus domain may not contain any dots
+			httpclient.getParams().setParameter(HttpClientParams.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
 
 			// Set proxy if needed
 			if (CommandLineArguments.getProxyHost() != null && CommandLineArguments.getProxyPort() != null) {
@@ -152,6 +156,8 @@ public class WebServiceInvoker {
 
 		LOG.debug("relativeServiceURL in doGet method:" + relativeServiceURL);
 		HttpClient httpclient = new HttpClient();
+		//solve Cookie rejected: "$Version=0; BrowserId=Su_SOgNxEeqrrjGlvnCIuA; $Path=/; $Domain=.salesforce.com". Domain attribute ".salesforce.com" violates RFC 2109: host minus domain may not contain any dots
+		httpclient.getParams().setParameter(HttpClientParams.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
 		// Set proxy if needed
 		if (CommandLineArguments.getProxyHost() != null && CommandLineArguments.getProxyPort() != null) {
 			LOG.debug("Setting proxy configuraiton to " + CommandLineArguments.getProxyHost() + " on port "
