@@ -76,7 +76,8 @@ public class ApexClassFetcherUtils {
 			consolidatedTestClassesAsArray = testClassesAsArray;
 		}
 		// if null, no apex test classes fetched to execute; throw warning
-		if (consolidatedTestClassesAsArray == null || consolidatedTestClassesAsArray.length == 0) {
+		if (CommandLineArguments.isRequireAtLeastOneTest()
+			&& (consolidatedTestClassesAsArray == null || consolidatedTestClassesAsArray.length == 0)) {
 			ApexUnitUtils.shutDownWithErrMsg("No/Invalid test classes mentioned in manifest file and/or "
 					+ "regex pattern for ApexTestPrefix didn't return any test class names from the org");
 		} else {

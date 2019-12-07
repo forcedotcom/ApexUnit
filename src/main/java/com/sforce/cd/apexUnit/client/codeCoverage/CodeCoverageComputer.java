@@ -80,7 +80,7 @@ public class CodeCoverageComputer {
 	public ApexClassCodeCoverageBean[] calculateAggregatedCodeCoverageUsingToolingAPI() {
 		PartnerConnection connection = ConnectionHandler.getConnectionHandlerInstance().getConnection();
 
-		ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans = null;
+		ApexClassCodeCoverageBean[] apexClassCodeCoverageBeans = new ApexClassCodeCoverageBean[0];
 		String[] classesAsArray = null;
 
 		/*
@@ -184,7 +184,7 @@ public class CodeCoverageComputer {
 							"Code coverage metrics not computed. Null object returned while processing the JSON response from the Tooling API");
 				}
 			}
-		} else {
+		} else if (CommandLineArguments.isRequireAtLeastOneTest()) {
 			ApexUnitUtils.shutDownWithErrMsg("No/Invalid Apex source classes mentioned in manifest file and/or "
 					+ "regex pattern for ApexSourceClassPrefix didn't return any Apex source class names from the org");
 		}
