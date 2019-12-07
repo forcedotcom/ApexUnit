@@ -105,7 +105,7 @@ public class ApexUnitRunner {
 			LOG.info("Total test methods executed: " + apexReportBeans.length);
 			String reportFile = "ApexUnitReport.xml";
 			ApexUnitTestReportGenerator.generateTestReport(apexReportBeans, reportFile);
-		} else {
+		} else if (CommandLineArguments.isRequireAtLeastOneTest()) {
 			ApexUnitUtils.shutDownWithErrMsg("Unable to generate test report. "
 											 + "Did not find any test results for the job id");
 		}

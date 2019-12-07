@@ -36,7 +36,8 @@ public class CommandLineArguments {
 	public static final String PROXY_HOST = "-proxy.host";
 	public static final String PROXY_PORT = "-proxy.port";
 	public static final String TEST_RELOAD = "-test.reload";
-	
+	public static final String REQUIRE_AT_LEAST_ONE_TEST = "-require.at.least.one.test";
+
 	public static final String HELP = "-help";
 
 	/*
@@ -79,6 +80,8 @@ public class CommandLineArguments {
 	static private boolean help;
 	@Parameter(names = TEST_RELOAD, description = "Want to reload test if same class changes submitted again.", arity=1)
 	static private boolean testReload;
+	@Parameter(names = REQUIRE_AT_LEAST_ONE_TEST, description = "Fail if no test classes exist for specified manifest and/or regex pattern (defaults to true)", arity=1)
+	static private boolean requireAtLeastOneTest = true;
 
 	/*
 	 * Static getter methods for each of the CLI parameter
@@ -151,6 +154,10 @@ public class CommandLineArguments {
 
 	public static boolean isTestReload() {
 		return testReload;
+	}
+
+	public static boolean isRequireAtLeastOneTest() {
+		return requireAtLeastOneTest;
 	}
 }
 

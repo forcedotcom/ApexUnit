@@ -56,6 +56,9 @@ public class TestExecutor {
 		if (LOG.isDebugEnabled()) {
 			ApexClassFetcherUtils.logTheFetchedApexClasses(testClassesAsArray);
 		}
+		if (testClassesAsArray == null || testClassesAsArray.length == 0) {
+			return null;
+		}
 		String soql = QueryConstructor.getQueryForApexClassInfo(processClassArrayForQuery(testClassesAsArray));
 		QueryResult queryresult = null;
 		try {
@@ -93,12 +96,9 @@ public class TestExecutor {
 			
 		}
 
-		if(!submitTest){
+		if(!submitTest) {
 			ApexUnitUtils.shutDownWithErrMsg("Test for these classes already running/enqueue at server...");
-		}
-		else{
-
-		if (testClassesAsArray != null && testClassesAsArray.length > 0) {
+		} else {
 
 			int numOfBatches = 0;
 			int fromIndex = 0;
@@ -122,7 +122,7 @@ public class TestExecutor {
 
 				testClassesInBatch = Arrays.copyOfRange(testClassesAsArray, fromIndex, toIndex);
 				parentJobId = bulkApiHandler.handleBulkApiFlow(conn, bulkConnection, testClassesInBatch);
-                
+
 				LOG.info("#####Parent JOB ID  #####"+parentJobId);
 				if (parentJobId != null) {
 					LOG.info("Parent job ID for the submission of the test classes to the Force.com platform is: "
@@ -138,8 +138,7 @@ public class TestExecutor {
 				}
 
 			}
-			
-		}
+
 		}
 		return apexReportBean.toArray(new ApexReportBean[0]);
 		
